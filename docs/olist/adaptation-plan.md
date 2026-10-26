@@ -1,6 +1,6 @@
 # Olist case-study adaptation plan
 
-Status: proposal for technical review. This delivery inspects source data and revises the design; it does not implement database models, an importer, or an API.
+Status: approved adaptation design record. Stage 2 implements the model/setup, and Stage 3 implements the importer and initial APIs. The original design wording below records the contract and its inspected starting point; current delivery status and executed evidence are tracked in the README and stage guides.
 
 This is an independent educational case study using the public [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). It does not imply employment, partnership, endorsement, or access to Olist's internal systems.
 

@@ -1,0 +1,48 @@
+[
+  {
+    "command": [
+      "docker",
+      "compose",
+      "run",
+      "--rm",
+      "--user",
+      "501:20",
+      "importer",
+      "import_olist",
+      "--archive",
+      "/data/brazilian-ecommerce.zip",
+      "--manifest",
+      "/app/olist/source-manifest.json",
+      "--expected-database",
+      "olist_case_study",
+      "--report",
+      "/reports/full-import.json"
+    ],
+    "exit_code": 0,
+    "stdout": "SUCCEEDED: entities imported=451537, skipped=0, rejected=0, duplicate input=0, inconsistent rows=3116 (retained without repair).\n",
+    "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-importer-run-f4ff1d5f33aa Creating \n Container olist-case-study-importer-run-f4ff1d5f33aa Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "run",
+      "--rm",
+      "--user",
+      "501:20",
+      "importer",
+      "import_olist",
+      "--archive",
+      "/data/brazilian-ecommerce.zip",
+      "--manifest",
+      "/app/olist/source-manifest.json",
+      "--expected-database",
+      "olist_case_study",
+      "--report",
+      "/reports/verified-noop.json"
+    ],
+    "exit_code": 0,
+    "stdout": "NOOP: entities imported=0, skipped=451537, rejected=0, duplicate input=0, inconsistent rows=3116 (retained without repair).\n",
+    "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-importer-run-94d57545d939 Creating \n Container olist-case-study-importer-run-94d57545d939 Created \n"
+  }
+]

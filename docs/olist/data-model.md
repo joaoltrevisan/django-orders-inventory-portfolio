@@ -1,6 +1,6 @@
 # Olist case-study ER model
 
-Status: implemented as Stage 2 models/migrations in an isolated PostgreSQL database. The diagram highlights core fields; the complete generated DDL is in `sql/schema.sql`. Historical import and operational services remain later-stage work. The initial Stage 1 model stays archived.
+Status: implemented as Stage 2 models/migrations in an isolated PostgreSQL database, populated by the Stage 3 historical importer. The diagram highlights core fields; the complete generated DDL is in `sql/schema.sql`. Operational transaction services remain Stage 4 work. The initial Stage 1 model stays archived.
 
 ## Historical domain
 
@@ -115,7 +115,7 @@ erDiagram
 
 The diagram highlights core fields. All source timestamp columns retain matching raw text, not just purchase time; additional product measurements map as listed in the dictionary. A source order may have zero item/payment rows. Historical customers have no Django user FK. Their `customer_unique_id` intentionally repeats. The archive happens to use one customer row per order; a conventional FK preserves source references without asserting a universal business rule beyond this snapshot.
 
-`DatasetSnapshot` identifies an accepted source. Stage 2 enforces exactly one possible snapshot identity through a nonnull unique `singleton` column constrained to 1, with unique source identifiers. All historical parent relationships use protected FKs. `ImportRun` can exist before a snapshot is accepted. The Stage 3 importer must validate matching source identity and atomically publish completed snapshots with their domain inserts; that workflow is not implemented yet. A future multi-snapshot design would need additional cross-snapshot integrity enforcement rather than relying on separate ordinary FKs.
+`DatasetSnapshot` identifies an accepted source. Stage 2 enforces exactly one possible snapshot identity through a nonnull unique `singleton` column constrained to 1, with unique source identifiers. All historical parent relationships use protected FKs. `ImportRun` can exist before a snapshot is accepted. The Stage 3 importer validates matching source identity/content and atomically publishes completed snapshots with their domain inserts. A future multi-snapshot design would need additional cross-snapshot integrity enforcement rather than relying on separate ordinary FKs.
 
 Historical item uniqueness is `(order_id, source_order_item_id)` and payment uniqueness is `(order_id, payment_sequential)`. Do not add `(order_id, product_id)` uniqueness. Integer sequences must be positive and source money finite/nonnegative, with reviewed numeric widths. Preserve zero payment values and zero installments. Do not apply operational state/timestamp, nonempty-order, exact-payment-total, or simulated-snapshot-name checks to historical rows.
 

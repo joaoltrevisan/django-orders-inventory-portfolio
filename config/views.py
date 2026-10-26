@@ -10,7 +10,7 @@ def health(request):
             cursor.execute("SELECT 1")
     except DatabaseError:
         return JsonResponse({"status": "unavailable"}, status=503)
-    return JsonResponse({"status": "ok", "stage": 2})
+    return JsonResponse({"status": "ok", "stage": 3})
 
 
 def not_found(request, exception):

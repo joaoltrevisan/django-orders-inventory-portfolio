@@ -1,0 +1,141 @@
+{
+  "checks": [
+    {
+      "method": "GET",
+      "path": "/health/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/register/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/olist/orders/",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/olist/orders/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/olist/items/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/olist/orders/00010242fe8c5a6d1ba2dd792cb16214/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/olist/payments/?order_id=00010242fe8c5a6d1ba2dd792cb16214",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/olist/orders/00010242fe8c5a6d1ba2dd792cb16214/",
+      "status": 405,
+      "expected": 405
+    },
+    {
+      "method": "POST",
+      "path": "/api/products/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/sellers/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/offers/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/products/",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/products/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me/",
+      "status": 401,
+      "expected": 401
+    }
+  ],
+  "passed": true,
+  "health": {
+    "status": "ok",
+    "stage": 3
+  },
+  "historical_order_count": 99441,
+  "historical_example": {
+    "source_order_id": "00010242fe8c5a6d1ba2dd792cb16214",
+    "source_customer_id": "3ce436f183e68e07877b285a838db11a",
+    "customer_unique_id": "871766c5855e863f6eccc05f988b23cb",
+    "source_status": "delivered",
+    "purchased_at_source": "2017-09-13 08:59:02",
+    "source_product_id": "4244733e06e7ecb4970a6e2683c13e61",
+    "source_seller_id": "48436dade18ac8b2bce089ec2a041202",
+    "source_order_item_id": 1,
+    "historical_price": "58.90",
+    "freight_value": "13.29",
+    "payment_rows": 1
+  },
+  "simulated_offer": {
+    "id": 1,
+    "seller_id": 1,
+    "product_id": 1,
+    "simulated_price": "25.90",
+    "is_active": true,
+    "available_quantity": 0,
+    "data_origin": "SIMULATED_API"
+  },
+  "note": "Passwords, tokens and full responses are deliberately excluded. Source identifiers are historical examples, never login credentials."
+}

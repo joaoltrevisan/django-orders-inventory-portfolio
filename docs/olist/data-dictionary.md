@@ -17,7 +17,7 @@ Use surrogate bigint application PKs plus unique source keys for historical tabl
 
 ## Source file mapping
 
-| File / observed rows | Source columns | Proposed meaning and null handling |
+| File / observed rows | Source columns | Meaning and null handling |
 | --- | --- | --- |
 | `olist_customers_dataset.csv` / 99,441 | `customer_id`, `customer_unique_id`, `customer_zip_code_prefix`, `customer_city`, `customer_state` | Customer reference, repeat identity, purchase-location snapshot; postal prefix is text of five digits, not a complete address. No name/email/password inferred |
 | `olist_products_dataset.csv` / 32,951 | `product_id`, `product_category_name` | Historical product identity and nullable source category; no SKU, name, current price, stock, or activation flag is supplied |

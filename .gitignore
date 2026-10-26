@@ -1,0 +1,25 @@
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local environments, caches, and generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.local/
+*.log
+.DS_Store
+
+# Private database copies; reviewed schema exports belong in sql/schema.sql
+*.dump
+*.backup
+*.sqlite3
+media/

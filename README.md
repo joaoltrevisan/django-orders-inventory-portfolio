@@ -6,21 +6,26 @@ Repository: [joaoltrevisan/django-orders-inventory-portfolio](https://github.com
 
 ## Current delivery
 
-**Stage 3: validated Olist import, authentication, customer/catalog APIs, and administrative historical queries.**
+**Stage 4: transactional multi-seller orders, auditable offer inventory, cancellation and simulated processing.**
 
-The service runs in its own Docker Compose environment with restricted database roles. The historical snapshot is imported and independently verified on re-execution, while accounts, catalog offers, and inventory stay separate. The executed suite passed **67 tests**; real HTTP verification covered **18 requests**, and strict OpenAPI validation passed for **27 paths**. Transactional order/stock/payment services, SQL business reports, and measured optimization remain the next deliveries.
+The service runs in its own Docker Compose environment with restricted database roles. The historical snapshot is imported and verified independently, while simulated accounts, offers, inventory and orders stay separate. Orders reserve all seller offers atomically, retain purchase snapshots, and support permitted cancellation/payment/shipping/delivery actions. The executed suite passed **106 tests**, including **15 observed PostgreSQL contention scenarios**; **47 HTTP requests** verified the current workflow, and strict OpenAPI validation passed for **37 paths**. The SQL business portfolio and measured index experiment remain Stage 5 work.
 
 | Material | Contents |
 | --- | --- |
 | [Adaptation plan](docs/olist/adaptation-plan.md) | Inspected implementation conflicts, target architecture, import/report contracts, and stage checkpoints |
 | [Source dictionary](docs/olist/data-dictionary.md) | Identifiers, exact source fields, historical prices/statuses, missing data, and analytical measures |
 | [ER model](docs/olist/data-model.md) | Implemented historical facts and simulated seller offers/inventory |
+| [Operational rules](docs/stage-04/rules.md) | Offer-level stock strategy, lifecycle, ordered locks, integrity and authorization |
+| [Order/inventory API](docs/stage-04/api.md) | Current routes, Docker execution, action semantics, curl workflows and limitations |
+| [Stage 4 verification](docs/stage-04/verification.md) | Actual tests, lock observations, HTTP/SQL results and preserved source facts |
+| [Stage 4 review](docs/stage-04/review.md) | Independent scope, checks, evidence and remaining limits |
+| [Stage 4 files](docs/stage-04/changes.md) | Complete created/changed delivery file inventory |
 | [Validated import](docs/stage-03/import.md) | Locked manifest, Docker commands, validation, atomic publication, no-op checks, and report meanings |
 | [API guide and examples](docs/stage-03/api.md) | JWT, roles, catalog, historical identifiers, and curl workflows |
 | [Stage 3 evidence](docs/stage-03/verification.md) | Actual imports, test/HTTP/schema outcomes, corrections, and limitations |
 | [Stage 3 review](docs/stage-03/review.md) | Independent findings, resolutions, and actual reviewer checks |
 | [Stage 3 files](docs/stage-03/changes.md) | Complete created/changed file inventory |
-| [Current OpenAPI](reports/stage-03/openapi.json) | Validated documentation for implemented endpoints |
+| [Current OpenAPI](reports/stage-04/openapi.json) | Validated documentation for implemented endpoints |
 | [Docker execution](docs/stage-02/setup.md) | Isolated startup, role separation, checks, and schema restoration |
 | [Database implementation](docs/stage-02/database.md) | Reuse, constraints, source clocks, indexes, and service boundaries |
 | [Stage 2 verification](docs/stage-02/verification.md) | Actual commands, test results, versions, corrections, and limitations |
@@ -39,7 +44,7 @@ The inspected source contains **99,441 orders, 112,650 item rows, 103,886 paymen
 
 Historical Olist records are read-only in their own tables and `/api/olist/` namespace, available only to active administrators. They do not create login accounts, stock balances/movements, or simulated approvals. Multiple payment records remain source facts; their amounts are not multiplied by installments or assumed to equal items plus freight.
 
-The operational demonstration uses fictional `example.com` accounts and simulated sellers, offers, and current prices. New offers initialize zero stock. Atomic multi-seller purchases, strict pending-only cancellation, stock movements, simulated payments/deliveries and controlled purchase concurrency remain Stage 4 work. Historical purchases are never presented as current inventory or today's real offers.
+The operational demonstration uses fictional `example.com` accounts and simulated sellers, offers, current prices and stock movements. New offers start at zero; administrative supply appends audit history. Creation deducts available units, pending cancellation restores them once, and payment/shipping/delivery do not change stock. Purchase, cancellation and inventory writes use ordered PostgreSQL row locks. Historical purchases are never presented as current inventory or today's real offers.
 
 The completed import accepted **451,535 source rows**, represented by **451,537 entities** after building the category union. It rejected no rows and preserved **3,116 inconsistent rows with 3,739 warning issues**. Repeated import verified persisted fields/relationships and returned `NOOP`. Full issue reports stay local; committed summaries contain counts, reconciliation magnitudes, and hashes. These import observations are not index benchmark results.
 
@@ -47,14 +52,14 @@ Raw CSVs, ZIPs, downloaded metadata, and credentials stay outside Git in `.local
 
 ## Stack and incremental delivery
 
-Actual container versions: Python 3.12.15, Django 5.2.18 LTS, DRF 3.18.3, PostgreSQL 17.11, SimpleJWT 5.5.1, and psycopg 3.3.6. Dependencies are pinned in `requirements.lock`; [runtime evidence](reports/stage-03/runtime.json) records the current environment. Authentication tests now exercise actual login/refresh/access, password/account revocation, privilege changes, and owner/admin boundaries.
+Actual container versions: Python 3.12.15, Django 5.2.18 LTS, DRF 3.18.3, PostgreSQL 17.11, SimpleJWT 5.5.1, and psycopg 3.3.6. Dependencies are pinned in `requirements.lock`; [runtime evidence](reports/stage-04/runtime.json) records the current environment. Authentication tests exercise login/refresh/access, password/account revocation, privilege changes, and owner/admin boundaries.
 
 | Delivery | Scope | Status |
 | --- | --- | --- |
 | Adaptation plan | Source/implementation inspection, conflicts, dictionary, ER, import/analysis plan | Reviewed and approved for implementation |
 | 2 | Port existing setup; isolated PostgreSQL/roles; historical and seller-offer models, constraints, migrations, schema export | Reviewed and approved |
-| 3 | Repeatable Olist import/report; historical read APIs; authentication, customers, catalog, permissions | Independently reviewed; awaiting user technical review |
-| 4 | Multi-seller simulated orders, offer stock/ledger, transitions, rollback/concurrency | Pending |
+| 3 | Repeatable Olist import/report; historical read APIs; authentication, customers, catalog, permissions | Reviewed and approved |
+| 4 | Multi-seller simulated orders, offer stock/ledger, transitions, rollback/concurrency | Independently reviewed; awaiting user technical review |
 | 5 | Executed Olist SQL portfolio and new index experiment with actual plans/samples | Pending |
 | 6 | Final English guides, OpenAPI, Docker/import commands, verified curl examples, portfolio presentation | Pending |
 
@@ -72,7 +77,7 @@ docker compose up -d --wait app
 curl --fail --silent --show-error http://127.0.0.1:18020/health/
 ```
 
-Skip environment generation if `.env` already exists; the generator preserves existing files. The current health response is `{"status":"ok","stage":3}`. The setup guide explains isolated roles/volumes; the [Stage 3 import guide](docs/stage-03/import.md) adds current startup/import instructions. Registration, JWT, profile, catalog, customer administration and historical reads are available. Operational order creation remains Stage 4 work.
+Skip environment generation if `.env` already exists; the generator preserves existing files. The current health response is `{"status":"ok","stage":4}`. The [current execution/API guide](docs/stage-04/api.md) explains startup, inventory and orders; the [import guide](docs/stage-03/import.md) explains historical publication. Registration, JWT, profiles, catalog, customer administration and historical reads remain available. Operational fulfillment/payment are explicit simulations.
 
 ## Inspect the source archive
 

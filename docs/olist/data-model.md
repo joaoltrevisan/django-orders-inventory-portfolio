@@ -1,6 +1,6 @@
 # Olist case-study ER model
 
-Status: implemented as Stage 2 models/migrations in an isolated PostgreSQL database, populated by the Stage 3 historical importer. The diagram highlights core fields; the complete generated DDL is in `sql/schema.sql`. Operational transaction services remain Stage 4 work. The initial Stage 1 model stays archived.
+Status: implemented as Stage 2 models/migrations in an isolated PostgreSQL database, populated by the Stage 3 historical importer, and used by Stage 4 operational transaction services. The diagram highlights core fields; the complete generated DDL is in `sql/schema.sql`. The initial Stage 1 model stays archived.
 
 ## Historical domain
 
@@ -182,4 +182,4 @@ Historical baseline indexes include PKs, unique source identifiers, item/payment
 
 Simulation locks follow existing order -> sellers by ID -> products by ID -> offers by ID -> stock by offer ID. Catalog activation/price edits and stock changes must follow the same relative order. Historical importer publication uses its own database-scoped lock, and API readers cannot mutate historical facts.
 
-PostgreSQL constraints enforce relational references and local ranges/keys; application services enforce operational cross-table totals, snapshot immutability, legal transitions, and ledger reconciliation. Import validation/reporting preserves historical exceptions instead of forcing operational invariants. The [adaptation plan](adaptation-plan.md) defines the required tests and incremental delivery boundaries.
+PostgreSQL constraints enforce relational references and local ranges/keys; Stage 4 application services enforce operational cross-table totals, snapshot immutability, legal transitions, and ledger reconciliation. Import validation/reporting preserves historical exceptions instead of forcing operational invariants. The [operational contract](../stage-04/rules.md) details the implemented locking/lifecycle behavior; the [adaptation plan](adaptation-plan.md) records the broader delivery boundaries.

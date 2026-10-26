@@ -37,6 +37,13 @@ class JSONBooleanField(serializers.BooleanField):
         return super().to_internal_value(data)
 
 
+class JSONIntegerField(serializers.IntegerField):
+    def to_internal_value(self, data):
+        if type(data) is not int:
+            raise serializers.ValidationError("Enter a JSON integer without a fractional part.")
+        return super().to_internal_value(data)
+
+
 class MoneyInputField(serializers.DecimalField):
     def to_internal_value(self, data):
         if not isinstance(data, str):

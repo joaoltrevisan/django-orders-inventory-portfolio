@@ -28,6 +28,8 @@ for prefix, view in [
 urlpatterns = [
     path("health/", health, name="health"),
     path("api/auth/", include("accounts.urls")),
+    path("api/orders/", include("orders.urls")),
+    path("api/inventory/", include("inventory.urls")),
     path("api/customers/", CustomerListView.as_view()),
     path("api/customers/<int:pk>/", CustomerDetailView.as_view()),
     path("api/olist/", include(historical.urls)),

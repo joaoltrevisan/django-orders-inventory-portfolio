@@ -1,0 +1,322 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "method": "GET",
+      "path": "/health/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/orders/",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/register/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/products/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/sellers/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/sellers/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/offers/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/offers/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/inventory/2/changes/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/inventory/3/changes/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/orders/1/",
+      "status": 404,
+      "expected": 404
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/1/cancel/",
+      "status": 404,
+      "expected": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/inventory/",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/1/simulated-payment/",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/offers/2/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/products/2/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/sellers/2/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/orders/1/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/1/cancel/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/1/cancel/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/2/simulated-payment/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/2/simulated-payment/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/2/cancel/",
+      "status": 409,
+      "expected": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/2/ship/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/2/ship/",
+      "status": 409,
+      "expected": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/2/deliver/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/2/deliver/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/customers/1/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/orders/",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/3/cancel/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/customers/1/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/inventory/2/changes/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/inventory/2/changes/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/",
+      "status": 409,
+      "expected": 409
+    },
+    {
+      "method": "GET",
+      "path": "/api/inventory/2/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/inventory/3/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/inventory/movements/?order_id=3",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/olist/orders/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/olist/orders/",
+      "status": 403,
+      "expected": 403
+    }
+  ],
+  "health": {
+    "status": "ok",
+    "stage": 4
+  },
+  "order_ids": [
+    1,
+    2,
+    3
+  ],
+  "order_totals": [
+    "91.80",
+    "100.00",
+    "30.00"
+  ],
+  "final_statuses": [
+    "CANCELLED",
+    "DELIVERED",
+    "CANCELLED"
+  ],
+  "offer_ids": [
+    2,
+    3
+  ],
+  "ending_available_quantities": [
+    8,
+    4
+  ],
+  "snapshots_preserved_after_catalog_changes": true,
+  "repeated_cancel_payment_delivery_unchanged": true,
+  "admin_cancelled_inactive_customer_order": true,
+  "admin_release_actor_id": 1,
+  "customer_user_id": 2,
+  "customer_profile_id": 1,
+  "historical_order_count": 99441,
+  "note": "Executed with fictional accounts and local JWTs. Passwords, tokens, addresses and full responses are omitted."
+}

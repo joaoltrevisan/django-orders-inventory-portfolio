@@ -1,0 +1,80 @@
+"""Atomic multi-seller reservations adapted from the existing order service."""
+
+from decimal import Decimal
+
+from django.core.exceptions import ValidationError
+from django.db import transaction
+
+from accounts.permissions import require_customer
+from catalog.locking import lock_offer_inventory
+from common.limits import MAX_ORDER_TOTAL
+from inventory.models import StockMovement
+from inventory.services import inspect_stock
+
+from .exceptions import OrderConflict
+from .models import Order, OrderItem
+from .validation import validate_order_input
+
+
+def create_order(*, actor, items, shipping_address):
+    customer = require_customer(actor)
+    items, address = validate_order_input(items=items, shipping_address=shipping_address)
+    quantities = {line["offer_id"]: line["quantity"] for line in items}
+    with transaction.atomic():
+        offers, sellers, products, stocks = lock_offer_inventory(quantities)
+        inspect_stock(stocks)
+        for offer in offers:
+            if (
+                not offer.is_active
+                or not sellers[offer.seller_id].is_active
+                or not products[offer.product_id].is_active
+            ):
+                raise OrderConflict("offer_inactive", "A seller, product or offer is inactive.")
+            if stocks[offer.pk].available_quantity < quantities[offer.pk]:
+                raise OrderConflict(
+                    "insufficient_stock", f"Insufficient stock for offer {offer.pk}."
+                )
+        total = sum(
+            (offer.simulated_price * quantities[offer.pk] for offer in offers), Decimal("0.00")
+        )
+        if not total.is_finite() or not Decimal("0.00") < total <= MAX_ORDER_TOTAL:
+            raise ValidationError(
+                {"items": ["The calculated total is outside the supported range."]}
+            )
+        order = Order.objects.create(
+            customer=customer,
+            total=total,
+            **{"shipping_" + key: value for key, value in address.items()},
+        )
+        lines = OrderItem.objects.bulk_create(
+            [
+                OrderItem(
+                    order=order,
+                    offer=offer,
+                    quantity=quantities[offer.pk],
+                    unit_price=offer.simulated_price,
+                    product_sku=products[offer.product_id].sku,
+                    product_name=products[offer.product_id].name,
+                    seller_label=sellers[offer.seller_id].label,
+                )
+                for offer in offers
+            ]
+        )
+        for offer_id, stock in stocks.items():
+            stock.available_quantity -= quantities[offer_id]
+            stock.save(update_fields=["available_quantity", "updated_at"])
+        StockMovement.objects.bulk_create(
+            [
+                StockMovement(
+                    offer=offer,
+                    order=order,
+                    performed_by=actor,
+                    movement_type="RESERVATION",
+                    quantity_delta=-quantities[offer.pk],
+                    reason="Reservation on simulated order creation.",
+                )
+                for offer in offers
+            ]
+        )
+        order.snapshot_items = lines
+        return order

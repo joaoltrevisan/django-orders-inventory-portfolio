@@ -1,0 +1,97 @@
+{
+  "source": "checks.json final test stdout",
+  "postgresql_tests": 106,
+  "observed_scenarios": [
+    {
+      "scenario": "test_adjustment_first_forces_waiting_purchase_to_recheck_stock",
+      "first_backend_pid": 14249,
+      "second_backend_pid": 14250,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_cancellation_wins_and_waiting_payment_is_rejected",
+      "first_backend_pid": 14252,
+      "second_backend_pid": 14253,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_different_orders_cancel_overlapping_offers_without_inverse_order_locks",
+      "first_backend_pid": 14255,
+      "second_backend_pid": 14256,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_last_unit_is_purchased_once_after_a_real_lock_wait",
+      "first_backend_pid": 14258,
+      "second_backend_pid": 14259,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_payment_wins_and_waiting_cancellation_is_rejected",
+      "first_backend_pid": 14261,
+      "second_backend_pid": 14262,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_purchase_explicitly_locks_stock_rows_before_deducting",
+      "first_backend_pid": 14264,
+      "second_backend_pid": 14265,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_purchase_first_preserves_original_price_while_catalog_update_waits",
+      "first_backend_pid": 14267,
+      "second_backend_pid": 14268,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_repricing_first_makes_waiting_purchase_use_the_new_committed_price",
+      "first_backend_pid": 14270,
+      "second_backend_pid": 14271,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_reversed_multi_seller_multi_product_inputs_use_common_lock_order",
+      "first_backend_pid": 14273,
+      "second_backend_pid": 14274,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_rolled_back_first_reservation_releases_units_to_waiting_customer",
+      "first_backend_pid": 14276,
+      "second_backend_pid": 14277,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_seller_deactivation_first_blocks_waiting_purchase",
+      "first_backend_pid": 14279,
+      "second_backend_pid": 14280,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_shipping_and_waiting_delivery_return_coherent_action_snapshots",
+      "first_backend_pid": 14282,
+      "second_backend_pid": 14283,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_simultaneous_payment_repetitions_keep_one_reference",
+      "first_backend_pid": 14285,
+      "second_backend_pid": 14286,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_two_cancellations_release_once_and_preserve_the_first_actor",
+      "first_backend_pid": 14288,
+      "second_backend_pid": 14289,
+      "blocking_observed": true
+    },
+    {
+      "scenario": "test_two_inventory_adjustments_accumulate_without_lost_updates",
+      "first_backend_pid": 14291,
+      "second_backend_pid": 14292,
+      "blocking_observed": true
+    }
+  ],
+  "note": "Backend IDs and blocking are actual observations from coordinated PostgreSQL transactions, not performance measurements."
+}

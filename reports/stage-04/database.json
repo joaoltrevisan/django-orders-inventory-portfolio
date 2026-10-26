@@ -1,0 +1,87 @@
+{
+  "queries": {
+    "ledger": "WITH movement_totals AS (\nSELECT offer_id,SUM(quantity_delta) AS total FROM inventory_stock_movement GROUP BY offer_id\n), pending AS (\nSELECT i.offer_id,SUM(i.quantity) AS quantity FROM orders_order_item i\nINNER JOIN orders_order o ON o.id=i.order_id WHERE o.status='PENDING_PAYMENT' GROUP BY i.offer_id\n)\nSELECT s.offer_id,s.available_quantity,COALESCE(m.total,0) AS movement_total,\nCOALESCE(p.quantity,0) AS pending_quantity FROM inventory_stock s\nLEFT JOIN movement_totals m ON m.offer_id=s.offer_id\nLEFT JOIN pending p ON p.offer_id=s.offer_id ORDER BY s.offer_id",
+    "orders": "WITH totals AS (SELECT order_id,SUM(quantity*unit_price) AS amount\nFROM orders_order_item GROUP BY order_id)\nSELECT o.id,o.status,o.total::text,o.total=t.amount AS total_matches_items,\np.amount::text AS simulated_payment_amount,s.tracking_code\nFROM orders_order o JOIN totals t ON t.order_id=o.id\nLEFT JOIN orders_simulated_payment p ON p.order_id=o.id\nLEFT JOIN orders_shipment s ON s.order_id=o.id ORDER BY o.id",
+    "release_actors": "SELECT order_id,performed_by_id,quantity_delta FROM inventory_stock_movement WHERE movement_type='RELEASE' ORDER BY order_id,offer_id"
+  },
+  "database_role": "olist_api",
+  "isolation": "read committed",
+  "ledger": [
+    {
+      "offer_id": 1,
+      "available_quantity": 0,
+      "movement_total": 0,
+      "pending_quantity": 0
+    },
+    {
+      "offer_id": 2,
+      "available_quantity": 8,
+      "movement_total": 8,
+      "pending_quantity": 0
+    },
+    {
+      "offer_id": 3,
+      "available_quantity": 4,
+      "movement_total": 4,
+      "pending_quantity": 0
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "status": "CANCELLED",
+      "total": "91.80",
+      "total_matches_items": true,
+      "simulated_payment_amount": null,
+      "tracking_code": null
+    },
+    {
+      "id": 2,
+      "status": "DELIVERED",
+      "total": "100.00",
+      "total_matches_items": true,
+      "simulated_payment_amount": "100.00",
+      "tracking_code": "SIMULATED-STAGE4-001"
+    },
+    {
+      "id": 3,
+      "status": "CANCELLED",
+      "total": "30.00",
+      "total_matches_items": true,
+      "simulated_payment_amount": null,
+      "tracking_code": null
+    }
+  ],
+  "release_actors": [
+    {
+      "order_id": 1,
+      "performed_by_id": 2,
+      "quantity_delta": 2
+    },
+    {
+      "order_id": 1,
+      "performed_by_id": 2,
+      "quantity_delta": 1
+    },
+    {
+      "order_id": 3,
+      "performed_by_id": 1,
+      "quantity_delta": 1
+    }
+  ],
+  "table_counts": {
+    "olist_customer": 99441,
+    "olist_product": 32951,
+    "olist_seller": 3095,
+    "olist_order": 99441,
+    "olist_order_item": 112650,
+    "olist_payment_record": 103886,
+    "orders_order": 3,
+    "orders_order_item": 5,
+    "orders_simulated_payment": 1,
+    "orders_shipment": 1,
+    "inventory_stock_movement": 12
+  },
+  "ledger_reconciles": true,
+  "note": "Executed operational reconciliation, not Olist sales analysis or a benchmark. Historical counts remain separate from simulated orders."
+}

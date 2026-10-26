@@ -1,0 +1,26 @@
+{
+  "python": "3.12.15",
+  "architecture": "aarch64",
+  "postgresql": "PostgreSQL 17.11 (Debian 17.11-1.pgdg12+2) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "database_role": "olist_api",
+  "database_timezone": "UTC",
+  "packages": {
+    "Django": "5.2.18",
+    "djangorestframework": "3.18.3",
+    "djangorestframework-simplejwt": "5.5.1",
+    "psycopg": "3.3.6",
+    "PyJWT": "2.15.1",
+    "drf-spectacular": "0.30.0",
+    "ruff": "0.17.2"
+  },
+  "docker_engine": "29.9.2",
+  "docker_compose": "5.6.1",
+  "application_image_id": "sha256:a62d28db3f925500dda1bd315d5be90203e509c11576c275778a2cbeb4a0c3a7",
+  "running_application_image_id": "sha256:a62d28db3f925500dda1bd315d5be90203e509c11576c275778a2cbeb4a0c3a7",
+  "application_container_user": "app",
+  "health_http_status": 200,
+  "health_response": {
+    "status": "ok",
+    "stage": 4
+  }
+}

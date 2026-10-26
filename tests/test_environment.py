@@ -52,6 +52,6 @@ class HealthTests(TestCase):
         self.assertEqual(response.json(), {"status": "unavailable"})
 
     def test_unimplemented_api_has_english_not_found_response(self):
-        response = self.client.get("/api/orders/", HTTP_HOST="localhost")
+        response = self.client.get("/api/not-implemented/", HTTP_HOST="localhost")
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json()["detail"], "Resource not found.")

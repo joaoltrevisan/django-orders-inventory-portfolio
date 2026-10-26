@@ -43,6 +43,7 @@ USE_TZ = True
 TIME_ZONE = "UTC"
 LANGUAGE_CODE = "en-us"
 REST_FRAMEWORK = {
+    "EXCEPTION_HANDLER": "common.exceptions.exception_handler",
     "DEFAULT_AUTHENTICATION_CLASSES": ["accounts.authentication.DatabaseJWTAuthentication"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
@@ -66,5 +67,5 @@ SIMPLE_JWT = {
 SPECTACULAR_SETTINGS = {
     "TITLE": "Order and Inventory Management Service for Olist",
     "DESCRIPTION": "A service for Olist's marketplace context: orders, inventory, and analytics.",
-    "VERSION": "0.3.0",
+    "VERSION": "0.4.0",
 }

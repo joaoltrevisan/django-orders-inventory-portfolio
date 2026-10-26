@@ -1,8 +1,8 @@
-# Olist E-Commerce: Independent Back-End Case Study
+# Marketplace Operations API
 
-An independent educational project using the public [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) to demonstrate Django/DRF development, PostgreSQL modeling and integrity, transactional marketplace simulation, SQL analysis, testing, and measured query optimization.
+A Django REST Framework backend for multi-seller orders, seller offers, inventory control, customer access, and PostgreSQL analytics. The architecture emphasizes relational integrity, transactional consistency, authorization, and measured query performance.
 
-This project does not imply employment, partnership, endorsement, or access to Olist's internal systems. Repository: [joaoltrevisan/django-orders-inventory-portfolio](https://github.com/joaoltrevisan/django-orders-inventory-portfolio).
+Repository: [joaoltrevisan/django-orders-inventory-portfolio](https://github.com/joaoltrevisan/django-orders-inventory-portfolio).
 
 ## Current delivery
 
@@ -59,3 +59,7 @@ python3 scripts/inspect_olist.py \
 ```
 
 Choose a new output filename each run; the script refuses overwrite. It profiles a ZIP without extracting files or connecting to a database. It is **not** the future validated `import_olist` command. Full download/provenance instructions and actual command outcomes are in the inspection record. Application startup, database creation/import, API examples, and SQL/benchmark commands will be added and executed with their implementation stages.
+
+## Data provenance and licensing
+
+Historical analysis uses the [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). Source attribution, dataset identity, transformations, and CC BY-NC-SA 4.0 obligations are recorded in [THIRD_PARTY_DATA.md](THIRD_PARTY_DATA.md). Operational accounts, inventory, current offer prices, payments, and delivery actions are simulated. This independently developed repository does not claim an Olist employment, contractual, partnership, or endorsement relationship.

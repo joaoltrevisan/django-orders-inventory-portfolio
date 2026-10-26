@@ -1870,4 +1870,3 @@ ALTER TABLE ONLY public.orders_simulated_payment
 --
 
 \unrestrict NP81wZYdlHmNlDsW6jOzmU7l2GGKxG4Bb65gY9nHFOmQtgjXvGvNmv0L3U1dPk0
-

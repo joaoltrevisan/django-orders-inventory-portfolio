@@ -3,7 +3,7 @@
   "isolated_restore_matches": true,
   "normalized_schema_sha256": "990015aeee46936a285e51ab843fa28dc7918f8618ebff4a816001140396b859",
   "restored_canonical_sha256": "833152f42f67373428fe04c504c429c4b24869f7cee1d16aaf44a783cb08bfed",
-  "schema_file_sha256": "4d3700a445a68cbd2b1940c0c508438eef9cb4074556e51e9a0609bde6f44a7b",
+  "schema_file_sha256": "6e3867e7ffeaacbe1ead988847f5cd352075c167ad71300f0c4d7f38724d9156",
   "postgresql": "PostgreSQL 17.11 (Debian 17.11-1.pgdg12+2) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
   "pg_dump": "pg_dump (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
   "migration_history": [

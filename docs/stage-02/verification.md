@@ -37,6 +37,7 @@ The [runtime artifact](../../reports/stage-02/runtime.json) records Python/packa
 7. The first runtime-version collector invocation used a direct script path, which omitted the project root from Python's import path. Invoke it as `python -m scripts.runtime_versions`; this module command resolves Django settings from the application root.
 8. A later rebuild initially failed because Docker Desktop was stopped. Started the existing Docker Desktop installation, rebuilt successfully, and restarted only this project's app against its preserved database volume.
 9. Final review found an outdated expected JWT audience after the service identity changed. Updated the smoke test to assert both the configured audience and issuer, rebuilt the image, and reran all seven consolidated checks with 39 tests passing. Earlier successful check/runtime artifacts remain private under `.local/stage-02/`; committed evidence describes the final image.
+10. The staged diff check reported a generated blank line at the end of the PostgreSQL schema dump. Removed only that trailing empty line, then reran export/live and isolated restoration comparison and refreshed the schema file fingerprint. SQL statements and the normalized schema fingerprints remain unchanged.
 
 No unresolved test/build/startup/schema failure is being presented as a pass. Initial failures remain documented; retained successful artifacts describe the corrected implementation.
 

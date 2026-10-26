@@ -1,0 +1,20 @@
+# Pinned direct and transitive dependencies; Python 3.12.15.
+asgiref==3.13.0
+attrs==26.1.0
+Django==5.2.18
+djangorestframework==3.18.3
+djangorestframework_simplejwt==5.5.1
+drf-spectacular==0.30.0
+inflection==0.5.1
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+psycopg==3.3.6
+psycopg-binary==3.3.6
+PyJWT==2.15.1
+PyYAML==6.0.3
+referencing==0.37.0
+rpds-py==2026.9.1
+ruff==0.17.2
+sqlparse==0.6.0
+typing_extensions==4.16.0
+uritemplate==4.2.0

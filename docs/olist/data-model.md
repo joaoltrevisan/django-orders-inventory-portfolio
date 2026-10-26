@@ -1,6 +1,6 @@
-# Proposed Olist case-study ER model
+# Olist case-study ER model
 
-Status: review design, not migration-generated schema. This design replaces the fictional-only domain assumptions for new work; the initial Stage 1 model remains archived. Historical and simulated data use separate Django apps/tables and cannot enter each other's write services.
+Status: implemented as Stage 2 models/migrations in an isolated PostgreSQL database. The diagram highlights core fields; the complete generated DDL is in `sql/schema.sql`. Historical import and operational services remain later-stage work. The initial Stage 1 model stays archived.
 
 ## Historical domain
 
@@ -22,9 +22,10 @@ erDiagram
 
     olist_dataset_snapshot {
         bigint id PK
+        smallint singleton UK "Database CHECK equals 1"
         varchar dataset_ref
         varchar reported_version
-        char archive_sha256 UK
+        varchar archive_sha256 UK
         jsonb member_manifest
         varchar mapping_version
         varchar publication_status
@@ -50,11 +51,11 @@ erDiagram
     olist_customer {
         bigint id PK
         bigint snapshot_id FK
-        char source_customer_id UK
-        char customer_unique_id "Nonunique indexed repeat identity"
+        varchar source_customer_id UK
+        varchar customer_unique_id "Nonunique indexed repeat identity"
         varchar zip_code_prefix
         varchar city
-        char state
+        varchar state
     }
     olist_category {
         bigint id PK
@@ -65,7 +66,7 @@ erDiagram
     olist_product {
         bigint id PK
         bigint snapshot_id FK
-        char source_product_id UK
+        varchar source_product_id UK
         bigint category_id FK "Nullable"
         integer name_length "Nullable, not a name"
         integer description_length "Nullable"
@@ -74,15 +75,15 @@ erDiagram
     olist_seller {
         bigint id PK
         bigint snapshot_id FK
-        char source_seller_id UK
+        varchar source_seller_id UK
         varchar zip_code_prefix
         varchar city
-        char state
+        varchar state
     }
     olist_order {
         bigint id PK
         bigint snapshot_id FK
-        char source_order_id UK
+        varchar source_order_id UK
         bigint customer_id FK
         varchar source_status
         varchar purchased_at_raw
@@ -114,7 +115,7 @@ erDiagram
 
 The diagram highlights core fields. All source timestamp columns retain matching raw text, not just purchase time; additional product measurements map as listed in the dictionary. A source order may have zero item/payment rows. Historical customers have no Django user FK. Their `customer_unique_id` intentionally repeats. The archive happens to use one customer row per order; a conventional FK preserves source references without asserting a universal business rule beyond this snapshot.
 
-`DatasetSnapshot` identifies an immutable accepted source. `ImportRun` may reference it only after a matching source has been validated; failed preflight attempts still retain reports. Completed snapshot publication and domain inserts commit atomically. All historical parent relationships use protected FKs. Initially one snapshot is allowed per database, with unique source identifiers; tests must enforce snapshot consistency across related dimensions. Do not claim that separate ordinary FKs by themselves prevent cross-snapshot links in a future multi-snapshot design.
+`DatasetSnapshot` identifies an accepted source. Stage 2 enforces exactly one possible snapshot identity through a nonnull unique `singleton` column constrained to 1, with unique source identifiers. All historical parent relationships use protected FKs. `ImportRun` can exist before a snapshot is accepted. The Stage 3 importer must validate matching source identity and atomically publish completed snapshots with their domain inserts; that workflow is not implemented yet. A future multi-snapshot design would need additional cross-snapshot integrity enforcement rather than relying on separate ordinary FKs.
 
 Historical item uniqueness is `(order_id, source_order_item_id)` and payment uniqueness is `(order_id, payment_sequential)`. Do not add `(order_id, product_id)` uniqueness. Integer sequences must be positive and source money finite/nonnegative, with reviewed numeric widths. Preserve zero payment values and zero installments. Do not apply operational state/timestamp, nonempty-order, exact-payment-total, or simulated-snapshot-name checks to historical rows.
 
@@ -171,7 +172,7 @@ erDiagram
     }
 ```
 
-These are proposed table names; Stage 2 must make `db_table`/migrations/export agree, rather than assume underscore changes occur automatically during reuse. Operational FKs, positive decimal prices/quantities, nonnegative stock, history protection, and strict lifecycle checks remain. Offer seller/product associations are immutable; changing an association requires a new offer, not rewriting purchase identity. Reservation/release uniqueness changes to `(order, offer, movement_type)`; cancellation headroom is calculated per offer. Names/labels and current prices here are fictional, never fields copied into the historical catalog as facts.
+These table names are now explicit in Stage 2 models/migrations and agree with the SQL export. The offer reassignment trigger enforces immutable seller/product associations, including raw SQL and bulk updates. Operational FKs, positive decimal prices/quantities, nonnegative stock, history protection, and strict lifecycle checks remain. Offer seller/product associations are immutable; changing an association requires a new offer, not rewriting purchase identity. Reservation/release uniqueness changes to `(order, offer, movement_type)`; cancellation headroom is calculated per offer. Names/labels and current prices here are fictional, never fields copied into the historical catalog as facts.
 
 Optional later historical provenance links are deliberately omitted from the core diagram because they are not operational ownership, authentication, or current-merchant relationships. No historical customer-to-login linkage will be created. A demo seed using historical product/seller references must label its projection and synthetic attributes explicitly.
 

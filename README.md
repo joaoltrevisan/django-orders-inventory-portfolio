@@ -18,6 +18,8 @@ The service now runs in its own Docker Compose environment with restricted datab
 | [Docker execution](docs/stage-02/setup.md) | Isolated startup, role separation, checks, and schema restoration |
 | [Database implementation](docs/stage-02/database.md) | Reuse, constraints, source clocks, indexes, and service boundaries |
 | [Stage 2 verification](docs/stage-02/verification.md) | Actual commands, test results, versions, corrections, and limitations |
+| [Stage 2 review](docs/stage-02/review.md) | Independent findings, corrections, checks, and remaining gates |
+| [Stage 2 files](docs/stage-02/changes.md) | Complete inventory of created and changed delivery files |
 | [Inspection and verification](docs/olist/inspection.md) | Commands, actual counts/anomalies, reproducibility, limitations, and preservation checks |
 | [Independent review](docs/olist/review.md) | Conflict corrections, separate profiler rerun, actual checks, and remaining gates |
 | [Source manifest](reports/olist/source-manifest.json) | Publisher metadata, version ambiguity, attribution, and archive fingerprint |
@@ -42,7 +44,7 @@ Actual container versions: Python 3.12.15, Django 5.2.18 LTS, DRF 3.18.3, Postgr
 | Delivery | Scope | Status |
 | --- | --- | --- |
 | Adaptation plan | Source/implementation inspection, conflicts, dictionary, ER, import/analysis plan | Reviewed and approved for implementation |
-| 2 | Port existing setup; isolated PostgreSQL/roles; historical and seller-offer models, constraints, migrations, schema export | Implemented; final review pending |
+| 2 | Port existing setup; isolated PostgreSQL/roles; historical and seller-offer models, constraints, migrations, schema export | Independently reviewed; awaiting user technical review |
 | 3 | Repeatable Olist import/report; historical read APIs; authentication, customers, catalog, permissions | Pending |
 | 4 | Multi-seller simulated orders, offer stock/ledger, transitions, rollback/concurrency | Pending |
 | 5 | Executed Olist SQL portfolio and new index experiment with actual plans/samples | Pending |

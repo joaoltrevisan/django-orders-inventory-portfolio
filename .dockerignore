@@ -1,0 +1,15 @@
+.git
+.env
+.env.*
+!.env.example
+.local
+.venv
+__pycache__
+*.py[cod]
+.ruff_cache
+.DS_Store
+docs
+reports
+sql
+README.md
+THIRD_PARTY_DATA.md

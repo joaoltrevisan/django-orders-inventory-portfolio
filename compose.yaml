@@ -1,0 +1,85 @@
+name: olist-case-study
+
+x-app: &app
+  image: olist-case-study-app:stage2
+  build: .
+  read_only: true
+  tmpfs: [/tmp]
+  security_opt: [no-new-privileges:true]
+  depends_on:
+    db:
+      condition: service_healthy
+
+x-environment: &environment
+  DJANGO_SETTINGS_MODULE: config.settings.development
+  DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Generate .env with scripts/create_env.py}
+  DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1}
+  PGHOST: db
+  PGPORT: "5432"
+  PGDATABASE: ${PGDATABASE:-olist_case_study}
+
+services:
+  db:
+    image: postgres:17.11-bookworm
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Generate .env}
+      POSTGRES_DB: ${PGDATABASE:-olist_case_study}
+      MIGRATION_DB_PASSWORD: ${MIGRATION_DB_PASSWORD:?Generate .env}
+      IMPORT_DB_PASSWORD: ${IMPORT_DB_PASSWORD:?Generate .env}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?Generate .env}
+      TEST_DB_PASSWORD: ${TEST_DB_PASSWORD:?Generate .env}
+    command: [postgres, -c, timezone=UTC]
+    volumes:
+      - olist_postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/01-roles.sql:/docker-entrypoint-initdb.d/01-roles.sql:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U postgres -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+  app:
+    <<: *app
+    environment:
+      <<: *environment
+      PGUSER: olist_api
+      PGPASSWORD: ${APP_DB_PASSWORD:?Generate .env}
+    ports: ["127.0.0.1:${APP_PORT:-18020}:8000"]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/', timeout=3)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  migrate:
+    <<: *app
+    profiles: [tools]
+    environment:
+      <<: *environment
+      PGUSER: olist_owner
+      PGPASSWORD: ${MIGRATION_DB_PASSWORD:?Generate .env}
+    command: [migrate, --noinput]
+
+  importer:
+    <<: *app
+    profiles: [tools]
+    environment:
+      <<: *environment
+      PGUSER: olist_importer
+      PGPASSWORD: ${IMPORT_DB_PASSWORD:?Generate .env}
+    command: [check]
+
+  tests:
+    <<: *app
+    profiles: [tools]
+    environment:
+      <<: *environment
+      DJANGO_SETTINGS_MODULE: config.settings.test
+      PGUSER: olist_test
+      PGPASSWORD: ${TEST_DB_PASSWORD:?Generate .env}
+    command: [test, tests, --noinput, --verbosity, "2"]
+
+volumes:
+  olist_postgres_data:

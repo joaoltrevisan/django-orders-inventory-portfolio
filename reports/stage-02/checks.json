@@ -1,0 +1,115 @@
+{
+  "started_at_utc": "2026-10-26T17:07:33.307556+00:00",
+  "commands": [
+    {
+      "command": [
+        "docker",
+        "compose",
+        "run",
+        "--rm",
+        "--entrypoint",
+        "python",
+        "app",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "exit_code": 0,
+      "stdout": "No broken requirements found.\n",
+      "stderr": " Container olist-case-study-db-1 Starting \n Container olist-case-study-db-1 Started \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-app-run-9bb8eb176a7b Creating \n Container olist-case-study-app-run-9bb8eb176a7b Created \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "run",
+        "--rm",
+        "--entrypoint",
+        "ruff",
+        "app",
+        "check",
+        "--no-cache",
+        "."
+      ],
+      "exit_code": 0,
+      "stdout": "All checks passed!\n",
+      "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-app-run-4908a21f3284 Creating \n Container olist-case-study-app-run-4908a21f3284 Created \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "run",
+        "--rm",
+        "--entrypoint",
+        "ruff",
+        "app",
+        "format",
+        "--check",
+        "--no-cache",
+        "."
+      ],
+      "exit_code": 0,
+      "stdout": "51 files already formatted\n",
+      "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-app-run-76c32d835697 Creating \n Container olist-case-study-app-run-76c32d835697 Created \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "run",
+        "--rm",
+        "migrate",
+        "check"
+      ],
+      "exit_code": 0,
+      "stdout": "System check identified no issues (0 silenced).\n",
+      "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-migrate-run-069f4cc4ff37 Creating \n Container olist-case-study-migrate-run-069f4cc4ff37 Created \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "run",
+        "--rm",
+        "migrate",
+        "makemigrations",
+        "--check",
+        "--dry-run"
+      ],
+      "exit_code": 0,
+      "stdout": "No changes detected\n",
+      "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-migrate-run-0c0f9ca23fef Creating \n Container olist-case-study-migrate-run-0c0f9ca23fef Created \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "run",
+        "--rm",
+        "migrate",
+        "migrate",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-migrate-run-74f00e30310b Creating \n Container olist-case-study-migrate-run-74f00e30310b Created \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "run",
+        "--rm",
+        "tests"
+      ],
+      "exit_code": 0,
+      "stdout": "Found 39 test(s).\nOperations to perform:\n  Synchronize unmigrated apps: common, drf_spectacular, rest_framework\n  Apply all migrations: accounts, auth, catalog, contenttypes, inventory, olist, orders\nSynchronizing apps without migrations:\n  Creating tables...\n    Running deferred SQL...\nRunning migrations:\n  Applying contenttypes.0001_initial... OK\n  Applying contenttypes.0002_remove_content_type_name... OK\n  Applying auth.0001_initial... OK\n  Applying auth.0002_alter_permission_name_max_length... OK\n  Applying auth.0003_alter_user_email_max_length... OK\n  Applying auth.0004_alter_user_username_opts... OK\n  Applying auth.0005_alter_user_last_login_null... OK\n  Applying auth.0006_require_contenttypes_0002... OK\n  Applying auth.0007_alter_validators_add_error_messages... OK\n  Applying auth.0008_alter_user_username_max_length... OK\n  Applying auth.0009_alter_user_last_name_max_length... OK\n  Applying auth.0010_alter_group_name_max_length... OK\n  Applying auth.0011_update_proxy_permissions... OK\n  Applying auth.0012_alter_user_first_name_max_length... OK\n  Applying accounts.0001_initial... OK\n  Applying catalog.0001_initial... OK\n  Applying catalog.0002_offer_identity... OK\n  Applying orders.0001_initial... OK\n  Applying inventory.0001_initial... OK\n  Applying olist.0001_initial... OK\nSystem check identified no issues (0 silenced).\n",
+      "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-tests-run-13efa2a8b9cb Creating \n Container olist-case-study-tests-run-13efa2a8b9cb Created \nCreating test database for alias 'default' ('test_olist_case_study')...\ntest_database_failure_is_sanitized (tests.test_environment.HealthTests.test_database_failure_is_sanitized) ... ok\ntest_health_probes_real_postgresql (tests.test_environment.HealthTests.test_health_probes_real_postgresql) ... ok\ntest_unimplemented_api_has_english_not_found_response (tests.test_environment.HealthTests.test_unimplemented_api_has_english_not_found_response) ... ok\ntest_all_source_statuses_are_preserved_without_operational_mapping (tests.test_historical_models.HistoricalModelTests.test_all_source_statuses_are_preserved_without_operational_mapping) ... ok\ntest_failed_attempt_can_exist_without_a_snapshot (tests.test_historical_models.HistoricalModelTests.test_failed_attempt_can_exist_without_a_snapshot) ... ok\ntest_foreign_keys_are_checked_before_asserting_success (tests.test_historical_models.HistoricalModelTests.test_foreign_keys_are_checked_before_asserting_success) ... ok\ntest_historical_exception_rows_are_retained (tests.test_historical_models.HistoricalModelTests.test_historical_exception_rows_are_retained) ... ok\ntest_historical_references_protect_deletion (tests.test_historical_models.HistoricalModelTests.test_historical_references_protect_deletion) ... ok\ntest_invalid_source_key_and_postal_prefix_rejected (tests.test_historical_models.HistoricalModelTests.test_invalid_source_key_and_postal_prefix_rejected) ... ok\ntest_nonfinite_negative_and_excessive_historical_money_is_rejected (tests.test_historical_models.HistoricalModelTests.test_nonfinite_negative_and_excessive_historical_money_is_rejected) ... ok\ntest_repeated_product_lines_and_multiple_payments_are_valid (tests.test_historical_models.HistoricalModelTests.test_repeated_product_lines_and_multiple_payments_are_valid) ... ok\ntest_single_snapshot_enforced_by_database (tests.test_historical_models.HistoricalModelTests.test_single_snapshot_enforced_by_database) ... ok\ntest_source_customer_and_product_ids_are_unique (tests.test_historical_models.HistoricalModelTests.test_source_customer_and_product_ids_are_unique) ... ok\ntest_source_customers_are_not_login_accounts_and_repeat_identity_is_nonunique (tests.test_historical_models.HistoricalModelTests.test_source_customers_are_not_login_accounts_and_repeat_identity_is_nonunique) ... ok\ntest_source_line_and_payment_sequence_uniqueness (tests.test_historical_models.HistoricalModelTests.test_source_line_and_payment_sequence_uniqueness) ... ok\ntest_untranslated_category_and_missing_attributes_are_valid (tests.test_historical_models.HistoricalModelTests.test_untranslated_category_and_missing_attributes_are_valid) ... ok\ntest_aware_fractional_or_malformed_source_times_are_rejected (tests.test_historical_models.SourceTimeTests.test_aware_fractional_or_malformed_source_times_are_rejected) ... ok\ntest_exact_and_range_queries_keep_source_calendar (tests.test_historical_models.SourceTimeTests.test_exact_and_range_queries_keep_source_calendar) ... ok\ntest_naive_roundtrip_and_calendar_boundaries_under_non_utc_timezones (tests.test_historical_models.SourceTimeTests.test_naive_roundtrip_and_calendar_boundaries_under_non_utc_timezones) ... ok\ntest_native_column_type_and_raw_timestamp_are_preserved (tests.test_historical_models.SourceTimeTests.test_native_column_type_and_raw_timestamp_are_preserved) ... ok\ntest_unsafe_inherited_orm_datetime_transforms_are_not_available (tests.test_historical_models.SourceTimeTests.test_unsafe_inherited_orm_datetime_transforms_are_not_available) ... ok\ntest_django_password_hashing_and_case_insensitive_email_uniqueness (tests.test_simulated_models.SimulatedModelTests.test_django_password_hashing_and_case_insensitive_email_uniqueness) ... ok\ntest_invalid_status_timestamp_combination_rejected (tests.test_simulated_models.SimulatedModelTests.test_invalid_status_timestamp_combination_rejected) ... ok\ntest_jwt_dependency_roundtrip_smoke_only (tests.test_simulated_models.SimulatedModelTests.test_jwt_dependency_roundtrip_smoke_only) ... ok\ntest_movement_sign_order_and_duplicate_effect_constraints (tests.test_simulated_models.SimulatedModelTests.test_movement_sign_order_and_duplicate_effect_constraints) ... ok\ntest_offer_and_order_line_uniqueness (tests.test_simulated_models.SimulatedModelTests.test_offer_and_order_line_uniqueness) ... ok\ntest_offer_order_and_actor_references_protect_history (tests.test_simulated_models.SimulatedModelTests.test_offer_order_and_actor_references_protect_history) ... ok\ntest_offer_reassignment_rejected_through_bulk_and_raw_sql (tests.test_simulated_models.SimulatedModelTests.test_offer_reassignment_rejected_through_bulk_and_raw_sql) ... ok\ntest_quantities_reject_zero_and_fractional_or_boolean_inputs (tests.test_simulated_models.SimulatedModelTests.test_quantities_reject_zero_and_fractional_or_boolean_inputs) ... ok\ntest_reprice_and_deactivate_preserve_purchase_snapshots (tests.test_simulated_models.SimulatedModelTests.test_reprice_and_deactivate_preserve_purchase_snapshots) ... ok\ntest_same_product_can_be_bought_from_two_sellers_with_separate_stock (tests.test_simulated_models.SimulatedModelTests.test_same_product_can_be_bought_from_two_sellers_with_separate_stock) ... ok\ntest_simulated_price_must_be_positive_finite (tests.test_simulated_models.SimulatedModelTests.test_simulated_price_must_be_positive_finite) ... ok\ntest_stock_cannot_be_negative_and_is_unique_per_offer (tests.test_simulated_models.SimulatedModelTests.test_stock_cannot_be_negative_and_is_unique_per_offer) ... ok\ntest_existing_configuration_is_not_overwritten (tests.test_environment.EnvironmentFileTests.test_existing_configuration_is_not_overwritten) ... ok\ntest_generated_secrets_are_distinct_private_and_template_is_preserved (tests.test_environment.EnvironmentFileTests.test_generated_secrets_are_distinct_private_and_template_is_preserved) ... ok\ntest_invalid_template_does_not_create_a_partial_file (tests.test_environment.EnvironmentFileTests.test_invalid_template_does_not_create_a_partial_file) ... ok\ntest_nonempty_history_refused_before_denial_probes (tests.test_verification_tools.VerificationSafetyTests.test_nonempty_history_refused_before_denial_probes) ... ok\ntest_schema_normalization_keeps_constraints_and_sql_casts (tests.test_verification_tools.VerificationSafetyTests.test_schema_normalization_keeps_constraints_and_sql_casts) ... ok\ntest_unexpected_permission_success_rolls_back_before_failing (tests.test_verification_tools.VerificationSafetyTests.test_unexpected_permission_success_rolls_back_before_failing) ... ok\n\n----------------------------------------------------------------------\nRan 39 tests in 0.429s\n\nOK\nDestroying test database for alias 'default' ('test_olist_case_study')...\n"
+    }
+  ],
+  "passed": true,
+  "postgresql_tests": 39,
+  "test_runtime_seconds": 0.429,
+  "finished_at_utc": "2026-10-26T17:07:46.347011+00:00"
+}

@@ -15,11 +15,11 @@ Every development stage must receive an independent review before its final hand
 
 | Stage | Primary concerns |
 | --- | --- |
-| 1 | Requirements consistency, complete business rules, lifecycle, permissions, relational design, integrity boundaries, and realistic verification plans |
-| 2 | Supported dependencies, reproducible PostgreSQL setup, migration/schema agreement, constraints, indexes, and preservation of existing work |
-| 3 | Authentication, English responses, strict validation, owner isolation, administrative permissions, and pagination |
-| 4 | Atomic writes, consistent lock ordering, overselling prevention, price snapshots, ledger integrity, cancellation idempotency, and controlled concurrency tests |
-| 5 | Fictional-data isolation, executed SQL correctness, identical before/after inputs, plans, individual measurements, medians, storage/buffer evidence, and honest conclusions |
+| 1 / Olist adaptation | Requirements consistency, source profiling/license, historical-versus-simulated facts, business rules, permissions, relational design, integrity boundaries, and realistic verification plans |
+| 2 | Supported dependencies, isolated PostgreSQL/roles, source timestamp preservation, seller-offer models, migration/schema agreement, constraints, indexes, and preservation of existing work |
+| 3 | Repeatable historical import and reconciliation, no-op/rollback behavior, read-only historical permissions, authentication, English responses, owner isolation, administrative permissions, and pagination |
+| 4 | Multi-seller atomic writes, offer-level lock ordering/stock, overselling prevention, purchase snapshots, ledger integrity, cancellation idempotency, and controlled concurrency tests |
+| 5 | Imported-data isolation, Olist SQL grain/correctness, identical before/after inputs, new plans and individual measurements, medians, storage/buffer evidence, and honest conclusions |
 | 6 | Accurate English documentation, reproducible workflows, OpenAPI consistency, test evidence, portfolio clarity, and disclosed limitations |
 
 Review findings should prioritize demonstrated defects and concrete risks rather than speculative rewrites or stylistic preferences. A reviewer must never report unexecuted tests as passing. Secrets, tokens, and private database data must not appear in review artifacts.

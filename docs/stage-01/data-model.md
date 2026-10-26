@@ -1,5 +1,7 @@
 # Stage 1: relational data model
 
+Historical baseline: see the proposed [Olist model](../olist/data-model.md) and [adaptation plan](../olist/adaptation-plan.md) for current work. They separate source history from simulated accounts/orders and move simulated price/inventory to seller offers. This earlier model remains preserved for traceability.
+
 This is the proposed model for review. Table names match the related Django model conventions to support selective reuse. No migrations or SQL schema have been created in this repository. Stage 2 will reconcile this design with actual migration-generated PostgreSQL DDL.
 
 ## Entity-relationship diagram

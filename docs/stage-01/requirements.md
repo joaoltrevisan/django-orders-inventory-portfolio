@@ -1,5 +1,7 @@
 # Stage 1: requirements and business rules
 
+Historical baseline: the later [Olist adaptation plan](../olist/adaptation-plan.md) supersedes fictional-only, single-store, product-level stock, historical payment/status, and source-time assumptions. Retain applicable operational safeguards, adapted to seller offers. This original document is preserved as a record of the earlier design, not the current Olist contract.
+
 Status: proposed implementation contract, awaiting technical review. No API behavior described here is implemented in this new repository yet.
 
 ## Scope and architecture

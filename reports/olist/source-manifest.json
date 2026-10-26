@@ -1,0 +1,64 @@
+{
+  "archive_bytes": 44717580,
+  "archive_sha256": "967e41e04fc306fe604e2a693f488995a8b41e5047418f8a5c8e4abd6deca784",
+  "database_import_executed": false,
+  "dataset_title": "Brazilian E-Commerce Public Dataset by Olist",
+  "format_version": 1,
+  "index_experiment_executed": false,
+  "license": "CC BY-NC-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "member_manifest": "inspection-profile.json",
+  "metadata_endpoint": "https://www.kaggle.com/api/v1/datasets/view/olistbr/brazilian-ecommerce",
+  "modifications": "Read CSVs without extraction; computed counts, hashes, relationship checks, and anomaly summaries. No source values were repaired.",
+  "publisher": "Olist",
+  "publisher_account": "olistbr",
+  "publisher_current_version_reported": 2,
+  "publisher_last_updated": "2021-10-01T19:08:27.97Z",
+  "publisher_version_history": [
+    {
+      "creation_date": "2021-10-01T19:08:27.97Z",
+      "version_number": 2
+    },
+    {
+      "creation_date": "2018-11-29T12:22:57.62Z",
+      "version_number": 7
+    },
+    {
+      "creation_date": "2018-10-31T16:15:27.527Z",
+      "version_number": 6
+    },
+    {
+      "creation_date": "2018-10-25T19:46:13.67Z",
+      "version_number": 5
+    },
+    {
+      "creation_date": "2018-10-09T01:52:17.347Z",
+      "version_number": 4
+    },
+    {
+      "creation_date": "2018-10-03T18:55:37.45Z",
+      "version_number": 3
+    },
+    {
+      "creation_date": "2018-09-21T15:53:39.287Z",
+      "version_number": 2
+    },
+    {
+      "creation_date": "2018-09-21T15:23:38.59Z",
+      "version_number": 1
+    }
+  ],
+  "purpose": "Pre-implementation CSV inspection, not a database import or SQL benchmark",
+  "retrieved_on": "2026-10-26",
+  "snapshot_metadata_creator": "Francisco Magioli",
+  "source_clock": "Timestamp text contains no time-zone offset; publisher metadata does not establish a time zone.",
+  "source_page": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+  "sql_reports_executed": false,
+  "successful_download_endpoint": "https://www.kaggle.com/api/v1/datasets/download/olistbr/brazilian-ecommerce",
+  "version_label_caveat": "Metadata reports current version 2 but includes older version 7 and a second version 2. The actual inspected archive is identified by hashes.",
+  "version_pinned_redownload": {
+    "accepted_as_evidence": false,
+    "curl_exit_code": 28,
+    "status": "incomplete_timeout"
+  }
+}

@@ -28,9 +28,11 @@ Commands were executed from the workspace or the related project as appropriate.
 
 The first GitHub read attempts failed because sandbox network access was unavailable. Retrying the same read operations with approved network access succeeded. Docker access was not escalated or retried because running containers is unnecessary for the Stage 1 design. No database was changed.
 
-## New-document verification
+## Initial publication verification
 
 Checks ran from the new repository using Python standard-library heredocs and Git. They verified documentation structure and publication scope, not application behavior.
+
+The counts below describe the initial six-file delivery in commit `7a2a149`, before the independent-review workflow and review record were added.
 
 | Executed command/check | Actual result |
 | --- | --- |
@@ -70,6 +72,14 @@ git diff --cached --check
 
 The diagrams were reviewed as Mermaid source, not rendered. No Docker/API/SQL tests were run. The related project's successful `pip check` is recorded only as dependency-inspection evidence.
 
+## Independent-review revision verification
+
+An independent reviewer completed Stage 1 review with no material findings. The reviewer executed separate documentation checks; their scope and limitations are recorded in `docs/stage-01/review.md`.
+
+After adding the workflow and review record, the implementer executed a Python standard-library heredoc checking local Markdown links, line-anchored fences, the 24 rule IDs, targeted private-content patterns, and Git ignore probes. Actual result: exit 0; **7 Markdown files, 11 resolved local links, balanced fences, 24 ordered rule IDs, no targeted private-content matches, 5 private/local paths ignored, and `.env.example` eligible for tracking**. `git diff --check` also exited 0. A final original-repository status check produced no output, confirming it remains clean.
+
+The initial published repository was also fetched directly through GitHub's API: its description, commit subject, and all six then-published files were English. No original-project files were translated, changed, committed, or published to this new repository.
+
 ## Files delivered
 
 - `.gitignore`: excludes local secrets, environments, caches, and private database copies.
@@ -78,6 +88,8 @@ The diagrams were reviewed as Mermaid source, not rendered. No Docker/API/SQL te
 - `docs/stage-01/requirements.md`: business rules, roles, lifecycle, stock/locking strategy, API/security conventions, SQL/benchmark contract, and stage acceptance plan.
 - `docs/stage-01/data-model.md`: Mermaid ER diagram, tables, relationships, keys, checks, indexes, snapshots, and database artifact plan.
 - `docs/stage-01/verification.md`: actual commands/results and review boundary.
+- `docs/review-process.md`: required independent review, corrections, verification, and user approval checkpoints for every stage.
+- `docs/stage-01/review.md`: independent Stage 1 findings, actual reviewer checks, and retained implementation gates.
 
 ## Limitations and outstanding work
 

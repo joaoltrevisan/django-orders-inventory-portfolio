@@ -172,3 +172,5 @@ Stage 5 must use one isolated, seeded, larger database (initial target: 500 cust
 Concurrency tests must use transaction-capable PostgreSQL test cases with separate connections/backend PIDs and controlled events/barriers. Observe a real lock wait with `pg_blocking_pids()` before releasing the first transaction. Test the last available units, overlapping products in reversed input order, double cancellation, and approval racing cancellation. Small bounded polling is acceptable for observing a lock, but arbitrary sleeps alone are not coordination. Assert committed orders, stock, movements, and losing outcomes after threads finish.
 
 Record the exact commands and actual results at each stage. Do not state that a test or benchmark passed unless executed. Failures and unavailable services remain visible. Stop for technical review at every stage; commits and GitHub publication do not imply approval to begin the next stage.
+
+Each stage must also receive an independent review following the [review process](../review-process.md). Address material findings and verify corrections before handoff. This review is additional to the user's stage approval.

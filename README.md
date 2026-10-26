@@ -16,6 +16,7 @@ This new repository currently contains design documents only. The existing relat
 | [Requirements and business rules](docs/stage-01/requirements.md) | Scope, permissions, validation, lifecycle, stock strategy, transactions, and acceptance criteria |
 | [Relational data model](docs/stage-01/data-model.md) | Mermaid ER diagram, tables, keys, constraints, indexes, and integrity boundaries |
 | [Verification record](docs/stage-01/verification.md) | Commands actually executed, results, limitations, and review checklist |
+| [Independent review](docs/stage-01/review.md) | Reviewer findings, executed checks, and outstanding implementation gates |
 
 ## Planned stack
 
@@ -43,6 +44,8 @@ Python 3.12, Django 5.2 LTS, Django REST Framework, PostgreSQL 17, JWT authentic
 | 6 | Final English documentation, OpenAPI, Docker guide, curl examples, portfolio presentation | Pending |
 
 Each stage ends with actual verification evidence and a technical review pause. English commits will be published incrementally. No later stage starts before the current stage is reviewed.
+
+An independent reviewer will inspect each stage before handoff. Findings, corrections, and any unresolved limitations will be recorded under the [review process](docs/review-process.md). Independent review supplements the user's technical review; it does not replace approval to start the next stage.
 
 ## Execution and evidence
 

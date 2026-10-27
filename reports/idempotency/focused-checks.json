@@ -1,0 +1,56 @@
+[
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-idempotency-review",
+      "--env-file",
+      ".local/idempotency/review.env",
+      "run",
+      "--rm",
+      "migrate"
+    ],
+    "exit_code": 0,
+    "stdout": "Operations to perform:\n  Apply all migrations: accounts, auth, catalog, contenttypes, inventory, olist, orders\nRunning migrations:\n  Applying orders.0002_creation_idempotency... OK\n",
+    "stderr": " Container olist-idempotency-review-db-1 Running \n Container olist-idempotency-review-db-1 Waiting \n Container olist-idempotency-review-db-1 Healthy \n Container olist-idempotency-review-migrate-run-9aa4e158444d Creating \n Container olist-idempotency-review-migrate-run-9aa4e158444d Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-idempotency-review",
+      "--env-file",
+      ".local/idempotency/review.env",
+      "run",
+      "--rm",
+      "migrate",
+      "configure_database_roles"
+    ],
+    "exit_code": 0,
+    "stdout": "Configured historical read-only API access and scoped importer grants.\n",
+    "stderr": " Container olist-idempotency-review-db-1 Running \n Container olist-idempotency-review-db-1 Waiting \n Container olist-idempotency-review-db-1 Healthy \n Container olist-idempotency-review-migrate-run-169c0f43af59 Creating \n Container olist-idempotency-review-migrate-run-169c0f43af59 Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-idempotency-review",
+      "--env-file",
+      ".local/idempotency/review.env",
+      "run",
+      "--rm",
+      "tests",
+      "test",
+      "tests.test_order_idempotency",
+      "--noinput",
+      "--verbosity",
+      "2"
+    ],
+    "exit_code": 0,
+    "stdout": "Found 20 test(s).\nOperations to perform:\n  Synchronize unmigrated apps: common, drf_spectacular, rest_framework\n  Apply all migrations: accounts, auth, catalog, contenttypes, inventory, olist, orders\nSynchronizing apps without migrations:\n  Creating tables...\n    Running deferred SQL...\nRunning migrations:\n  Applying contenttypes.0001_initial... OK\n  Applying contenttypes.0002_remove_content_type_name... OK\n  Applying auth.0001_initial... OK\n  Applying auth.0002_alter_permission_name_max_length... OK\n  Applying auth.0003_alter_user_email_max_length... OK\n  Applying auth.0004_alter_user_username_opts... OK\n  Applying auth.0005_alter_user_last_login_null... OK\n  Applying auth.0006_require_contenttypes_0002... OK\n  Applying auth.0007_alter_validators_add_error_messages... OK\n  Applying auth.0008_alter_user_username_max_length... OK\n  Applying auth.0009_alter_user_last_name_max_length... OK\n  Applying auth.0010_alter_group_name_max_length... OK\n  Applying auth.0011_update_proxy_permissions... OK\n  Applying auth.0012_alter_user_first_name_max_length... OK\n  Applying accounts.0001_initial... OK\n  Applying catalog.0001_initial... OK\n  Applying catalog.0002_offer_identity... OK\n  Applying orders.0001_initial... OK\n  Applying inventory.0001_initial... OK\n  Applying olist.0001_initial... OK\n  Applying orders.0002_creation_idempotency... OK\nSystem check identified no issues (0 silenced).\nPostgreSQL contention: {\"scenario\": \"test_customer_revoked_during_key_wait_cannot_replay\", \"first_backend_pid\": 683, \"second_backend_pid\": 684, \"blocking_observed\": true}\nPostgreSQL contention: {\"scenario\": \"test_replay_waits_for_cancellation_and_returns_coherent_cancelled_state\", \"first_backend_pid\": 686, \"second_backend_pid\": 693, \"blocking_observed\": true}\nPostgreSQL contention: {\"scenario\": \"test_rollback_after_writes_releases_key_to_waiting_creator\", \"first_backend_pid\": 697, \"second_backend_pid\": 698, \"blocking_observed\": true}\nPostgreSQL contention: {\"scenario\": \"test_same_key_different_valid_payload_waits_then_conflicts\", \"first_backend_pid\": 700, \"second_backend_pid\": 701, \"blocking_observed\": true}\nPostgreSQL contention: {\"scenario\": \"test_same_key_waits_before_first_row_exists_and_reserves_last_unit_once\", \"first_backend_pid\": 703, \"second_backend_pid\": 704, \"blocking_observed\": true}\n",
+    "stderr": " Container olist-idempotency-review-db-1 Running \n Container olist-idempotency-review-db-1 Waiting \n Container olist-idempotency-review-db-1 Healthy \n Container olist-idempotency-review-tests-run-203edb21df09 Creating \n Container olist-idempotency-review-tests-run-203edb21df09 Created \nCreating test database for alias 'default' ('test_olist_demo')...\ntest_canonical_replay_preserves_snapshots_despite_catalog_and_stock_changes (tests.test_order_idempotency.OrderIdempotencyTests.test_canonical_replay_preserves_snapshots_despite_catalog_and_stock_changes) ... ok\ntest_current_permissions_and_customer_isolation_apply_to_http_replays (tests.test_order_idempotency.OrderIdempotencyTests.test_current_permissions_and_customer_isolation_apply_to_http_replays) ... ok\ntest_database_enforces_both_null_or_valid_hashes_and_scoped_uniqueness (tests.test_order_idempotency.OrderIdempotencyTests.test_database_enforces_both_null_or_valid_hashes_and_scoped_uniqueness) ... ok\ntest_database_failure_rolls_back_key_and_all_writes_then_allows_corrected_retry (tests.test_order_idempotency.OrderIdempotencyTests.test_database_failure_rolls_back_key_and_all_writes_then_allows_corrected_retry) ... ok\ntest_different_valid_content_conflicts_without_further_writes (tests.test_order_idempotency.OrderIdempotencyTests.test_different_valid_content_conflicts_without_further_writes) ... ok\ntest_http_creation_replay_conflict_and_internal_fields (tests.test_order_idempotency.OrderIdempotencyTests.test_http_creation_replay_conflict_and_internal_fields) ... ok\ntest_http_validation_precedes_conflict_and_blocks_internal_input (tests.test_order_idempotency.OrderIdempotencyTests.test_http_validation_precedes_conflict_and_blocks_internal_input) ... ok\ntest_inconsistent_existing_history_is_rejected_without_silent_repair (tests.test_order_idempotency.OrderIdempotencyTests.test_inconsistent_existing_history_is_rejected_without_silent_repair) ... ok\ntest_insufficient_stock_does_not_consume_key_or_partially_reserve (tests.test_order_idempotency.OrderIdempotencyTests.test_insufficient_stock_does_not_consume_key_or_partially_reserve) ... ok\ntest_invalid_keys_and_invalid_bodies_do_not_consume_keys (tests.test_order_idempotency.OrderIdempotencyTests.test_invalid_keys_and_invalid_bodies_do_not_consume_keys) ... ok\ntest_keyed_http_database_failure_is_sanitized_and_retry_can_create (tests.test_order_idempotency.OrderIdempotencyTests.test_keyed_http_database_failure_is_sanitized_and_retry_can_create) ... Database operation failed; transaction outcome requires review.\nok\ntest_keys_are_case_sensitive_and_customer_scoped (tests.test_order_idempotency.OrderIdempotencyTests.test_keys_are_case_sensitive_and_customer_scoped) ... ok\ntest_omitted_keys_keep_legacy_behavior_and_null_columns (tests.test_order_idempotency.OrderIdempotencyTests.test_omitted_keys_keep_legacy_behavior_and_null_columns) ... ok\ntest_replay_after_cancellation_keeps_original_release_and_cancelled_state (tests.test_order_idempotency.OrderIdempotencyTests.test_replay_after_cancellation_keeps_original_release_and_cancelled_state) ... ok\ntest_replay_captures_current_processing_state_without_processing_again (tests.test_order_idempotency.OrderIdempotencyTests.test_replay_captures_current_processing_state_without_processing_again) ... ok\ntest_customer_revoked_during_key_wait_cannot_replay (tests.test_order_idempotency.IdempotencyConcurrencyTests.test_customer_revoked_during_key_wait_cannot_replay) ... ok\ntest_replay_waits_for_cancellation_and_returns_coherent_cancelled_state (tests.test_order_idempotency.IdempotencyConcurrencyTests.test_replay_waits_for_cancellation_and_returns_coherent_cancelled_state) ... ok\ntest_rollback_after_writes_releases_key_to_waiting_creator (tests.test_order_idempotency.IdempotencyConcurrencyTests.test_rollback_after_writes_releases_key_to_waiting_creator) ... ok\ntest_same_key_different_valid_payload_waits_then_conflicts (tests.test_order_idempotency.IdempotencyConcurrencyTests.test_same_key_different_valid_payload_waits_then_conflicts) ... ok\ntest_same_key_waits_before_first_row_exists_and_reserves_last_unit_once (tests.test_order_idempotency.IdempotencyConcurrencyTests.test_same_key_waits_before_first_row_exists_and_reserves_last_unit_once) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 1.000s\n\nOK\nDestroying test database for alias 'default' ('test_olist_demo')...\n"
+  }
+]

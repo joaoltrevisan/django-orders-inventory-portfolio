@@ -11,7 +11,13 @@ from django.db import close_old_connections, connection, connections
 
 class ControlledConcurrencyMixin:
     def run_contended(
-        self, first_operation, second_operation, *, pause_before=None, wait_table=None
+        self,
+        first_operation,
+        second_operation,
+        *,
+        pause_before=None,
+        wait_table=None,
+        wait_query_fragment=None,
     ):
         locked, release = Event(), Event()
         pids = Queue()
@@ -61,14 +67,17 @@ class ControlledConcurrencyMixin:
                     time.sleep(0.01)
                 self.assertTrue(blocked, "PostgreSQL did not show the expected blocking backend.")
                 self.assertFalse(second.done())
-                if wait_table:
+                if wait_table or wait_query_fragment:
                     with connection.cursor() as cursor:
                         cursor.execute(
                             "SELECT query FROM pg_stat_activity WHERE pid=%s", [second_pid]
                         )
                         query = cursor.fetchone()[0]
-                    self.assertIn('"' + wait_table + '"', query)
-                    self.assertIn("FOR UPDATE", query)
+                    if wait_table:
+                        self.assertIn('"' + wait_table + '"', query)
+                        self.assertIn("FOR UPDATE", query)
+                    if wait_query_fragment:
+                        self.assertIn(wait_query_fragment, query)
                 print(
                     "PostgreSQL contention: "
                     + json.dumps(

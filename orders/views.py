@@ -1,5 +1,11 @@
 from django.db.models import Prefetch
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import (
+    OpenApiParameter,
+    OpenApiResponse,
+    OpenApiTypes,
+    extend_schema,
+    extend_schema_view,
+)
 from rest_framework import generics, serializers
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
@@ -71,12 +77,64 @@ class OrderListView(PrivateResponseMixin, generics.ListAPIView):
             )
         return queryset
 
-    @extend_schema(request=OrderCreateSerializer, responses={201: OrderSerializer})
+    @extend_schema(
+        description=(
+            "Create a simulated order. Optional customer-scoped key enables safe retry; "
+            "replay returns current stored state without reserving again."
+        ),
+        request=OrderCreateSerializer,
+        parameters=[
+            OpenApiParameter(
+                "Idempotency-Key",
+                str,
+                OpenApiParameter.HEADER,
+                description=(
+                    "Optional, case-sensitive 1–128 ASCII letters/digits or . _ : -. "
+                    "Retained with the order; same normalized content replays, "
+                    "different content conflicts."
+                ),
+            ),
+            OpenApiParameter(
+                "Idempotency-Replayed",
+                bool,
+                OpenApiParameter.HEADER,
+                description=(
+                    "Present on successful keyed requests: false for creation, true for replay."
+                ),
+                response=[200, 201],
+            ),
+        ],
+        responses={
+            201: OrderSerializer,
+            200: OrderSerializer,
+            400: OpenApiResponse(
+                OpenApiTypes.OBJECT, description="Invalid content or creation key."
+            ),
+            409: OpenApiResponse(
+                OpenApiTypes.OBJECT,
+                description=(
+                    "Idempotency-content conflict, insufficient stock or another business conflict."
+                ),
+            ),
+        },
+    )
     def post(self, request):
         serializer = OrderCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        order = service_call(create_order, actor=request.user, **serializer.validated_data)
-        return Response(OrderSerializer(order).data, status=201)
+        key = request.headers.get("Idempotency-Key")
+        order = service_call(
+            create_order, actor=request.user, idempotency_key=key, **serializer.validated_data
+        )
+        headers = (
+            {"Idempotency-Replayed": str(order.idempotency_replayed).lower()}
+            if key is not None
+            else {}
+        )
+        return Response(
+            OrderSerializer(order).data,
+            status=200 if order.idempotency_replayed else 201,
+            headers=headers,
+        )
 
 
 class OrderDetailView(PrivateResponseMixin, generics.RetrieveAPIView):

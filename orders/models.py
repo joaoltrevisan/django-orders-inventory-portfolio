@@ -46,10 +46,29 @@ class Order(TimestampedModel):
     cancelled_at = models.DateTimeField(null=True, blank=True)
     shipped_at = models.DateTimeField(null=True, blank=True)
     delivered_at = models.DateTimeField(null=True, blank=True)
+    idempotency_key_hash = models.CharField(max_length=64, null=True, blank=True, editable=False)
+    request_fingerprint = models.CharField(max_length=64, null=True, blank=True, editable=False)
 
     class Meta:
         db_table = "orders_order"
         constraints = [
+            models.UniqueConstraint(
+                fields=["customer", "idempotency_key_hash"],
+                condition=models.Q(idempotency_key_hash__isnull=False),
+                name="order_customer_idempotency_unique",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(idempotency_key_hash__isnull=True, request_fingerprint__isnull=True)
+                    | models.Q(
+                        idempotency_key_hash__isnull=False,
+                        request_fingerprint__isnull=False,
+                        idempotency_key_hash__regex=r"^[0-9a-f]{64}$",
+                        request_fingerprint__regex=r"^[0-9a-f]{64}$",
+                    )
+                ),
+                name="order_idempotency_hash_pair_valid",
+            ),
             models.CheckConstraint(
                 condition=models.Q(total__gt=0, total__lte=MAX_ORDER_TOTAL),
                 name="order_total_positive_finite",

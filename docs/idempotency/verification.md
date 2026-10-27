@@ -54,6 +54,17 @@ Observed behavior includes 201/false creation, 200/true same-order canonical rep
 
 ## Review, release and limitations
 
-Independent review and file inventory are recorded in [review](review.md) and [changes](changes.md). Hosted verification status is recorded below after an actual run; local results alone are not described as GitHub Actions results.
+Independent review and file inventory are recorded in [review](review.md) and [changes](changes.md). The actual hosted run is documented below; local and hosted results identify separate environments and revisions.
 
 This release does not automatically migrate existing running primary/demo containers. Follow the [existing-environment update guide](../getting-started.md#updating-an-existing-operational-environment) deliberately using the correct project/env. Existing data volumes and old image tags are retained. Successful keys have no expiry, unkeyed calls remain unsafe for automatic ambiguous retries, replay returns current state rather than cached bytes, and the guarantee ends at the database transaction. Passing coordinated schedules does not prove every possible schedule or production throughput. No new Olist index measurements, real payment processing or production deployment occurred.
+
+
+## Actual hosted execution
+
+Publishing `f66c253ae6a47ec4a74cc84a0e71a6b4d735379f` triggered the successful push-to-main [GitHub Actions run 40554533387](https://github.com/joaoltrevisan/django-orders-inventory-portfolio/actions/runs/40554533387) on 2026-10-27. [Run metadata](../../reports/idempotency/github-run.json) records the exact head, event, successful job/steps and timestamps. [Artifact metadata](../../reports/idempotency/github-artifacts.json) identifies the uploaded archive and retention.
+
+All nine phases and seven check commands exited 0. **157 PostgreSQL tests passed in 13.236 seconds**, including 20 actual observed operational contention records; **75 role checks passed**. Strict OpenAPI retained **API 1.1.0 / 38 paths**. Schema/export/restoration checks confirmed **28 tables / 21 migrations** and the exact current SQL file hash. Actual hosted runtime was Python 3.12.15 / PostgreSQL 17.11 on x86_64. Durations differ from local aarch64 and are not a performance comparison.
+
+The six downloaded files are retained byte-for-byte: [summary](../../reports/idempotency/github/summary.json), [checks](../../reports/idempotency/github/checks.json), [roles](../../reports/idempotency/github/roles.json), [OpenAPI](../../reports/idempotency/github/openapi.json), [schema](../../reports/idempotency/github/schema.json), [runtime](../../reports/idempotency/github/runtime.json). The source-input fingerprint reconstructed from the exact tested Git revision matches the artifact. [Log/artifact inspection](../../reports/idempotency/github-log-review.json) found no configured local secret or JWT/GitHub-token/private-key pattern; raw logs remain ignored. Deleted ephemeral hosted passwords are unavailable for an exact-value rescan, so this is not a claim of exhaustive secret detection.
+
+The independent reviewer checked the actual hosted evidence and source/schema hashes and found no material blocker. This final documentation/evidence commit may trigger another CI run; the immutable retained artifacts above refer specifically to `f66c253`, not an unexecuted later revision. There is no deployment or new benchmark claim.

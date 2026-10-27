@@ -18,4 +18,4 @@ This inventory includes the paused local implementation and the completion deliv
 | `reports/idempotency/local-cleanup.json` | Host verification of exclusive CI cleanup and retained existing volumes/image |
 | `reports/idempotency/local/*.json` | Six retained disposable CI outputs: summary, checks, roles, OpenAPI, schema and runtime |
 
-Any retained hosted artifacts and their metadata are documented in the verification report. Private configurations, local helpers, credentials, raw logs and database volumes remain ignored and unpublished. Historical source files, importer/report logic and dated index-experiment artifacts are unchanged.
+`reports/idempotency/github/*.json` preserves six hosted artifacts; `github-run.json`, `github-artifacts.json` and `github-log-review.json` retain exact-revision run/artifact identity and bounded log/source-hash inspection. Private configurations, local helpers, credentials, raw logs and database volumes remain ignored and unpublished. Historical source files, importer/report logic and dated index-experiment artifacts are unchanged.

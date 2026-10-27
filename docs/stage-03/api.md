@@ -1,5 +1,7 @@
 # Stage 3: authentication, catalog, and historical API
 
+> Stage delivery record. Current setup and feature scope are in the [execution guide](../getting-started.md) and [API reference](../api.md). Commands/results below retain their original stage context.
+
 Base URL for local execution: `http://127.0.0.1:18020`. Run `docker compose up -d --wait app` after rebuilding/migrating. All examples below use JSON and English responses. Accounts and operational catalog objects are explicitly simulated, with no historical customer-to-login association.
 
 ## Routes and permissions

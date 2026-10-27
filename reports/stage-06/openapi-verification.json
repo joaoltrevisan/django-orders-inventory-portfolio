@@ -1,0 +1,17 @@
+{
+  "command": [
+    "docker",
+    "compose",
+    "run",
+    "--rm",
+    "migrate",
+    "spectacular",
+    "--format",
+    "openapi-json",
+    "--validate",
+    "--fail-on-warn"
+  ],
+  "exit_code": 0,
+  "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-migrate-run-c2b47a206be2 Creating \n Container olist-case-study-migrate-run-c2b47a206be2 Created \n",
+  "paths": 38
+}

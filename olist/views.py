@@ -1,5 +1,6 @@
 import re
 
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
 
@@ -74,6 +75,17 @@ class OrderViewSet(HistoricalViewSet):
     lookup_field = "source_order_id"
 
 
+@extend_schema_view(
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "order_id",
+                str,
+                description="Exact 32-character lowercase hexadecimal source order ID.",
+            )
+        ]
+    )
+)
 class ItemViewSet(HistoricalViewSet):
     serializer_class = ItemSerializer
     queryset = HistoricalOrderItem.objects.select_related("order", "product", "seller").order_by(
@@ -83,6 +95,17 @@ class ItemViewSet(HistoricalViewSet):
     allow_order_filter = True
 
 
+@extend_schema_view(
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "order_id",
+                str,
+                description="Exact 32-character lowercase hexadecimal source order ID.",
+            )
+        ]
+    )
+)
 class PaymentViewSet(HistoricalViewSet):
     serializer_class = PaymentSerializer
     queryset = HistoricalPaymentRecord.objects.select_related("order").order_by(

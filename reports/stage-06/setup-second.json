@@ -1,0 +1,94 @@
+[
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-release-review-2",
+      "--env-file",
+      ".local/stage-06/review-second.env",
+      "up",
+      "-d",
+      "--wait",
+      "db"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": " Network olist-release-review-2_default Creating \n Network olist-release-review-2_default Creating \n Volume olist-release-review-2_olist_postgres_data Creating \n Volume olist-release-review-2_olist_postgres_data Creating \n Volume olist-release-review-2_olist_postgres_data Created \n Volume olist-release-review-2_olist_postgres_data Created \n Network olist-release-review-2_default Created \n Network olist-release-review-2_default Created \n Container olist-release-review-2-db-1 Creating \n Container olist-release-review-2-db-1 Created \n Container olist-release-review-2-db-1 Starting \n Container olist-release-review-2-db-1 Started \n Container olist-release-review-2-db-1 Waiting \n Container olist-release-review-2-db-1 Healthy \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-release-review-2",
+      "--env-file",
+      ".local/stage-06/review-second.env",
+      "run",
+      "--rm",
+      "migrate"
+    ],
+    "exit_code": 0,
+    "stdout": "Operations to perform:\n  Apply all migrations: accounts, auth, catalog, contenttypes, inventory, olist, orders\nRunning migrations:\n  Applying contenttypes.0001_initial... OK\n  Applying contenttypes.0002_remove_content_type_name... OK\n  Applying auth.0001_initial... OK\n  Applying auth.0002_alter_permission_name_max_length... OK\n  Applying auth.0003_alter_user_email_max_length... OK\n  Applying auth.0004_alter_user_username_opts... OK\n  Applying auth.0005_alter_user_last_login_null... OK\n  Applying auth.0006_require_contenttypes_0002... OK\n  Applying auth.0007_alter_validators_add_error_messages... OK\n  Applying auth.0008_alter_user_username_max_length... OK\n  Applying auth.0009_alter_user_last_name_max_length... OK\n  Applying auth.0010_alter_group_name_max_length... OK\n  Applying auth.0011_update_proxy_permissions... OK\n  Applying auth.0012_alter_user_first_name_max_length... OK\n  Applying accounts.0001_initial... OK\n  Applying catalog.0001_initial... OK\n  Applying catalog.0002_offer_identity... OK\n  Applying orders.0001_initial... OK\n  Applying inventory.0001_initial... OK\n  Applying olist.0001_initial... OK\n",
+    "stderr": " Container olist-release-review-2-db-1 Running \n Container olist-release-review-2-db-1 Waiting \n Container olist-release-review-2-db-1 Healthy \n Container olist-release-review-2-migrate-run-406c29527b9e Creating \n Container olist-release-review-2-migrate-run-406c29527b9e Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-release-review-2",
+      "--env-file",
+      ".local/stage-06/review-second.env",
+      "run",
+      "--rm",
+      "migrate",
+      "configure_database_roles"
+    ],
+    "exit_code": 0,
+    "stdout": "Configured historical read-only API access and scoped importer grants.\n",
+    "stderr": " Container olist-release-review-2-db-1 Running \n Container olist-release-review-2-db-1 Waiting \n Container olist-release-review-2-db-1 Healthy \n Container olist-release-review-2-migrate-run-e66caf20d25c Creating \n Container olist-release-review-2-migrate-run-e66caf20d25c Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-release-review-2",
+      "--env-file",
+      ".local/stage-06/review-second.env",
+      "run",
+      "--rm",
+      "--user",
+      "501:20",
+      "-e",
+      "DEMO_SEED_ENABLED=1",
+      "migrate",
+      "seed_demo",
+      "--expected-database",
+      "olist_demo",
+      "--report",
+      "/reports/release-seed-second.json"
+    ],
+    "exit_code": 0,
+    "stdout": "Created fictional demo data through transactional services; no real charges or historical imports.\n",
+    "stderr": " Container olist-release-review-2-db-1 Running \n Container olist-release-review-2-db-1 Waiting \n Container olist-release-review-2-db-1 Healthy \n Container olist-release-review-2-migrate-run-eed6cf93dd03 Creating \n Container olist-release-review-2-migrate-run-eed6cf93dd03 Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-release-review-2",
+      "--env-file",
+      ".local/stage-06/review-second.env",
+      "up",
+      "-d",
+      "--wait",
+      "app"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": " Container olist-release-review-2-db-1 Running \n Container olist-release-review-2-app-1 Creating \n Container olist-release-review-2-app-1 Created \n Container olist-release-review-2-db-1 Waiting \n Container olist-release-review-2-db-1 Healthy \n Container olist-release-review-2-app-1 Starting \n Container olist-release-review-2-app-1 Started \n Container olist-release-review-2-app-1 Waiting \n Container olist-release-review-2-db-1 Waiting \n Container olist-release-review-2-db-1 Healthy \n Container olist-release-review-2-app-1 Healthy \n"
+  }
+]

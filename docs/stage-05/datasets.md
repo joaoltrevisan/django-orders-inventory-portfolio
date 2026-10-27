@@ -1,5 +1,7 @@
 # Separate demonstration and historical analysis environments
 
+> Stage delivery record. Current setup and feature scope are in the [execution guide](../getting-started.md) and [API reference](../api.md). Commands/results below retain their original stage context.
+
 Stage 5 adds two independent Compose projects, databases, credential files and volumes. Existing application and legacy data are preserved. The historical benchmark uses the actual accepted Olist archive, not inflated or fictional sales. The small operational demonstration uses fictional identities and simulated inventory, prices, payments and delivery actions.
 
 | Environment | Compose project / database | Persistent volume | Contents |

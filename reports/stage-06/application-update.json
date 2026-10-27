@@ -1,0 +1,13 @@
+{
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "-d",
+    "--wait",
+    "app"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-app-1 Recreate \n Container olist-case-study-app-1 Recreated \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-app-1 Starting \n Container olist-case-study-app-1 Started \n Container olist-case-study-app-1 Waiting \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-app-1 Healthy \n"
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "used_demo",
+    "command": [
+      "python3",
+      "scripts/verify_curl.py",
+      "--project",
+      "olist-release-review-final",
+      "--env-file",
+      ".local/stage-06/review-final.env",
+      "--output",
+      ".local/stage-06/refused-used.json",
+      "--allow-demo-writes"
+    ],
+    "exit_code": 1,
+    "expected_nonzero": true,
+    "output_created": false,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/scripts/verify_curl.py\", line 395, in <module>\n    main()\n    ~~~~^^\n  File \"/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/scripts/verify_curl.py\", line 362, in main\n    base_url = confirmed_url(compose)\n  File \"/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/scripts/verify_curl.py\", line 74, in confirmed_url\n    raise ValueError(\"Use a freshly seeded demo; populated workflow targets are never reset.\")\nValueError: Use a freshly seeded demo; populated workflow targets are never reset.\n"
+  },
+  {
+    "name": "primary_configuration",
+    "command": [
+      "python3",
+      "scripts/verify_curl.py",
+      "--env-file",
+      ".env",
+      "--output",
+      ".local/stage-06/refused-primary.json",
+      "--allow-demo-writes"
+    ],
+    "exit_code": 1,
+    "expected_nonzero": true,
+    "output_created": false,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/scripts/verify_curl.py\", line 395, in <module>\n    main()\n    ~~~~^^\n  File \"/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/scripts/verify_curl.py\", line 358, in main\n    values = configuration(args.env_file)\n  File \"/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/scripts/verify_curl.py\", line 45, in configuration\n    raise ValueError(\n        \"Use a generated isolated demo configuration with a private seed password.\"\n    )\nValueError: Use a generated isolated demo configuration with a private seed password.\n"
+  }
+]

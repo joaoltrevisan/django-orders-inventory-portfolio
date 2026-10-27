@@ -1,5 +1,7 @@
 # Stage 2: isolated Docker execution
 
+> Stage delivery record. Current setup and feature scope are in the [execution guide](../getting-started.md) and [API reference](../api.md). Commands/results below retain their original stage context.
+
 This stage provides models, migrations, database constraints/roles, a health endpoint, and PostgreSQL tests. Registration/order/import/report endpoints are not implemented yet. The older API's source and containers remain separate and unchanged.
 
 ## Create this project's environment

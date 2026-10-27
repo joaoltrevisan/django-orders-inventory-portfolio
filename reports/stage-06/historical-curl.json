@@ -1,0 +1,191 @@
+{
+  "passed": true,
+  "transport_command": [
+    "curl",
+    "--disable",
+    "--noproxy",
+    "*",
+    "--silent",
+    "--show-error",
+    "--connect-timeout",
+    "5",
+    "--max-time",
+    "30",
+    "--write-out",
+    "\n%{http_code}",
+    "--config",
+    "-"
+  ],
+  "requests": [
+    {
+      "name": "anonymous historical report",
+      "path": "/api/olist/reports/monthly_sales/",
+      "status": 401,
+      "expected": 401,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "administrator login",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "customer login",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "customer historical denial",
+      "path": "/api/olist/reports/monthly_sales/",
+      "status": 403,
+      "expected": 403,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical order_details",
+      "path": "/api/olist/reports/order_details/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical customer_coverage",
+      "path": "/api/olist/reports/customer_coverage/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical best_selling_products",
+      "path": "/api/olist/reports/best_selling_products/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical monthly_sales",
+      "path": "/api/olist/reports/monthly_sales/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical repeat_customers",
+      "path": "/api/olist/reports/repeat_customers/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical repeat_customer_rate",
+      "path": "/api/olist/reports/repeat_customer_rate/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical running_monthly_totals",
+      "path": "/api/olist/reports/running_monthly_totals/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical category_seller_sales",
+      "path": "/api/olist/reports/category_seller_sales/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical customer_spending",
+      "path": "/api/olist/reports/customer_spending/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical delivery_performance",
+      "path": "/api/olist/reports/delivery_performance/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical seller_delivery",
+      "path": "/api/olist/reports/seller_delivery/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical reconciliation",
+      "path": "/api/olist/reports/reconciliation/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical second page",
+      "path": "/api/olist/reports/customer_coverage/?page=2",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "unknown report",
+      "path": "/api/olist/reports/unknown/",
+      "status": 404,
+      "expected": 404,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "invalid source timestamp",
+      "path": "/api/olist/reports/monthly_sales/?start=bad",
+      "status": 400,
+      "expected": 400,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "historical order page",
+      "path": "/api/olist/orders/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "source order items",
+      "path": "/api/olist/items/?order_id=00010242fe8c5a6d1ba2dd792cb16214",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "source payment records",
+      "path": "/api/olist/payments/?order_id=00010242fe8c5a6d1ba2dd792cb16214",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "current OpenAPI",
+      "path": "/api/schema/?format=json",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0
+    },
+    {
+      "name": "customer schema denial",
+      "path": "/api/schema/?format=json",
+      "status": 403,
+      "expected": 403,
+      "curl_exit_code": 0
+    }
+  ],
+  "all_report_counts_and_first_rows_match_executed_stage5_SQL": true,
+  "historical_payment_kind_verified": true
+}

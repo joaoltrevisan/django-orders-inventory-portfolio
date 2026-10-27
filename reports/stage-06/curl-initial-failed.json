@@ -1,0 +1,96 @@
+{
+  "started_at_utc": "2026-10-27T01:59:55.512599+00:00",
+  "passed": false,
+  "project": "olist-release-review",
+  "database": "olist_demo",
+  "base_url": "http://127.0.0.1:18023",
+  "transport_command": [
+    "curl",
+    "--silent",
+    "--show-error",
+    "--connect-timeout",
+    "5",
+    "--max-time",
+    "30",
+    "--write-out",
+    "\n%{http_code}",
+    "--config",
+    "-"
+  ],
+  "requests": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "name": "anonymous isolation",
+      "method": "GET",
+      "path": "/api/orders/",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "name": "registration",
+      "method": "POST",
+      "path": "/api/auth/register/",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "name": "customer login",
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "name": "token refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "name": "self profile",
+      "method": "GET",
+      "path": "/api/auth/me/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "name": "administrator login",
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "name": "existing seeded orders",
+      "method": "GET",
+      "path": "/api/orders/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "name": "customer cannot manage inventory",
+      "method": "GET",
+      "path": "/api/inventory/",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "name": "create product",
+      "method": "POST",
+      "path": "/api/products/",
+      "status": 400,
+      "expected": 201
+    }
+  ],
+  "credential_handling": "Private curl config on stdin; no tokens/passwords in argv or evidence.",
+  "data_origin": "SIMULATED_API",
+  "failure": "A curl workflow failed; inspect local demo state before retrying.",
+  "finished_at_utc": "2026-10-27T01:59:56.194354+00:00"
+}

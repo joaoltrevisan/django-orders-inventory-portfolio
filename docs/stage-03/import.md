@@ -1,5 +1,7 @@
 # Stage 3: validated Olist import
 
+> Stage delivery record. Current setup and feature scope are in the [execution guide](../getting-started.md) and [API reference](../api.md). Commands/results below retain their original stage context.
+
 The `import_olist` management command publishes the locked historical snapshot into the existing isolated `olist_case_study` database. It preserves operational tables and the separate legacy project's data. No command resets a database, deletes history, repairs source values, creates historical login accounts, or initializes operational inventory from purchases.
 
 ## Reproduce the import

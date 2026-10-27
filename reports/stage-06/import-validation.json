@@ -1,0 +1,120 @@
+{
+  "status": "DRY_RUN",
+  "mapping_version": "olist-1",
+  "files": {
+    "olist_customers_dataset.csv": {
+      "input": 99441,
+      "accepted": 99441,
+      "duplicate_input": 0,
+      "rejected": 0,
+      "imported": 0,
+      "skipped": 0
+    },
+    "olist_order_items_dataset.csv": {
+      "input": 112650,
+      "accepted": 112650,
+      "duplicate_input": 0,
+      "rejected": 0,
+      "imported": 0,
+      "skipped": 0
+    },
+    "olist_order_payments_dataset.csv": {
+      "input": 103886,
+      "accepted": 103886,
+      "duplicate_input": 0,
+      "rejected": 0,
+      "imported": 0,
+      "skipped": 0
+    },
+    "olist_orders_dataset.csv": {
+      "input": 99441,
+      "accepted": 99441,
+      "duplicate_input": 0,
+      "rejected": 0,
+      "imported": 0,
+      "skipped": 0
+    },
+    "olist_products_dataset.csv": {
+      "input": 32951,
+      "accepted": 32951,
+      "duplicate_input": 0,
+      "rejected": 0,
+      "imported": 0,
+      "skipped": 0
+    },
+    "olist_sellers_dataset.csv": {
+      "input": 3095,
+      "accepted": 3095,
+      "duplicate_input": 0,
+      "rejected": 0,
+      "imported": 0,
+      "skipped": 0
+    },
+    "product_category_name_translation.csv": {
+      "input": 71,
+      "accepted": 71,
+      "duplicate_input": 0,
+      "rejected": 0,
+      "imported": 0,
+      "skipped": 0
+    }
+  },
+  "deferred_files": {
+    "olist_geolocation_dataset.csv": 1000163,
+    "olist_order_reviews_dataset.csv": 99224
+  },
+  "imported": 0,
+  "skipped": 0,
+  "dry_run": true,
+  "dataset_ref": "olistbr/brazilian-ecommerce",
+  "source_url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+  "reported_version": "2",
+  "license": "CC BY-NC-SA 4.0",
+  "retrieved_on": "2026-10-26",
+  "retrieval_precision": "calendar date only",
+  "target_database": "olist_benchmark",
+  "database_role": "olist_importer",
+  "archive_sha256": "967e41e04fc306fe604e2a693f488995a8b41e5047418f8a5c8e4abd6deca784",
+  "reconciliation": {
+    "comparable_orders": 98665,
+    "exact_matches": 98089,
+    "difference_above_001": 303,
+    "sum_signed_difference": "2870.39",
+    "maximum_absolute_difference": "182.81"
+  },
+  "proposed_entities": {
+    "categories": 73,
+    "customers": 99441,
+    "products": 32951,
+    "sellers": 3095,
+    "orders": 99441,
+    "items": 112650,
+    "payments": 103886
+  },
+  "inconsistent_rows": 3116,
+  "issue_counts": {
+    "MISSING_CATEGORY": 610,
+    "MISSING_PRODUCT_ATTRIBUTES": 611,
+    "UNTRANSLATED_CATEGORY": 13,
+    "ZERO_PAYMENT_VALUE": 9,
+    "ZERO_INSTALLMENTS": 2,
+    "UNDEFINED_PAYMENT_TYPE": 3,
+    "UNEXPECTED_CHRONOLOGY": 1382,
+    "MISSING_ITEMS": 775,
+    "PAYMENT_ITEM_DIFFERENCE": 303,
+    "CANCELED_WITH_DELIVERY": 6,
+    "DELIVERED_MISSING:delivered_customer_at_source": 8,
+    "DELIVERED_MISSING:approved_at_source": 14,
+    "MISSING_PAYMENTS": 1,
+    "DELIVERED_MISSING:delivered_carrier_at_source": 2
+  },
+  "rejected": 0,
+  "duplicate_input": 0,
+  "parent_failures": 0,
+  "committed_source_rows": 0,
+  "skipped_source_rows": 0,
+  "duration_seconds": 13.628,
+  "metadata_persisted": false,
+  "full_local_report_sha256": "23e8ec6a3443e9599d2b6d29bcc1cfda9e3f8370d0b05731946bb1bd5d5c5b50",
+  "note": "Full dry-run validation; row-level issue details stay local. No historical rows or attempt metadata published."
+}

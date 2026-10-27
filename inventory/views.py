@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import generics, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -48,6 +48,12 @@ class StockChangeView(PrivateResponseMixin, APIView):
         )
 
 
+@extend_schema_view(
+    get=extend_schema(
+        description="Administrator-only immutable simulated stock movements. Page size 20.",
+        parameters=[OpenApiParameter("offer_id", int), OpenApiParameter("order_id", int)],
+    )
+)
 class MovementListView(PrivateResponseMixin, generics.ListAPIView):
     permission_classes = [IsAdministrator]
     serializer_class = MovementSerializer

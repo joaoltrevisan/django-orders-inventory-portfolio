@@ -1,0 +1,37 @@
+{
+  "data_origin": "SIMULATED_API",
+  "database": "olist_demo",
+  "users": 4,
+  "customers": 3,
+  "products": 2,
+  "sellers": 2,
+  "offers": 3,
+  "orders": [
+    {
+      "id": 1,
+      "status": "PENDING_PAYMENT",
+      "total": "85.90"
+    },
+    {
+      "id": 2,
+      "status": "CANCELLED",
+      "total": "30.00"
+    },
+    {
+      "id": 3,
+      "status": "PAID",
+      "total": "100.00"
+    },
+    {
+      "id": 4,
+      "status": "SHIPPED",
+      "total": "25.90"
+    },
+    {
+      "id": 5,
+      "status": "DELIVERED",
+      "total": "30.00"
+    }
+  ],
+  "note": "No historical source records. Accounts, inventory, prices, payments and deliveries are simulated. Password salts, UUIDs and times differ across fresh runs."
+}

@@ -1,5 +1,5 @@
 from django.db.models import Prefetch
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import generics, serializers
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
@@ -38,6 +38,17 @@ def readable_orders(actor):
     )
 
 
+@extend_schema_view(
+    get=extend_schema(
+        description="Owner-scoped orders; administrators see all orders. Page size 20.",
+        parameters=[
+            OpenApiParameter("status", str, enum=Order.Status.values),
+            OpenApiParameter(
+                "customer_id", int, description="Administrator only; Customer profile PK."
+            ),
+        ],
+    )
+)
 class OrderListView(PrivateResponseMixin, generics.ListAPIView):
     serializer_class = OrderDetailSerializer
 

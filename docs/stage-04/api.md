@@ -1,5 +1,7 @@
 # Stage 4: order and inventory workflows
 
+> Stage delivery record. Current setup and feature scope are in the [execution guide](../getting-started.md) and [API reference](../api.md). Commands/results below retain their original stage context.
+
 This extends the [authentication/catalog guide](../stage-03/api.md) with simulated operational orders, offer inventory and lifecycle actions. Source `olist_*` data stays in its own read-only namespace. No action calls a payment provider, merchant system, warehouse, carrier, or Olist internal API.
 
 ## Run and authenticate

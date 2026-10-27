@@ -1,0 +1,48 @@
+{
+  "temporary_review_projects_stopped": true,
+  "volumes_removed": false,
+  "commands": [
+    {
+      "command": [
+        "docker",
+        "compose",
+        "-p",
+        "olist-release-review",
+        "--env-file",
+        ".local/stage-06/review.env",
+        "down"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": " Container olist-release-review-app-1 Stopping \n Container olist-release-review-app-1 Stopped \n Container olist-release-review-app-1 Removing \n Container olist-release-review-app-1 Removed \n Container olist-release-review-db-1 Stopping \n Container olist-release-review-db-1 Stopped \n Container olist-release-review-db-1 Removing \n Container olist-release-review-db-1 Removed \n Network olist-release-review_default Removing \n Network olist-release-review_default Removed \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "-p",
+        "olist-release-review-2",
+        "--env-file",
+        ".local/stage-06/review-second.env",
+        "down"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": " Container olist-release-review-2-app-1 Stopping \n Container olist-release-review-2-app-1 Stopped \n Container olist-release-review-2-app-1 Removing \n Container olist-release-review-2-app-1 Removed \n Container olist-release-review-2-db-1 Stopping \n Container olist-release-review-2-db-1 Stopped \n Container olist-release-review-2-db-1 Removing \n Container olist-release-review-2-db-1 Removed \n Network olist-release-review-2_default Removing \n Network olist-release-review-2_default Removed \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "-p",
+        "olist-release-review-final",
+        "--env-file",
+        ".local/stage-06/review-final.env",
+        "down"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": " Container olist-release-review-final-app-1 Stopping \n Container olist-release-review-final-app-1 Stopped \n Container olist-release-review-final-app-1 Removing \n Container olist-release-review-final-app-1 Removed \n Container olist-release-review-final-db-1 Stopping \n Container olist-release-review-final-db-1 Stopped \n Container olist-release-review-final-db-1 Removing \n Container olist-release-review-final-db-1 Removed \n Network olist-release-review-final_default Removing \n Network olist-release-review-final_default Removed \n"
+    }
+  ]
+}

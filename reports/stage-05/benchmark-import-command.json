@@ -1,0 +1,27 @@
+{
+  "command": [
+    "docker",
+    "compose",
+    "-p",
+    "olist-benchmark",
+    "--env-file",
+    ".local/analysis/benchmark.env",
+    "run",
+    "--rm",
+    "--user",
+    "501:20",
+    "importer",
+    "import_olist",
+    "--archive",
+    "/data/brazilian-ecommerce.zip",
+    "--manifest",
+    "/app/olist/source-manifest.json",
+    "--expected-database",
+    "olist_benchmark",
+    "--report",
+    "/reports/benchmark-import.json"
+  ],
+  "exit_code": 0,
+  "stdout": "SUCCEEDED: entities imported=451537, skipped=0, rejected=0, duplicate input=0, inconsistent rows=3116 (retained without repair).\n",
+  "stderr": " Container olist-benchmark-db-1 Running \n Container olist-benchmark-db-1 Waiting \n Container olist-benchmark-db-1 Healthy \n Container olist-benchmark-importer-run-906f57194fb0 Creating \n Container olist-benchmark-importer-run-906f57194fb0 Created \n"
+}

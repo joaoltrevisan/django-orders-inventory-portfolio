@@ -1,0 +1,103 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "path": "/api/olist/reports/monthly_sales/",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/monthly_sales/",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "path": "/api/olist/reports/order_details/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/customer_coverage/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/best_selling_products/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/monthly_sales/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/repeat_customers/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/repeat_customer_rate/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/running_monthly_totals/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/category_seller_sales/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/customer_spending/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/delivery_performance/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/seller_delivery/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/reconciliation/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/olist/reports/unknown/",
+      "status": 404,
+      "expected": 404
+    },
+    {
+      "path": "/api/olist/reports/monthly_sales/?start=bad",
+      "status": 400,
+      "expected": 400
+    },
+    {
+      "path": "/api/olist/reports/customer_coverage/?page=2",
+      "status": 200,
+      "expected": 200
+    }
+  ],
+  "sql_api_first_rows_and_counts_match_offline_execution": true,
+  "pagination_second_page_size": 20,
+  "note": "Actual source API compared with separate benchmark SQL results. Tokens and passwords omitted."
+}

@@ -6,6 +6,7 @@ from accounts.permissions import IsAdministrator
 from accounts.views import CustomerDetailView, CustomerListView
 from catalog.views import OfferViewSet, ProductViewSet, SellerViewSet
 from olist import views as history
+from olist.report_views import ReportView
 
 from .views import health, not_found
 
@@ -33,6 +34,7 @@ urlpatterns = [
     path("api/customers/", CustomerListView.as_view()),
     path("api/customers/<int:pk>/", CustomerDetailView.as_view()),
     path("api/olist/", include(historical.urls)),
+    path("api/olist/reports/<slug:report_name>/", ReportView.as_view()),
     path(
         "api/schema/",
         SpectacularAPIView.as_view(permission_classes=[IsAdministrator]),

@@ -1,7 +1,7 @@
 name: olist-case-study
 
 x-app: &app
-  image: olist-case-study-app:stage4
+  image: olist-case-study-app:stage5
   build: .
   read_only: true
   tmpfs: [/tmp]
@@ -60,7 +60,10 @@ services:
       <<: *environment
       PGUSER: olist_owner
       PGPASSWORD: ${MIGRATION_DB_PASSWORD:?Generate .env}
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-}
     command: [migrate, --noinput]
+    volumes:
+      - ./.local/analysis-reports:/reports
 
   importer:
     <<: *app

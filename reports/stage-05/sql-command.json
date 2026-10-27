@@ -1,0 +1,23 @@
+{
+  "command": [
+    "docker",
+    "compose",
+    "-p",
+    "olist-benchmark",
+    "--env-file",
+    ".local/analysis/benchmark.env",
+    "run",
+    "--rm",
+    "--user",
+    "501:20",
+    "migrate",
+    "run_olist_reports",
+    "--expected-database",
+    "olist_benchmark",
+    "--output",
+    "/reports/sql-results.json"
+  ],
+  "exit_code": 0,
+  "stdout": "Executed 12 historical SQL reports; full counts/hashes and bounded result samples retained.\n",
+  "stderr": " Container olist-benchmark-db-1 Running \n Container olist-benchmark-db-1 Waiting \n Container olist-benchmark-db-1 Healthy \n Container olist-benchmark-migrate-run-83e795dc1fdc Creating \n Container olist-benchmark-migrate-run-83e795dc1fdc Created \n"
+}

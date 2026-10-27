@@ -67,5 +67,5 @@ SIMPLE_JWT = {
 SPECTACULAR_SETTINGS = {
     "TITLE": "Order and Inventory Management Service for Olist",
     "DESCRIPTION": "A service for Olist's marketplace context: orders, inventory, and analytics.",
-    "VERSION": "0.4.0",
+    "VERSION": "0.5.0",
 }

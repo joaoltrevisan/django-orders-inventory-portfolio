@@ -1,0 +1,23 @@
+{
+  "command": [
+    "docker",
+    "compose",
+    "run",
+    "--rm",
+    "--user",
+    "501:20",
+    "-e",
+    "OLIST_BENCHMARK_ENABLED=1",
+    "migrate",
+    "benchmark_olist",
+    "--expected-database",
+    "olist_benchmark",
+    "--output",
+    "/reports/refused-primary-target"
+  ],
+  "exit_code": 1,
+  "expected_exit_code": 1,
+  "stdout": "",
+  "stderr": " Container olist-case-study-db-1 Running \n Container olist-case-study-db-1 Waiting \n Container olist-case-study-db-1 Healthy \n Container olist-case-study-migrate-run-006eea1470ff Creating \n Container olist-case-study-migrate-run-006eea1470ff Created \nCommandError: Benchmark failed or refused; inspect retained evidence. No automatic data reset is performed.\n\n",
+  "output_directory_created": false
+}

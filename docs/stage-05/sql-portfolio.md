@@ -1,0 +1,60 @@
+# Olist historical SQL portfolio
+
+The collection answers marketplace questions using the accepted Olist snapshot, not simulated inventory/orders. Source attribution, version-label ambiguity and CC BY-NC-SA 4.0 obligations remain in [THIRD_PARTY_DATA.md](../../THIRD_PARTY_DATA.md). Archive SHA-256 is `967e41e04fc306fe604e2a693f488995a8b41e5047418f8a5c8e4abd6deca784`; the [executed output](../../reports/stage-05/sql-results.json) records complete dataset metadata, natural-key content hashes, SQL hashes and ordered-result hashes.
+
+## Shared definitions
+
+Default interval: **2016-09-01 00:00:00 inclusive to 2018-11-01 00:00:00 exclusive**, using the source purchase calendar. Source timestamps have no verified time zone. SQL uses native timezone-free expressions; no UTC instant is invented. Arbitrary whole-second intervals are accepted within the bounded report range; monthly boundary buckets may therefore be partial. Even full requested calendar months do not imply complete market coverage in this historical snapshot.
+
+Sales means **observed merchandise value from orders whose snapshot status is `delivered`**. Freight and recorded payments are separate measures. These are not audited revenue, profit, settled cash, refunds, or seller payouts. Status is the final observed snapshot status, not reconstructed status as of a historical month-end. Monthly recorded-payment attribution uses purchase month because source payment records have no payment-event timestamp.
+
+One source item row represents one observed unit/line; `order_item_id` is a sequence and is never summed as quantity. Preserve repeated product lines and multiple sellers. Join source orders by `customer_id`; group repeat identities by `customer_unique_id`. Repeated behavior is observed within this source/window, not a customer's lifetime. Only completed snapshots participate. Item and payment facts are aggregated separately before their order-level join; payment amounts are never multiplied by installments.
+
+Money remains PostgreSQL `numeric`/Python `Decimal`, serialized as exact strings in JSON. SQL NULL distinguishes absent facts from observed zero. Queries are fixed files under [sql/olist](../../sql/olist); `%(name)s` markers are **psycopg bound parameters**, not literal psql syntax. Use the provided runner or `cursor.execute(sql, parameters)` rather than string interpolation.
+
+## Business questions and result semantics
+
+| SQL file | Business question / concepts | Grain and meaning | Cancelled and empty-result behavior |
+| --- | --- | --- | --- |
+| [order_details.sql](../../sql/olist/order_details.sql) | Which customer reference, product/category and seller belongs to each purchased line? INNER JOIN plus nullable category LEFT JOIN | One source item; historical price/freight, both customer identifiers and original status. Missing category and untranslated category use distinct English presentation labels | Includes every source status, including canceled; orders without items produce no line; no eligible lines returns zero rows |
+| [customer_coverage.sql](../../sql/olist/customer_coverage.sql) | Which customer references have orders in the requested period? LEFT JOIN, GROUP BY, COUNT/FILTER | One source `customer_id`, retaining repeat identity. Date restrictions stay in the LEFT JOIN so references without window orders survive | All statuses count; delivered count is separate. No window orders means zero counts; no source customers means zero rows |
+| [best_selling_products.sql](../../sql/olist/best_selling_products.sql) | Which products sold at least the requested observed unit threshold? GROUP BY, HAVING, SUM, COUNT DISTINCT, CTE, DENSE_RANK, ROW_NUMBER | Product source identity; units are item count, merchandise is SUM(price). Equal unit totals share dense rank; merchandise/source ID deterministically break display ties | Delivered only; canceled excluded. Products below threshold omitted; no qualifying sales returns zero rows |
+| [monthly_sales.sql](../../sql/olist/monthly_sales.sql) | How do delivered-order merchandise, freight and recorded payments compare by purchase month? Independent fact CTEs, LEFT JOIN, GROUP BY, SUM/FILTER | One month containing eligible orders; order counts are not multiplied by item/payment combinations. Missing-side counts accompany nullable sums | Delivered only. No eligible month returns zero rows; a month with no payment facts has NULL payment sum, not an invented zero |
+| [repeat_customers.sql](../../sql/olist/repeat_customers.sql) | Which observed identities placed at least two eligible orders, and how do they rank by merchandise? CTEs, HAVING, SUM, DENSE_RANK | One `customer_unique_id` across different source customer references. Default minimum orders=2, configurable upward. Equal merchandise totals share rank; ID sorts ties | Delivered only; canceled excluded. No repeat identity returns zero rows; missing item facts are counted and all-missing merchandise stays NULL |
+| [repeat_customer_rate.sql](../../sql/olist/repeat_customer_rate.sql) | What share of eligible identities repeat within this window? Aggregate CTE, COUNT FILTER, NULLIF, decimal division | One summary row; repeat means at least two delivered orders. Denominator is identities with at least one delivered order, not every source customer reference | Canceled excluded. No eligible identities gives counts 0 and a NULL percentage; zero repeat among nonzero buyers gives 0.00 percent |
+| [running_monthly_totals.sql](../../sql/olist/running_monthly_totals.sql) | How does observed delivered merchandise accumulate through the requested months? Calendar CTE, generate_series, LEFT JOIN, SUM OVER with explicit ROWS frame | One requested source-calendar month, including empty months. Running sum begins at the requested interval, not the whole source history. Missing item counts remain visible | Canceled excluded. Empty months contribute zero observed merchandise; a wholly empty interval still returns its calendar with zeros |
+| [category_seller_sales.sql](../../sql/olist/category_seller_sales.sql) | Which sellers contribute observed merchandise within each category? Item-grain JOINs, GROUP BY, HAVING, SUM, ROW_NUMBER PARTITION BY | Category/seller pair meeting unit threshold; merchandise/freight come from that seller's lines. NULL source category is a separate missing bucket; untranslated source keys retain NULL English labels | Delivered only. Canceled excluded; no qualifying pair returns zero rows. No order-level payment is allocated to sellers |
+| [customer_spending.sql](../../sql/olist/customer_spending.sql) | How do all observed identities rank by delivered merchandise, including those without eligible purchases? DISTINCT identity CTE, LEFT JOIN, DENSE_RANK | One observed `customer_unique_id`; zero means no observed eligible merchandise, with delivered/missing-item counts distinguishing coverage. Ties share rank and identity sorts display | Canceled excluded from spending. Source identities with no qualifying order remain at zero; no identities means zero rows |
+| [delivery_performance.sql](../../sql/olist/delivery_performance.sql) | How often are delivered orders on time by purchase month and customer state? CTE, date expressions, COUNT FILTER, AVG, NULLIF | Month/state; denominator requires actual/estimated delivery dates, actual timestamp >= purchase, and estimated calendar date >= purchase calendar date. On time compares actual/estimated calendar dates; signed delay is negative when early | Delivered only. Missing/invalid pairs remain in excluded counts; zero valid pairs gives NULL rate/average. No eligible orders gives zero rows. Missing approval/carrier dates alone do not exclude this metric |
+| [seller_delivery.sql](../../sql/olist/seller_delivery.sql) | What delivery outcomes are associated with orders containing each seller? DISTINCT order/seller CTE, JOIN, conditional aggregates | One seller; repeated seller lines count one associated order. An order with several sellers contributes one association to each. This is order-level association, not measured seller-specific shipment performance | Delivered only; canceled excluded. Missing/invalid pairs counted separately; no associated order means zero rows. Do not sum seller association counts as unique marketplace orders |
+| [reconciliation.sql](../../sql/olist/reconciliation.sql) | Which source orders have missing financial facts or an observed payment/item discrepancy? Separate fact CTEs, LEFT JOIN, SUM, decimal difference | One order with either missing side or ABS(payment - merchandise - freight)>0.01. Raw statuses, observed zero payments and NULL missing sides remain distinct | Includes every status including canceled; no issues returns zero rows. No correction, refund inference, installment multiplication or settlement claim |
+
+The separate [benchmark page query](../../sql/olist/benchmark_delivered_page.sql) returns the first 100 delivered-order references in a fixed November 2017 purchase interval, ordered by source purchase time and source order ID. It has its own [measured index report](index-experiment.md); it is not the SQL used by every API route.
+
+## Execute and inspect
+
+After provisioning/importing the separate benchmark environment using the [environment guide](datasets.md):
+
+```bash
+docker compose -p olist-benchmark --env-file .local/analysis/benchmark.env \
+  run --rm --user "$(id -u):$(id -g)" migrate run_olist_reports \
+  --expected-database olist_benchmark --output /reports/sql-results-new.json
+```
+
+Use a new output filename. The command recalculates every persisted mapped historical field/relationship fingerprint before executing the collection. It retains full row counts and ordered result hashes, all rows for reports with at most 100 results, and a bounded first-10 sample otherwise. It does not pretend samples are complete exports. Actual commands/results are in [sql-command.json](../../reports/stage-05/sql-command.json).
+
+Administrators can also GET `/api/olist/reports/{report_name}/` with `start`, `end`, `min_units`, `min_orders` and `page` parameters. Date format is `YYYY-MM-DD HH:MM:SS` without offset; URL-encode spaces. Collections page at 20 with stable SQL ordering; execution applies LIMIT/OFFSET in PostgreSQL. Customer tokens get 403, anonymous requests 401, unknown names 404, invalid parameters 400, and an incomplete/unavailable historical snapshot 409. Historical report POSTs are unsupported. Example:
+
+```bash
+curl --fail-with-body -sS \
+  'http://127.0.0.1:18020/api/olist/reports/monthly_sales/?start=2017-01-01%2000:00:00&end=2018-01-01%2000:00:00' \
+  -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN"
+```
+
+The actual API verification compared every report's count/first row with the separate database's SQL execution and checked the second coverage page; [http.json](../../reports/stage-05/http.json) records outcomes. The curl form illustrates that endpoint rather than claiming a separately executed shell invocation. Source-origin and date-basis metadata appear beside paginated results. Monetary aggregates remain strings, not floating-point JSON approximations.
+
+## Executed observations
+
+The default delivered cohort contains **93,358 eligible customer identities**, of whom **2,801** repeat; the query reports **3.00%**. This differs from all-status repetition and from the 96,096 identity universe. The leading observed product has **520 item rows across 425 delivered orders**, merchandise value **BRL 37,104.30**. Neither measure is current stock or seller payout.
+
+Monthly sales returns **23 nonempty eligible months**, while the calendar/running query returns **26 requested months**. September 2016 has merchandise **134.97**, freight **8.49**, one missing payment side and **NULL** recorded payment value. These facts illustrate why absent payment cannot be replaced by an observed zero. All counts/values above come from executed SQL output, not projections. Complete per-query counts and hashes, plus bounded samples, are retained in the result artifact.

@@ -1,6 +1,6 @@
 # Olist case-study ER model
 
-Status: implemented as Stage 2 models/migrations in an isolated PostgreSQL database, populated by the Stage 3 historical importer, and used by Stage 4 operational transaction services. The diagram highlights core fields; the complete generated DDL is in `sql/schema.sql`. The initial Stage 1 model stays archived.
+Status: implemented as Stage 2 models/migrations in an isolated PostgreSQL database, populated by the Stage 3 historical importer, and used by Stage 4 operational transaction services and Stage 5 historical SQL reports. The diagram highlights core fields; the complete generated DDL is in `sql/schema.sql`. The initial Stage 1 model stays archived.
 
 ## Historical domain
 
@@ -178,7 +178,7 @@ Optional later historical provenance links are deliberately omitted from the cor
 
 ## Constraints, indexes, and locks
 
-Historical baseline indexes include PKs, unique source identifiers, item/payment composite keys, FKs, and a nonunique index on `customer_unique_id`. Avoid duplicate indexes already supplied by uniqueness/FKs. Candidate purchase-date/status/seller-report indexes need new measurements on the actual imported snapshot before adoption as performance improvements.
+Historical baseline indexes include PKs, unique source identifiers, item/payment composite keys, FKs, and a nonunique index on `customer_unique_id`. Avoid duplicate indexes already supplied by uniqueness/FKs. Stage 5 measured a partial covering purchase-date index for one delivered-order page query against the complete imported snapshot. It reduced that query's measured warm-cache work and occupied 7.90 MiB; it was removed after the experiment and is not part of migrations. See the [actual plans and trade-offs](../stage-05/index-experiment.md). Other access patterns and production adoption require separate evidence and review.
 
 Simulation locks follow existing order -> sellers by ID -> products by ID -> offers by ID -> stock by offer ID. Catalog activation/price edits and stock changes must follow the same relative order. Historical importer publication uses its own database-scoped lock, and API readers cannot mutate historical facts.
 

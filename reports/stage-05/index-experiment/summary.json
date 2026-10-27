@@ -1,0 +1,419 @@
+{
+  "status": "SUCCEEDED",
+  "database": "olist_benchmark",
+  "warmups_per_phase": 3,
+  "measured_runs_per_phase": 7,
+  "phases": {
+    "baseline": {
+      "measurements": [
+        {
+          "plan_file": "baseline-measured-01.json",
+          "execution_ms": 5.251,
+          "planning_ms": 0.085,
+          "client_ms": 6.4861250002650195,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "baseline-measured-02.json",
+          "execution_ms": 5.434,
+          "planning_ms": 0.075,
+          "client_ms": 5.884375000277942,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "baseline-measured-03.json",
+          "execution_ms": 5.356,
+          "planning_ms": 0.086,
+          "client_ms": 5.728292000640067,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "baseline-measured-04.json",
+          "execution_ms": 5.247,
+          "planning_ms": 0.074,
+          "client_ms": 5.624749999697087,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "baseline-measured-05.json",
+          "execution_ms": 5.289,
+          "planning_ms": 0.079,
+          "client_ms": 5.656541999996989,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "baseline-measured-06.json",
+          "execution_ms": 5.565,
+          "planning_ms": 0.08,
+          "client_ms": 6.176750000122411,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "baseline-measured-07.json",
+          "execution_ms": 5.391,
+          "planning_ms": 0.085,
+          "client_ms": 5.765250999502314,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        }
+      ],
+      "median_execution_ms": 5.356,
+      "median_planning_ms": 0.08,
+      "result_sha256": "f9e64378ea7d2704eafcfdf5c7de7a1dcc1d090cc9fcd2f14c228a8b1d62cc05"
+    },
+    "indexed": {
+      "measurements": [
+        {
+          "plan_file": "indexed-measured-01.json",
+          "execution_ms": 0.08,
+          "planning_ms": 0.052,
+          "client_ms": 0.32954099970083917,
+          "shared_hit_blocks": 306,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "indexed-measured-02.json",
+          "execution_ms": 0.08,
+          "planning_ms": 0.053,
+          "client_ms": 0.36912500036123674,
+          "shared_hit_blocks": 306,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "indexed-measured-03.json",
+          "execution_ms": 0.079,
+          "planning_ms": 0.051,
+          "client_ms": 0.3649580003184383,
+          "shared_hit_blocks": 306,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "indexed-measured-04.json",
+          "execution_ms": 0.084,
+          "planning_ms": 0.052,
+          "client_ms": 0.41737499941518763,
+          "shared_hit_blocks": 306,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "indexed-measured-05.json",
+          "execution_ms": 0.087,
+          "planning_ms": 0.055,
+          "client_ms": 0.28783299967471976,
+          "shared_hit_blocks": 306,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "indexed-measured-06.json",
+          "execution_ms": 0.08,
+          "planning_ms": 0.051,
+          "client_ms": 0.3634589993453119,
+          "shared_hit_blocks": 306,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "indexed-measured-07.json",
+          "execution_ms": 0.08,
+          "planning_ms": 0.05,
+          "client_ms": 0.3588330000638962,
+          "shared_hit_blocks": 306,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        }
+      ],
+      "median_execution_ms": 0.08,
+      "median_planning_ms": 0.052,
+      "result_sha256": "f9e64378ea7d2704eafcfdf5c7de7a1dcc1d090cc9fcd2f14c228a8b1d62cc05"
+    },
+    "control_baseline": {
+      "measurements": [
+        {
+          "plan_file": "control_baseline-measured-01.json",
+          "execution_ms": 5.328,
+          "planning_ms": 0.09,
+          "client_ms": 5.714124999940395,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "control_baseline-measured-02.json",
+          "execution_ms": 5.113,
+          "planning_ms": 0.09,
+          "client_ms": 5.474999999933061,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "control_baseline-measured-03.json",
+          "execution_ms": 5.031,
+          "planning_ms": 0.072,
+          "client_ms": 5.3588330001730355,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "control_baseline-measured-04.json",
+          "execution_ms": 5.135,
+          "planning_ms": 0.087,
+          "client_ms": 5.476082999848586,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "control_baseline-measured-05.json",
+          "execution_ms": 5.111,
+          "planning_ms": 0.072,
+          "client_ms": 5.462416000227677,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "control_baseline-measured-06.json",
+          "execution_ms": 5.161,
+          "planning_ms": 0.081,
+          "client_ms": 5.486459000167088,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        },
+        {
+          "plan_file": "control_baseline-measured-07.json",
+          "execution_ms": 5.184,
+          "planning_ms": 0.071,
+          "client_ms": 5.494707999787352,
+          "shared_hit_blocks": 3492,
+          "shared_read_blocks": 0,
+          "temp_written_blocks": 0,
+          "root_node": "Limit"
+        }
+      ],
+      "median_execution_ms": 5.135,
+      "median_planning_ms": 0.081,
+      "result_sha256": "f9e64378ea7d2704eafcfdf5c7de7a1dcc1d090cc9fcd2f14c228a8b1d62cc05"
+    }
+  },
+  "cache_conditions": "Warm PostgreSQL shared/OS caches. Fingerprinting, VACUUM, warm-ups and index creation read data. No cold-cache claim.",
+  "limitations": "Sequential phases, EXPLAIN instrumentation, planner sampling history, background work and host scheduling limit generalization. No forced planner settings or synthetic sales.",
+  "existing_indexes": [
+    {
+      "name": "olist_customer_customer_unique_id_cd7174f9",
+      "definition": "CREATE INDEX olist_customer_customer_unique_id_cd7174f9 ON public.olist_customer USING btree (customer_unique_id)"
+    },
+    {
+      "name": "olist_customer_customer_unique_id_cd7174f9_like",
+      "definition": "CREATE INDEX olist_customer_customer_unique_id_cd7174f9_like ON public.olist_customer USING btree (customer_unique_id varchar_pattern_ops)"
+    },
+    {
+      "name": "olist_customer_pkey",
+      "definition": "CREATE UNIQUE INDEX olist_customer_pkey ON public.olist_customer USING btree (id)"
+    },
+    {
+      "name": "olist_customer_snapshot_id_780804a4",
+      "definition": "CREATE INDEX olist_customer_snapshot_id_780804a4 ON public.olist_customer USING btree (snapshot_id)"
+    },
+    {
+      "name": "olist_customer_source_customer_id_5cedee6b_like",
+      "definition": "CREATE INDEX olist_customer_source_customer_id_5cedee6b_like ON public.olist_customer USING btree (source_customer_id varchar_pattern_ops)"
+    },
+    {
+      "name": "olist_customer_source_customer_id_key",
+      "definition": "CREATE UNIQUE INDEX olist_customer_source_customer_id_key ON public.olist_customer USING btree (source_customer_id)"
+    },
+    {
+      "name": "olist_order_customer_id_b131eef0",
+      "definition": "CREATE INDEX olist_order_customer_id_b131eef0 ON public.olist_order USING btree (customer_id)"
+    },
+    {
+      "name": "olist_order_pkey",
+      "definition": "CREATE UNIQUE INDEX olist_order_pkey ON public.olist_order USING btree (id)"
+    },
+    {
+      "name": "olist_order_snapshot_id_4a2ca50a",
+      "definition": "CREATE INDEX olist_order_snapshot_id_4a2ca50a ON public.olist_order USING btree (snapshot_id)"
+    },
+    {
+      "name": "olist_order_source_order_id_459d7b08_like",
+      "definition": "CREATE INDEX olist_order_source_order_id_459d7b08_like ON public.olist_order USING btree (source_order_id varchar_pattern_ops)"
+    },
+    {
+      "name": "olist_order_source_order_id_key",
+      "definition": "CREATE UNIQUE INDEX olist_order_source_order_id_key ON public.olist_order USING btree (source_order_id)"
+    }
+  ],
+  "postgresql": "PostgreSQL 17.11 (Debian 17.11-1.pgdg12+2) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "database_timezone": "UTC",
+  "order_heap_bytes": 25419776,
+  "order_total_bytes_before": 46759936,
+  "database_bytes_before": 158979763,
+  "settings": [
+    {
+      "name": "default_statistics_target",
+      "setting": "100",
+      "unit": null
+    },
+    {
+      "name": "effective_cache_size",
+      "setting": "524288",
+      "unit": "8kB"
+    },
+    {
+      "name": "enable_seqscan",
+      "setting": "on",
+      "unit": null
+    },
+    {
+      "name": "jit",
+      "setting": "on",
+      "unit": null
+    },
+    {
+      "name": "max_parallel_workers_per_gather",
+      "setting": "2",
+      "unit": null
+    },
+    {
+      "name": "random_page_cost",
+      "setting": "4",
+      "unit": null
+    },
+    {
+      "name": "seq_page_cost",
+      "setting": "1",
+      "unit": null
+    },
+    {
+      "name": "shared_buffers",
+      "setting": "16384",
+      "unit": "8kB"
+    },
+    {
+      "name": "track_io_timing",
+      "setting": "off",
+      "unit": null
+    },
+    {
+      "name": "work_mem",
+      "setting": "4096",
+      "unit": "kB"
+    }
+  ],
+  "driver_prepare_threshold": null,
+  "dataset_before": {
+    "dataset_ref": "olistbr/brazilian-ecommerce",
+    "source_url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+    "reported_version": "2",
+    "license": "CC BY-NC-SA 4.0",
+    "retrieved_on": "2026-10-26",
+    "retrieval_precision": "Calendar date only; stored timestamp is a conventional UTC day boundary.",
+    "archive_sha256": "967e41e04fc306fe604e2a693f488995a8b41e5047418f8a5c8e4abd6deca784",
+    "mapping_version": "olist-1",
+    "counts": {
+      "categories": 73,
+      "customers": 99441,
+      "products": 32951,
+      "sellers": 3095,
+      "orders": 99441,
+      "items": 112650,
+      "payments": 103886
+    },
+    "content_hashes": {
+      "categories": "30bdaf3ae040c38275e979281c9204e233a32bd7372d219a4786993217ade6cc",
+      "customers": "d15a0c0ce1bde04000d631ce7c53b5165c44cd37e2974b7b6078bbe63a398892",
+      "products": "ba7ef8d4685c2d02e0eaba96925b7512d10ee6d70b6b1a6fefb5117be3c6f0ec",
+      "sellers": "8e2c9444fbfedc444f50852994618a1092c686721d93e59b0d6e0bf9ffcdba9d",
+      "orders": "ad94e5324d108c0cc851ae10c1dfef36a3680d04f57449f848b4584d8ae3d957",
+      "items": "02b652cb94208fe2b2e512e428d2e7ab849abe56a57c545154a2578998531fd2",
+      "payments": "cfea20b643a60de61de63f71ab80c1f5ebee144c5dbc52823b825fa222a10077"
+    }
+  },
+  "sql": "-- Frozen experiment query: a delivered-order history page in a fixed source purchase interval.\nSELECT o.source_order_id,o.purchased_at_source,c.customer_unique_id\nFROM olist_order o INNER JOIN olist_customer c ON c.id=o.customer_id\nWHERE o.source_status='delivered'\nAND o.snapshot_id=(SELECT id FROM olist_dataset_snapshot WHERE publication_status='COMPLETE')\nAND o.purchased_at_source >= %(start)s::timestamp AND o.purchased_at_source < %(end)s::timestamp\nORDER BY o.purchased_at_source,o.source_order_id LIMIT %(row_limit)s;\n",
+  "sql_sha256": "2cd76c1c2428bdd21baa2d17e28e53bc8c454ee13648d32ab19e9057dcd3581b",
+  "parameters": {
+    "start": "2017-11-01 00:00:00",
+    "end": "2017-12-01 00:00:00",
+    "row_limit": 100
+  },
+  "candidate_index_sql": "CREATE INDEX olist_bench_delivered_purchase_idx ON olist_order (purchased_at_source,source_order_id) INCLUDE (customer_id,snapshot_id) WHERE source_status='delivered'",
+  "result_row_count": 100,
+  "ordered_result_sha256": "f9e64378ea7d2704eafcfdf5c7de7a1dcc1d090cc9fcd2f14c228a8b1d62cc05",
+  "statistics_policy": "VACUUM (ANALYZE) before all phases; unchanged table statistics reused after CREATE/DROP INDEX because no facts change.",
+  "index_build_client_ms": 35.44954199969652,
+  "index_bytes": 8282112,
+  "final_ordered_result_sha256": "f9e64378ea7d2704eafcfdf5c7de7a1dcc1d090cc9fcd2f14c228a8b1d62cc05",
+  "dataset_after": {
+    "dataset_ref": "olistbr/brazilian-ecommerce",
+    "source_url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+    "reported_version": "2",
+    "license": "CC BY-NC-SA 4.0",
+    "retrieved_on": "2026-10-26",
+    "retrieval_precision": "Calendar date only; stored timestamp is a conventional UTC day boundary.",
+    "archive_sha256": "967e41e04fc306fe604e2a693f488995a8b41e5047418f8a5c8e4abd6deca784",
+    "mapping_version": "olist-1",
+    "counts": {
+      "categories": 73,
+      "customers": 99441,
+      "products": 32951,
+      "sellers": 3095,
+      "orders": 99441,
+      "items": 112650,
+      "payments": 103886
+    },
+    "content_hashes": {
+      "categories": "30bdaf3ae040c38275e979281c9204e233a32bd7372d219a4786993217ade6cc",
+      "customers": "d15a0c0ce1bde04000d631ce7c53b5165c44cd37e2974b7b6078bbe63a398892",
+      "products": "ba7ef8d4685c2d02e0eaba96925b7512d10ee6d70b6b1a6fefb5117be3c6f0ec",
+      "sellers": "8e2c9444fbfedc444f50852994618a1092c686721d93e59b0d6e0bf9ffcdba9d",
+      "orders": "ad94e5324d108c0cc851ae10c1dfef36a3680d04f57449f848b4584d8ae3d957",
+      "items": "02b652cb94208fe2b2e512e428d2e7ab849abe56a57c545154a2578998531fd2",
+      "payments": "cfea20b643a60de61de63f71ab80c1f5ebee144c5dbc52823b825fa222a10077"
+    }
+  },
+  "results_equivalent": true,
+  "data_unchanged": true,
+  "candidate_created_by_run_remaining": false,
+  "candidate_index_present_after": false
+}

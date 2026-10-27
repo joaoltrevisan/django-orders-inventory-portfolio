@@ -1,0 +1,70 @@
+{
+  "database": "olist_demo",
+  "role": "olist_owner",
+  "table_counts": {
+    "accounts_customer": 3,
+    "accounts_user": 4,
+    "accounts_user_groups": 0,
+    "accounts_user_user_permissions": 0,
+    "catalog_offer": 3,
+    "catalog_product": 2,
+    "catalog_seller": 2,
+    "inventory_stock": 3,
+    "inventory_stock_movement": 10,
+    "olist_category": 0,
+    "olist_customer": 0,
+    "olist_dataset_snapshot": 0,
+    "olist_import_issue": 0,
+    "olist_import_run": 0,
+    "olist_order": 0,
+    "olist_order_item": 0,
+    "olist_payment_record": 0,
+    "olist_product": 0,
+    "olist_seller": 0,
+    "orders_order": 5,
+    "orders_order_item": 6,
+    "orders_shipment": 2,
+    "orders_simulated_payment": 3
+  },
+  "experimental_index_present": false,
+  "order_statuses": [
+    {
+      "status": "CANCELLED",
+      "count": 1
+    },
+    {
+      "status": "DELIVERED",
+      "count": 1
+    },
+    {
+      "status": "PAID",
+      "count": 1
+    },
+    {
+      "status": "PENDING_PAYMENT",
+      "count": 1
+    },
+    {
+      "status": "SHIPPED",
+      "count": 1
+    }
+  ],
+  "balances": [
+    {
+      "offer_id": 1,
+      "available": 18,
+      "ledger": 18
+    },
+    {
+      "offer_id": 2,
+      "available": 17,
+      "ledger": 17
+    },
+    {
+      "offer_id": 3,
+      "available": 19,
+      "ledger": 19
+    }
+  ],
+  "all_passwords_match_private_seed_and_are_hashed": true
+}

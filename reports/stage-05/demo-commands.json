@@ -1,0 +1,54 @@
+[
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-demo",
+      "--env-file",
+      ".local/analysis/demo.env",
+      "run",
+      "--rm",
+      "--user",
+      "501:20",
+      "-e",
+      "DEMO_SEED_ENABLED=1",
+      "migrate",
+      "seed_demo",
+      "--expected-database",
+      "olist_demo",
+      "--report",
+      "/reports/demo-seed.json"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout": "Created fictional demo data through transactional services; no real charges or historical imports.\n",
+    "stderr": " Container olist-demo-db-1 Running \n Container olist-demo-db-1 Waiting \n Container olist-demo-db-1 Healthy \n Container olist-demo-migrate-run-a5e53d7f6eca Creating \n Container olist-demo-migrate-run-a5e53d7f6eca Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-demo",
+      "--env-file",
+      ".local/analysis/demo.env",
+      "run",
+      "--rm",
+      "--user",
+      "501:20",
+      "-e",
+      "DEMO_SEED_ENABLED=1",
+      "migrate",
+      "seed_demo",
+      "--expected-database",
+      "olist_demo",
+      "--report",
+      "/reports/demo-repeat-refused.json"
+    ],
+    "exit_code": 1,
+    "expected_exit_code": 1,
+    "stdout": "",
+    "stderr": " Container olist-demo-db-1 Running \n Container olist-demo-db-1 Waiting \n Container olist-demo-db-1 Healthy \n Container olist-demo-migrate-run-014e271af2ee Creating \n Container olist-demo-migrate-run-014e271af2ee Created \nCommandError: Demo seed failed or refused; existing data was not replaced.\n\n"
+  }
+]

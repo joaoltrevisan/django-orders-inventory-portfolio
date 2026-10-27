@@ -1,0 +1,25 @@
+{
+  "command": [
+    "docker",
+    "compose",
+    "-p",
+    "olist-benchmark",
+    "--env-file",
+    ".local/analysis/benchmark.env",
+    "run",
+    "--rm",
+    "--user",
+    "501:20",
+    "-e",
+    "OLIST_BENCHMARK_ENABLED=1",
+    "migrate",
+    "benchmark_olist",
+    "--expected-database",
+    "olist_benchmark",
+    "--output",
+    "/reports/index-experiment"
+  ],
+  "exit_code": 0,
+  "stdout": "Measured baseline/index/control with 7 runs each; plans, medians and index bytes retained.\n",
+  "stderr": " Container olist-benchmark-db-1 Running \n Container olist-benchmark-db-1 Waiting \n Container olist-benchmark-db-1 Healthy \n Container olist-benchmark-migrate-run-671f0e508e45 Creating \n Container olist-benchmark-migrate-run-671f0e508e45 Created \n"
+}

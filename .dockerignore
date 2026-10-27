@@ -10,6 +10,7 @@ __pycache__
 .DS_Store
 docs
 reports
-sql
+sql/*
+!sql/olist
 README.md
 THIRD_PARTY_DATA.md

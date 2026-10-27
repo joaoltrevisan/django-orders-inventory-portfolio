@@ -1,0 +1,60 @@
+{
+  "database": "olist_benchmark",
+  "role": "olist_owner",
+  "table_counts": {
+    "accounts_customer": 0,
+    "accounts_user": 0,
+    "accounts_user_groups": 0,
+    "accounts_user_user_permissions": 0,
+    "catalog_offer": 0,
+    "catalog_product": 0,
+    "catalog_seller": 0,
+    "inventory_stock": 0,
+    "inventory_stock_movement": 0,
+    "olist_category": 73,
+    "olist_customer": 99441,
+    "olist_dataset_snapshot": 1,
+    "olist_import_issue": 3739,
+    "olist_import_run": 1,
+    "olist_order": 99441,
+    "olist_order_item": 112650,
+    "olist_payment_record": 103886,
+    "olist_product": 32951,
+    "olist_seller": 3095,
+    "orders_order": 0,
+    "orders_order_item": 0,
+    "orders_shipment": 0,
+    "orders_simulated_payment": 0
+  },
+  "experimental_index_present": false,
+  "order_statuses": [],
+  "balances": [],
+  "verified_historical_fingerprint": {
+    "dataset_ref": "olistbr/brazilian-ecommerce",
+    "source_url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+    "reported_version": "2",
+    "license": "CC BY-NC-SA 4.0",
+    "retrieved_on": "2026-10-26",
+    "retrieval_precision": "Calendar date only; stored timestamp is a conventional UTC day boundary.",
+    "archive_sha256": "967e41e04fc306fe604e2a693f488995a8b41e5047418f8a5c8e4abd6deca784",
+    "mapping_version": "olist-1",
+    "counts": {
+      "categories": 73,
+      "customers": 99441,
+      "products": 32951,
+      "sellers": 3095,
+      "orders": 99441,
+      "items": 112650,
+      "payments": 103886
+    },
+    "content_hashes": {
+      "categories": "30bdaf3ae040c38275e979281c9204e233a32bd7372d219a4786993217ade6cc",
+      "customers": "d15a0c0ce1bde04000d631ce7c53b5165c44cd37e2974b7b6078bbe63a398892",
+      "products": "ba7ef8d4685c2d02e0eaba96925b7512d10ee6d70b6b1a6fefb5117be3c6f0ec",
+      "sellers": "8e2c9444fbfedc444f50852994618a1092c686721d93e59b0d6e0bf9ffcdba9d",
+      "orders": "ad94e5324d108c0cc851ae10c1dfef36a3680d04f57449f848b4584d8ae3d957",
+      "items": "02b652cb94208fe2b2e512e428d2e7ab849abe56a57c545154a2578998531fd2",
+      "payments": "cfea20b643a60de61de63f71ab80c1f5ebee144c5dbc52823b825fa222a10077"
+    }
+  }
+}

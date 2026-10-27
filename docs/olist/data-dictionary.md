@@ -1,10 +1,10 @@
-# Olist source dictionary and proposed mappings
+# Olist source dictionary and implemented mappings
 
-Status: inspected source and proposed mapping. Models/import/API are not implemented yet. Source string values remain unchanged even when they are Portuguese; code identifiers, normalized column names, analytical labels, comments, and documentation are English.
+Status: inspected source mapping implemented by the historical models, validated importer and read-only APIs. Stage 5 [SQL reports](../stage-05/sql-portfolio.md) define analytical grains, date/status rules and missing-data handling. Source string values remain unchanged even when they are Portuguese; code identifiers, normalized column names, analytical labels, comments, and documentation are English.
 
 ## Identity and row grain
 
-| Source field/key | Meaning and proposed representation |
+| Source field/key | Meaning and implemented representation |
 | --- | --- |
 | `customer_id` | Source customer record attached to an order; preserve as unique `source_customer_id`, not a login ID |
 | `customer_unique_id` | Anonymized identifier grouping repeat customers across source customer rows; nonunique indexed field on historical customers; not evidence of a known real-world identity |

@@ -1,0 +1,8 @@
+{
+  "run_id": 40495339203,
+  "raw_log_kept_local": true,
+  "configured_local_secret_matches": 0,
+  "jwt_shaped_values_found": 0,
+  "github_token_shaped_values_found": 0,
+  "note": "Known local values and token-shape scan; generated hosted passwords were deleted by the runner and are not independently available for comparison."
+}

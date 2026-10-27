@@ -1,5 +1,7 @@
 # Order and Inventory Management Service for Olist
 
+[![PostgreSQL verification](https://github.com/joaoltrevisan/django-orders-inventory-portfolio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/joaoltrevisan/django-orders-inventory-portfolio/actions/workflows/ci.yml)
+
 A backend service by **João Trevisan** designed to address order and inventory management needs in Olist's marketplace context. The service combines multi-seller ordering, seller offers, stock control, customer access and sales analytics, with relational integrity and transactional consistency at its core.
 
 Built with **Python, Django REST Framework, PostgreSQL, JWT and Docker Compose**. Repository: [joaoltrevisan/django-orders-inventory-portfolio](https://github.com/joaoltrevisan/django-orders-inventory-portfolio).
@@ -31,7 +33,7 @@ The guarded [real-curl workflow](scripts/verify_curl.py) exercises registration,
 
 ## Verified results
 
-The Stage 6 suite passed **130 PostgreSQL tests**. The continuous-integration extension passed **137 PostgreSQL tests** locally; [CI verification](docs/ci/verification.md) records local and hosted outcomes. **39 real curl requests** passed on a separate seeded review environment. Strict OpenAPI validation passed for **38 paths**; SQL export/restore verification confirmed **28 tables and 20 migrations**. The [final verification](docs/stage-06/verification.md) records commands, outcomes, the corrected initial curl example, environment isolation and remaining limits.
+The Stage 6 suite passed **130 PostgreSQL tests**. The continuous-integration extension passed **137 PostgreSQL tests both locally and on GitHub Actions**; [CI verification](docs/ci/verification.md) records actual runs and their artifacts. **39 real curl requests** passed on a separate seeded review environment. Strict OpenAPI validation passed for **38 paths**; SQL export/restore verification confirmed **28 tables and 20 migrations**. The [final verification](docs/stage-06/verification.md) records commands, outcomes, the corrected initial curl example, environment isolation and remaining limits.
 
 The imported historical snapshot contains **99,441 orders, 112,650 item rows, 103,886 payment records, 32,951 products and 3,095 sellers**. Import accepted **451,535 source rows / 451,537 entities**, rejected none and retained **3,739 warning issues across 3,116 rows** without repairing the source. Repeat identities use `customer_unique_id`; order joins use `customer_id`. Delivered-order SQL identified **2,801 repeat identities among 93,358 eligible identities (3.00%)** in the defined source window.
 

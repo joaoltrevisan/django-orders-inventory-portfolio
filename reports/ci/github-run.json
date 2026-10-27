@@ -1,0 +1,78 @@
+{
+  "conclusion": "success",
+  "createdAt": "2026-10-27T11:20:02Z",
+  "event": "push",
+  "headSha": "5db02152f50efd68c65ed0a4d420ac21bc07f1cf",
+  "jobs": [
+    {
+      "completedAt": "2026-10-27T11:21:13Z",
+      "conclusion": "success",
+      "databaseId": 122159256887,
+      "name": "PostgreSQL checks and schema",
+      "startedAt": "2026-10-27T11:20:04Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-27T11:20:06Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-27T11:20:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-27T11:20:07Z",
+          "conclusion": "success",
+          "name": "Check out source",
+          "number": 2,
+          "startedAt": "2026-10-27T11:20:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-27T11:21:10Z",
+          "conclusion": "success",
+          "name": "Run isolated PostgreSQL verification",
+          "number": 3,
+          "startedAt": "2026-10-27T11:20:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-27T11:21:10Z",
+          "conclusion": "success",
+          "name": "Retry guarded cleanup",
+          "number": 4,
+          "startedAt": "2026-10-27T11:21:10Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-27T11:21:11Z",
+          "conclusion": "success",
+          "name": "Retain sanitized verification evidence",
+          "number": 5,
+          "startedAt": "2026-10-27T11:21:10Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-27T11:21:11Z",
+          "conclusion": "success",
+          "name": "Post Check out source",
+          "number": 10,
+          "startedAt": "2026-10-27T11:21:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-27T11:21:11Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 11,
+          "startedAt": "2026-10-27T11:21:11Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/joaoltrevisan/django-orders-inventory-portfolio/actions/runs/40495339203/job/122159256887"
+    }
+  ],
+  "updatedAt": "2026-10-27T11:21:13Z",
+  "url": "https://github.com/joaoltrevisan/django-orders-inventory-portfolio/actions/runs/40495339203",
+  "workflowName": "PostgreSQL verification"
+}

@@ -1,0 +1,16 @@
+{
+  "python": "3.12.15",
+  "architecture": "x86_64",
+  "postgresql": "PostgreSQL 17.11 (Debian 17.11-1.pgdg12+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "database_role": "olist_owner",
+  "database_timezone": "UTC",
+  "packages": {
+    "Django": "5.2.18",
+    "djangorestframework": "3.18.3",
+    "djangorestframework-simplejwt": "5.5.1",
+    "psycopg": "3.3.6",
+    "PyJWT": "2.15.1",
+    "drf-spectacular": "0.30.0",
+    "ruff": "0.17.2"
+  }
+}

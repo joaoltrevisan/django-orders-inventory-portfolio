@@ -1,6 +1,6 @@
 # API reference and curl workflows
 
-Base URL for the isolated seeded demo is `http://127.0.0.1:18022`; the existing primary service uses port 18020. All routes end in `/`. Bodies are JSON, identifiers are integers unless explicitly historical source keys, money is decimal BRL, and collection page size is 20. The [OpenAPI document for API 1.0.0](../reports/stage-06/openapi.json) is the current machine-readable contract; `GET /api/schema/` requires an administrator token. This is the API's version label, not a production readiness claim.
+Base URL for the isolated seeded demo is `http://127.0.0.1:18022`; the existing primary service uses port 18020. All routes end in `/`. Bodies are JSON, identifiers are integers unless explicitly historical source keys, money is decimal BRL, and collection page size is 20. The [OpenAPI document for API 1.1.0](../reports/idempotency/local/openapi.json) is the current machine-readable contract; `GET /api/schema/` requires an administrator token. This is the API's version label, not a production readiness claim.
 
 ## Authentication and permissions
 
@@ -108,13 +108,32 @@ Create another seller/offer to demonstrate multi-seller orders. Save `.local/api
 
 ```bash
 curl --fail-with-body -sS "$BASE_URL/api/orders/" -H @.local/api/customer.header \
-  -H 'Content-Type: application/json' --data-binary @.local/api/order.json
+  -H 'Content-Type: application/json' -H 'Idempotency-Key: purchase-example-001' \
+  --data-binary @.local/api/order.json
 curl --fail-with-body -sS "$BASE_URL/api/orders/?status=PENDING_PAYMENT&page=1" \
   -H @.local/api/customer.header
 curl --fail-with-body -sS "$BASE_URL/api/orders/1/" -H @.local/api/customer.header
 ```
 
 Use the returned order ID for later requests. Accept 1–100 distinct offers, integer JSON quantities 1–9999 and a structured fictional Brazilian address. Duplicate offers, client prices/totals/customer/status/timestamps are rejected. The server snapshots price/name/SKU/seller, calculates decimal totals and atomically deducts all offers. At prices 25.90 and 40.00, quantities 2/1 total **91.80**; the actually executed curl workflow verified that total, old snapshots after edits and a new-price purchase total of **100.00**.
+
+## Creation keys and safe retry
+
+For a purchase that may be retried, send an `Idempotency-Key` on the first request and keep the same key and validated content on retries. The example above uses `purchase-example-001`; choose a fresh value for each intended purchase. To inspect the response status/headers, add curl `--include`.
+
+| Request | Result |
+| --- | --- |
+| First successful keyed creation | 201, `Idempotency-Replayed: false` |
+| Same customer/key/normalized content | 200, `Idempotency-Replayed: true`, same order ID |
+| Committed key with different valid content | 409, `code: idempotency_conflict` |
+| Invalid key or request body | 400; no order/key consumed |
+| No key | Each successful call creates a distinct order, 201, no replay header |
+
+The key is case-sensitive and must contain 1–128 ASCII letters/digits or `.`, `_`, `:`, `-`; whitespace, empty values, commas and non-ASCII characters are rejected. Scope is the current active nonstaff Customer profile. Knowing a key grants no access. IDs/quantities are validated and item lines sorted; address text is trimmed and an absent complement equals an empty complement. JSON property order and item-line order do not change identity. Prices/totals remain server-owned.
+
+Replay returns the current coherent stored order state, not cached original response bytes. It preserves purchase snapshots after catalog edits and returns `CANCELLED` after cancellation without reserving again. Successful keys are retained with their order indefinitely, including after cancellation. Validation, insufficient stock and transaction failures consume no key; errors are not cached and a corrected attempt may reuse an uncommitted key. Only SHA-256 identity/content hashes are stored, hidden from API responses. The guarantee covers this database transaction, not external payment processing. See the [full contract and lock design](idempotency/design.md).
+
+Without a key, investigate an ambiguous commit before retrying. A key cannot be attached retroactively to an existing unkeyed purchase. Reservation expiry remains outside this release.
 
 ## Cancel or process another order
 
@@ -165,8 +184,8 @@ Reports return `{count, next, previous, results, data_origin, date_basis}`. Rows
 | 400 | Field/shape validation; usually field-name arrays or `non_field_errors` |
 | 401 / 403 | Missing/invalid token / authenticated role forbidden |
 | 404 / 405 | Missing/foreign-owned object or unknown page/report / unsupported method |
-| 409 | Business conflict `{code, detail}`; insufficient stock, invalid transition, integrity/tracking/capacity conflict, unavailable complete history |
+| 409 | Business conflict `{code, detail}`; insufficient stock, invalid transition, integrity/tracking/capacity conflict, unavailable complete history, committed key/content mismatch |
 | 429 | Authentication endpoint throttle |
 | 500 / 503 | Sanitized database-operation failure / health database unavailable |
 
-Business response shape is `{"code":"insufficient_stock","detail":"Insufficient stock for offer <id>."}`, with the actual offer ID in the English detail. Stable codes should drive clients. Never automatically retry creation after an ambiguous commit response; it has no idempotency key. Look up state and investigate first. [Limitations](limitations.md) document production/security and functional boundaries.
+Business response shape is `{"code":"insufficient_stock","detail":"Insufficient stock for offer <id>."}`, with the actual offer ID in the English detail. Stable codes should drive clients. For safe creation retry, provide the same optional key and normalized content from the first attempt. Without a key, look up state and investigate an ambiguous commit before retrying. [Limitations](limitations.md) document production/security and functional boundaries.

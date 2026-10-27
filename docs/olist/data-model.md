@@ -150,6 +150,15 @@ erDiagram
         bigint offer_id FK,UK
         integer available_quantity
     }
+    orders_order {
+        bigint id PK
+        bigint customer_id FK
+        varchar status
+        numeric total
+        varchar idempotency_key_hash "Nullable SHA-256; unique with customer when present"
+        varchar request_fingerprint "Nullable SHA-256; paired CHECK"
+        timestamptz created_at
+    }
     orders_order_item {
         bigint id PK
         bigint order_id FK
@@ -180,6 +189,8 @@ Optional later historical provenance links are deliberately omitted from the cor
 
 Historical baseline indexes include PKs, unique source identifiers, item/payment composite keys, FKs, and a nonunique index on `customer_unique_id`. Avoid duplicate indexes already supplied by uniqueness/FKs. Stage 5 measured a partial covering purchase-date index for one delivered-order page query against the complete imported snapshot. It reduced that query's measured warm-cache work and occupied 7.90 MiB; it was removed after the experiment and is not part of migrations. See the [actual plans and trade-offs](../stage-05/index-experiment.md). Other access patterns and production adoption require separate evidence and review.
 
-Simulation locks follow existing order -> sellers by ID -> products by ID -> offers by ID -> stock by offer ID. Catalog activation/price edits and stock changes must follow the same relative order. Historical importer publication uses its own database-scoped lock, and API readers cannot mutate historical facts.
+Simulation locks follow optional creation-key advisory lock -> existing order -> sellers by ID -> products by ID -> offers by ID -> stock by offer ID. Catalog activation/price edits and stock changes must follow the same relative order. Historical importer publication uses its own database-scoped lock, and API readers cannot mutate historical facts.
 
 PostgreSQL constraints enforce relational references and local ranges/keys; Stage 4 application services enforce operational cross-table totals, snapshot immutability, legal transitions, and ledger reconciliation. Import validation/reporting preserves historical exceptions instead of forcing operational invariants. The [operational contract](../stage-04/rules.md) details the implemented locking/lifecycle behavior; the [adaptation plan](adaptation-plan.md) records the broader delivery boundaries.
+
+API 1.1.0 adds two nullable 64-character lowercase SHA-256 fields through `orders.0002_creation_idempotency`. Both must be NULL or both valid hashes. A partial unique B-tree index on `(customer_id, idempotency_key_hash)` applies only to keyed orders; legacy/unkeyed rows remain NULL and do not collide. Raw keys are not stored, and keys remain with protected orders indefinitely. These fields belong only to the simulated domain and do not alter source identifiers, historical fingerprints or analytics. [Creation-key rules](../idempotency/design.md) define normalization, lock order and replay semantics.

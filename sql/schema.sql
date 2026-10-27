@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict NP81wZYdlHmNlDsW6jOzmU7l2GGKxG4Bb65gY9nHFOmQtgjXvGvNmv0L3U1dPk0
+\restrict PDTodRrabHRmjJuWUjFh1YhE1qdciUd6eTNZCW2c9b0p02tgMDtZJyizVTFtM7e
 
 -- Dumped from database version 17.11 (Debian 17.11-1.pgdg12+2)
 -- Dumped by pg_dump version 17.11 (Debian 17.11-1.pgdg12+2)
@@ -786,7 +786,10 @@ CREATE TABLE public.orders_order (
     shipped_at timestamp with time zone,
     delivered_at timestamp with time zone,
     customer_id bigint NOT NULL,
+    idempotency_key_hash character varying(64),
+    request_fingerprint character varying(64),
     CONSTRAINT order_currency_brl CHECK (((currency)::text = 'BRL'::text)),
+    CONSTRAINT order_idempotency_hash_pair_valid CHECK ((((idempotency_key_hash IS NULL) AND (request_fingerprint IS NULL)) OR ((idempotency_key_hash IS NOT NULL) AND ((idempotency_key_hash)::text ~ '^[0-9a-f]{64}$'::text) AND (request_fingerprint IS NOT NULL) AND ((request_fingerprint)::text ~ '^[0-9a-f]{64}$'::text)))),
     CONSTRAINT order_shipping_address_valid CHECK ((((shipping_country)::text = 'BR'::text) AND ((shipping_state)::text = ANY ((ARRAY['AC'::character varying, 'AL'::character varying, 'AP'::character varying, 'AM'::character varying, 'BA'::character varying, 'CE'::character varying, 'DF'::character varying, 'ES'::character varying, 'GO'::character varying, 'MA'::character varying, 'MT'::character varying, 'MS'::character varying, 'MG'::character varying, 'PA'::character varying, 'PB'::character varying, 'PR'::character varying, 'PE'::character varying, 'PI'::character varying, 'RJ'::character varying, 'RN'::character varying, 'RS'::character varying, 'RO'::character varying, 'RR'::character varying, 'SC'::character varying, 'SP'::character varying, 'SE'::character varying, 'TO'::character varying])::text[])) AND ((shipping_postal_code)::text ~ '^[0-9]{8}$'::text) AND ((shipping_recipient)::text ~ '\S'::text) AND ((shipping_street)::text ~ '\S'::text) AND ((shipping_number)::text ~ '\S'::text) AND ((shipping_district)::text ~ '\S'::text) AND ((shipping_city)::text ~ '\S'::text))),
     CONSTRAINT order_status_timestamps_valid CHECK ((((cancelled_at IS NULL) AND (delivered_at IS NULL) AND (paid_at IS NULL) AND (shipped_at IS NULL) AND ((status)::text = 'PENDING_PAYMENT'::text)) OR ((cancelled_at IS NOT NULL) AND (delivered_at IS NULL) AND (paid_at IS NULL) AND (shipped_at IS NULL) AND ((status)::text = 'CANCELLED'::text)) OR ((cancelled_at IS NULL) AND (delivered_at IS NULL) AND (paid_at IS NOT NULL) AND (shipped_at IS NULL) AND ((status)::text = 'PAID'::text)) OR ((cancelled_at IS NULL) AND (delivered_at IS NULL) AND (paid_at IS NOT NULL) AND (shipped_at IS NOT NULL) AND ((status)::text = 'SHIPPED'::text)) OR ((cancelled_at IS NULL) AND (delivered_at IS NOT NULL) AND (paid_at IS NOT NULL) AND (shipped_at IS NOT NULL) AND ((status)::text = 'DELIVERED'::text)))),
     CONSTRAINT order_timestamps_chronological CHECK ((((paid_at IS NULL) OR (paid_at >= created_at)) AND ((cancelled_at IS NULL) OR (cancelled_at >= created_at)) AND ((shipped_at IS NULL) OR (shipped_at >= paid_at)) AND ((delivered_at IS NULL) OR (delivered_at >= shipped_at)))),
@@ -1575,6 +1578,13 @@ CREATE INDEX olist_seller_source_seller_id_dc6a2f56_like ON public.olist_seller 
 
 
 --
+-- Name: order_customer_idempotency_unique; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX order_customer_idempotency_unique ON public.orders_order USING btree (customer_id, idempotency_key_hash) WHERE (idempotency_key_hash IS NOT NULL);
+
+
+--
 -- Name: orders_order_customer_id_0b76f6a4; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1869,4 +1879,4 @@ ALTER TABLE ONLY public.orders_simulated_payment
 -- PostgreSQL database dump complete
 --
 
-\unrestrict NP81wZYdlHmNlDsW6jOzmU7l2GGKxG4Bb65gY9nHFOmQtgjXvGvNmv0L3U1dPk0
+\unrestrict PDTodRrabHRmjJuWUjFh1YhE1qdciUd6eTNZCW2c9b0p02tgMDtZJyizVTFtM7e

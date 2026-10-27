@@ -6,19 +6,19 @@
 
 A multi-seller basket must either reserve every selected offer or fail completely. Catalog edits must preserve what the buyer purchased; cancellation must restore quantities once; customers must not access other customers' orders. Marketplace analysis must retain the meaning of source identities, statuses and monetary facts rather than multiplying item/payment rows or inventing current inventory from old sales.
 
-The service delivers JWT registration/login and scoped profiles/orders, administrative catalog/customer/inventory/processing, immutable purchase snapshots, stock movement history, controlled state transitions and twelve parameterized SQL reports. PostgreSQL constraints protect local integrity while services coordinate cross-table invariants with atomic transactions and consistently ordered locks. [Architecture](architecture.md) and [ER diagrams](olist/data-model.md) explain these decisions.
+The service delivers JWT registration/login and scoped profiles/orders, administrative catalog/customer/inventory/processing, immutable purchase snapshots, optional customer-scoped idempotent creation, stock movement history, controlled state transitions and twelve parameterized SQL reports. PostgreSQL constraints protect local integrity while services coordinate cross-table invariants with atomic transactions and consistently ordered locks. [Architecture](architecture.md) and [ER diagrams](olist/data-model.md) explain these decisions.
 
 ## Technical evidence to inspect
 
 | Competency | Concrete implementation / evidence |
 | --- | --- |
-| Backend design | Clear accounts/catalog/inventory/orders/olist modules; DRF validation, permissions, pagination and [OpenAPI](../reports/stage-06/openapi.json) |
+| Backend design | Clear accounts/catalog/inventory/orders/olist modules; DRF validation, permissions, pagination and [OpenAPI](../reports/idempotency/local/openapi.json) |
 | Relational modeling | Multi-seller historical item relationships and operational seller/product offers; PK/FK/unique/check constraints; migration-consistent [SQL export](../sql/schema.sql) |
 | Integrity/concurrency | Atomic offer reservations, consistent lock hierarchy, server totals/snapshots, cancellation once; separate-connection controlled PostgreSQL tests |
 | Data engineering | Locked-source repeatable importer with field/relationship fingerprints, duplicate/no-op protection, atomic publication and retained anomaly reports |
 | SQL | INNER/LEFT JOIN, GROUP BY/HAVING, aggregate CTEs, SUM OVER, DENSE_RANK and ROW_NUMBER with explicit business grain/status/null definitions |
 | Measured optimization | Identical SQL/data, statistics refresh, warm-ups, repeated samples/control, 30 actual JSON plans, buffers/storage and result equivalence |
-| Reproducibility/review | Docker/Compose roles and independent environments, 130 executed PostgreSQL tests, real curl workflows and independent review records |
+| Reproducibility/review | Docker/Compose roles and independent environments, executed PostgreSQL suites with [current evidence](idempotency/verification.md), real curl workflows and independent review records |
 
 The accepted historical snapshot includes **99,441 orders, 112,650 item rows, 103,886 payment records, 32,951 products and 3,095 sellers**. Separate aggregation avoids item/payment join multiplication. Repeat-customer grouping uses `customer_unique_id`, while joins use `customer_id`. Under the documented delivered-order cohort, executed SQL identified **2,801 repeating identities among 93,358 eligible identities (3.00%)**. These are observed source/window measures, not current market or lifetime-customer claims.
 
@@ -36,6 +36,6 @@ Final execution results and the initially failed/corrected curl example are reta
 
 ## Scope and provenance
 
-This is an independently developed educational project using Olist's publicly released anonymized dataset. It does not imply employment, a commissioned contract, partnership, endorsement or internal-system access. Technical source identity, version ambiguity, attribution and **CC BY-NC-SA 4.0** requirements are in [THIRD_PARTY_DATA.md](../THIRD_PARTY_DATA.md).
+This independently developed service uses Olist's publicly released anonymized dataset for historical analysis. It does not imply employment, a commissioned contract, partnership, endorsement or internal-system access. Technical source identity, version ambiguity, attribution and **CC BY-NC-SA 4.0** requirements are in [THIRD_PARTY_DATA.md](../THIRD_PARTY_DATA.md).
 
-Authentication, current prices/offers, inventory, new payments and operational fulfillment are explicitly simulated and separate from historical facts. The service is locally reproducible, not publicly deployed or production-certified. Idempotent creation/reservation expiry, real integrations and deployment hardening are prioritized [future improvements](limitations.md), not completed functionality.
+Authentication, current prices/offers, inventory, new payments and operational fulfillment are explicitly simulated and separate from historical facts. The service is locally reproducible, not publicly deployed or production-certified. Optional keyed creation retries are implemented with transaction serialization and preserved snapshots. Reservation expiry, real integrations and deployment hardening remain prioritized [future improvements](limitations.md).

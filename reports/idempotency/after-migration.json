@@ -1,0 +1,102 @@
+{
+  "tables": {
+    "accounts_customer": {
+      "rows": 3,
+      "sha256": "ee7d8c9c86b1a6d7f6af0227c7753303ece8ce448857fb61d8aa645af7b239f9"
+    },
+    "accounts_user": {
+      "rows": 4,
+      "sha256": "8ccaa8bc7cb932a1b665ad9401931a36bc758824cf989e79f0c1ad2b9c83f526"
+    },
+    "accounts_user_groups": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "accounts_user_user_permissions": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "catalog_offer": {
+      "rows": 3,
+      "sha256": "b82f74a62023ecc2d0434d921b8e694d8245cd9ceaa3fcfbec3b9854bd99171f"
+    },
+    "catalog_product": {
+      "rows": 2,
+      "sha256": "e7a9c894b4324957b8ab1b2147e870a84a51a8a9f731298b5ddd8a54d87174cb"
+    },
+    "catalog_seller": {
+      "rows": 2,
+      "sha256": "11e7c61a2790f9f7e2608c63e2484d40657522d88d6fb0974130294e6aa89a6f"
+    },
+    "inventory_stock": {
+      "rows": 3,
+      "sha256": "611dee9e37e7b1fbaaedec571f5eed9163c0399cf03fae19b095d717e0f02917"
+    },
+    "inventory_stock_movement": {
+      "rows": 10,
+      "sha256": "1747bee4f8f63bbcef607eca96df7eeb18e2a9661b1a903e607616fe1cf79e7b"
+    },
+    "olist_category": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_customer": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_dataset_snapshot": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_import_issue": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_import_run": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_order": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_order_item": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_payment_record": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_product": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_seller": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "orders_order": {
+      "rows": 5,
+      "sha256": "c249b9b0369e2c45cdff685cbff6dcbdd2cfbe1e07be935cb398c2210345fb32"
+    },
+    "orders_order_item": {
+      "rows": 6,
+      "sha256": "88259e57d7db7b419ddcaa6edd1fbd8ac90ee80d02f5a6f8266fd8143e463a31"
+    },
+    "orders_shipment": {
+      "rows": 2,
+      "sha256": "6f7012360626eba46857358420d74668d3709e14e19671bb5edb83de44f957ab"
+    },
+    "orders_simulated_payment": {
+      "rows": 3,
+      "sha256": "9cd24c0b0521994d9cf1b293ba39781870f9284899f4691cde777cbb281c5978"
+    }
+  },
+  "migration_count": 21,
+  "hash_columns": [
+    "idempotency_key_hash",
+    "request_fingerprint"
+  ],
+  "legacy_orders_with_null_pair": 5
+}

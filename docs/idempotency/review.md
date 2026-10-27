@@ -1,0 +1,13 @@
+# Independent creation-key review
+
+An independent reviewer inspected the contract before implementation, then reviewed the implementation, constraints, controlled concurrency tests, HTTP verification and documentation separately from the implementer. Review was read-only; the reviewer did not mutate a database or rerun Docker workloads.
+
+Initial implementation review found no material defect. It checked customer-scoped full-hash lookup under a transaction advisory lock, current authorization after waiting, replay before catalog validation, coherent order-locked snapshots, null-safe hash pairing and scoped partial uniqueness. Static Ruff lint/format and whitespace checks passed. The five new races coordinate separate connections and observe advisory/order-lock waits; rollback releases both stock writes and key identity.
+
+The resumed review independently compared all 23 baseline/post-migration count/hash entries and confirmed exact equality, 21 applied migrations and five NULL legacy pairs. It reviewed the additive schema export and the extended curl header/status checks, catalog/cancellation replay, corrected failed-key reuse and final stock assertions. No material defect was found in these passes. Remaining publication gates were the actual complete-suite/HTTP artifacts and final documentation; their final review outcome is recorded below once completed.
+
+## Completed local evidence review
+
+The final reviewer independently verified all nine phase and seven check exit codes, **157 tests in 11.377 seconds**, 20 observed operational contention lines, normal test-database destruction, 75 role checks, API 1.1.0/38 OpenAPI paths and 28 tables/21 migrations. The current SQL file SHA-256 equals the schema artifact. All 50 curl statuses/transport outcomes match their expectations; current-document relative links resolve and credential/JWT/private-key patterns were absent from the inspected evidence. The source-input hash was reconstructed exactly with the README version used for the run. Cleanup evidence supports exclusive resource removal and retained existing-volume presence; it is not a row audit of those other environments.
+
+One minor wording correction broadened the README provenance description to cover both evidence and feature-summary edits. No material implementation, security, concurrency or evidence defect remained. The reviewer considered the local delivery ready to publish, conditional on recording the completed review and then checking actual hosted CI. Hosted results are separate from this local review and must identify their exact tested revision.

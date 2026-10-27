@@ -1,4 +1,6 @@
-# Paused idempotency checkpoint
+# Archived pause checkpoint
+
+**Historical checkpoint:** resumed on 2026-10-27. The text below records the earlier pause, not current delivery status. See [verification](verification.md) for completed work and remaining limits.
 
 Paused at the user's explicit request on 2026-10-27. Resume from this checkpoint; do not start another feature.
 

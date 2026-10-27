@@ -1,0 +1,66 @@
+{
+  "ci_project": "olist-ci-4033a66cc9b44507",
+  "exclusive_cleanup_verified": true,
+  "commands": [
+    {
+      "command": [
+        "docker",
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=olist-ci-4033a66cc9b44507",
+        "--format",
+        "{{.ID}}"
+      ],
+      "exit_code": 0,
+      "stdout": ""
+    },
+    {
+      "command": [
+        "docker",
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=olist-ci-4033a66cc9b44507",
+        "--format",
+        "{{.Name}}"
+      ],
+      "exit_code": 0,
+      "stdout": ""
+    },
+    {
+      "command": [
+        "docker",
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=olist-ci-4033a66cc9b44507",
+        "--format",
+        "{{.Name}}"
+      ],
+      "exit_code": 0,
+      "stdout": ""
+    },
+    {
+      "command": [
+        "docker",
+        "image",
+        "ls",
+        "olist-ci-app:olist-ci-4033a66cc9b44507",
+        "--format",
+        "{{.ID}}"
+      ],
+      "exit_code": 0,
+      "stdout": ""
+    }
+  ],
+  "preserved_existing_volumes": [
+    "olist-case-study_olist_postgres_data",
+    "olist-benchmark_olist_postgres_data",
+    "olist-demo_olist_postgres_data",
+    "olist-idempotency-review_olist_postgres_data",
+    "loja-stage3-20261023223148_postgres_data"
+  ],
+  "stage6_image_still_exists": true,
+  "note": "Presence/cleanup checks; not a fresh full hash audit of previously existing primary/demo/benchmark databases."
+}

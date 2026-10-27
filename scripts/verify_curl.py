@@ -79,9 +79,17 @@ def confirmed_url(compose):
 
 
 def workflow(base_url, values, report):
-    def request(name, method, path, expected=200, payload=None, token=None):
+    def request(
+        name, method, path, expected=200, payload=None, token=None, key=None, replayed=None
+    ):
         # Credentials remain on curl stdin and in process memory, never command arguments/evidence.
-        config = [f"url = {json.dumps(base_url + path)}", f"request = {json.dumps(method)}"]
+        config = [
+            f"url = {json.dumps(base_url + path)}",
+            f"request = {json.dumps(method)}",
+            "include",
+        ]
+        if key is not None:
+            config.append(f"header = {json.dumps('Idempotency-Key: ' + key)}")
         if token:
             config.append(f"header = {json.dumps('Authorization: Bearer ' + token)}")
         if payload is not None:
@@ -94,7 +102,16 @@ def workflow(base_url, values, report):
         result = subprocess.run(CURL, input="\n".join(config), capture_output=True, text=True)
         if result.returncode:
             raise RuntimeError(f"Curl transport failed during {name}.")
-        body, status = result.stdout.rsplit("\n", 1)
+        response, status = result.stdout.rsplit("\n", 1)
+        header_text, body = response.split("\n\n", 1)
+        headers = {
+            name.lower(): value.strip()
+            for line in header_text.splitlines()[1:]
+            if ":" in line
+            for name, value in [line.split(":", 1)]
+        }
+        observed_replay = headers.get("idempotency-replayed")
+        require(observed_replay == replayed, f"Unexpected replay header during {name}.")
         report["requests"].append(
             {
                 "name": name,
@@ -103,6 +120,7 @@ def workflow(base_url, values, report):
                 "curl_exit_code": result.returncode,
                 "status": int(status),
                 "expected": expected,
+                "idempotency_replayed": observed_replay,
             }
         )
         if int(status) != expected:
@@ -229,7 +247,33 @@ def workflow(base_url, values, report):
         ],
         "shipping_address": address,
     }
-    order = request("multi-seller purchase", "POST", "/api/orders/", 201, payload, buyer)
+    key = f"curl-order-{suffix}"
+    order = request(
+        "multi-seller purchase", "POST", "/api/orders/", 201, payload, buyer, key, "false"
+    )
+    canonical = {
+        "items": list(reversed(payload["items"])),
+        "shipping_address": {**address, "complement": "  "},
+    }
+    replay = request(
+        "canonical keyed replay", "POST", "/api/orders/", 200, canonical, buyer, key, "true"
+    )
+    require(replay == order, "Canonical retry changed the order or its snapshots.")
+    conflict = request(
+        "key content conflict",
+        "POST",
+        "/api/orders/",
+        409,
+        {**payload, "shipping_address": {**address, "number": "11"}},
+        buyer,
+        key,
+    )
+    require(conflict["code"] == "idempotency_conflict", "The conflict code differs.")
+    request("anonymous key is not authorization", "POST", "/api/orders/", 401, payload, key=key)
+    request(
+        "administrator cannot replay customer key", "POST", "/api/orders/", 403, payload, admin, key
+    )
+    request("invalid creation key", "POST", "/api/orders/", 400, payload, buyer, "invalid key")
     require(
         order["total"] == "91.80" and order["data_origin"] == "SIMULATED_API",
         "The initial simulated purchase total differs.",
@@ -252,6 +296,10 @@ def workflow(base_url, values, report):
         },
         token=admin,
     )
+    repriced_replay = request(
+        "keyed replay after catalog edits", "POST", "/api/orders/", 200, payload, buyer, key, "true"
+    )
+    require(repriced_replay == order, "Catalog edits changed a keyed purchase replay.")
     original = request("purchase snapshot", "GET", f"/api/orders/{order['id']}/", token=buyer)
     require(original["total"] == "91.80", "The stored purchase total changed.")
     require(
@@ -263,6 +311,13 @@ def workflow(base_url, values, report):
             name, "POST", f"/api/orders/{order['id']}/cancel/", payload={}, token=buyer
         )
         require(result["order"]["status"] == "CANCELLED", "Cancellation did not persist.")
+    cancelled_replay = request(
+        "keyed replay after cancellation", "POST", "/api/orders/", 200, payload, buyer, key, "true"
+    )
+    require(
+        cancelled_replay["id"] == order["id"] and cancelled_replay["status"] == "CANCELLED",
+        "Replay reopened or replaced a cancelled order.",
+    )
     for offer in offers:
         balance = request("restored stock", "GET", f"/api/inventory/{offer['id']}/", token=admin)
         require(balance["available_quantity"] == 10, "Cancellation restored an incorrect balance.")
@@ -313,7 +368,16 @@ def workflow(base_url, values, report):
         ],
     }
     before = request("orders before failed purchase", "GET", "/api/orders/", token=buyer)["count"]
-    request("insufficient stock rollback", "POST", "/api/orders/", 409, failed_payload, buyer)
+    failed_key = f"curl-failed-{suffix}"
+    request(
+        "insufficient stock rollback",
+        "POST",
+        "/api/orders/",
+        409,
+        failed_payload,
+        buyer,
+        failed_key,
+    )
     after = request("orders after failed purchase", "GET", "/api/orders/", token=buyer)
     require(after["count"] == before, "A failed purchase left an order behind.")
     for offer, expected in zip(offers, [8, 9], strict=True):
@@ -329,6 +393,36 @@ def workflow(base_url, values, report):
         sum(Decimal(row["quantity_delta"]) for row in movements["results"]) == 0,
         "The cancellation ledger does not balance.",
     )
+    recovered = request(
+        "uncommitted key accepts corrected content",
+        "POST",
+        "/api/orders/",
+        201,
+        payload,
+        buyer,
+        failed_key,
+        "false",
+    )
+    require(recovered["id"] != processed["id"], "A rolled-back key reused another order.")
+    request(
+        "cancel recovered purchase",
+        "POST",
+        f"/api/orders/{recovered['id']}/cancel/",
+        payload={},
+        token=buyer,
+    )
+    for offer, expected in zip(offers, [8, 9], strict=True):
+        balance = request(
+            "stock after recovered cancellation",
+            "GET",
+            f"/api/inventory/{offer['id']}/",
+            token=admin,
+        )
+        require(balance["available_quantity"] == expected, "Recovery changed final stock.")
+    require(
+        not {"idempotency_key_hash", "request_fingerprint"}.intersection(order),
+        "Internal key hashes leaked in the order response.",
+    )
     request(
         "source-free report refusal", "GET", "/api/olist/reports/monthly_sales/", 409, token=admin
     )
@@ -343,6 +437,14 @@ def workflow(base_url, values, report):
         "failed_order_fully_rolled_back": True,
         "owner_and_admin_boundaries": True,
         "all_events_simulated": True,
+        "canonical_keyed_replay_same_order": True,
+        "content_conflict_rejected": True,
+        "replay_preserves_purchase_after_catalog_edits": True,
+        "cancelled_replay_does_not_reserve_again": True,
+        "key_does_not_bypass_authorization": True,
+        "uncommitted_key_reusable_after_failure": True,
+        "unkeyed_creation_has_no_replay_header": True,
+        "internal_hashes_not_exposed": True,
     }
 
 

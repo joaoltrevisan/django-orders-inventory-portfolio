@@ -16,7 +16,7 @@ Login/registration/refresh throttles use Django's per-process local-memory cache
 
 - Historical Olist data is one immutable accepted snapshot per database, with offset-free source clocks, preserved anomalies and missing facts. Reviews and raw geolocation are fingerprinted but not imported. No real identities, current stock, catalog prices, logins, settlement/refunds or item-level seller delivery events can be inferred from it.
 - Operational prices, offers, inventory, accounts, payments and fulfillment are explicitly simulated. There are no real payment, warehouse, carrier or Olist internal-system calls, separate seller suborders, partial cancellation, refunds/returns, taxes/discounts/shipping charges or multi-currency support.
-- Only pending orders cancel. Deduct-on-create reservations do not expire. Creation has no idempotency key and ambiguous commits require checking state before retrying. Parent locks favor a clear common hierarchy over maximum concurrency.
+- Only pending orders cancel. Deduct-on-create reservations do not expire. Optional customer-scoped creation keys support retries from the first keyed attempt; unkeyed ambiguous commits still require checking state before retrying. Keys persist indefinitely with orders, errors are not cached, replay returns current state and the guarantee does not extend to external services. Parent locks favor a clear common hierarchy over maximum concurrency.
 - Cross-table totals, immutable snapshots, permitted transitions and ledger reconciliation rely on the application services. Database constraints enforce local keys/ranges/row consistency; privileged SQL can bypass service invariants. Audit history is not a tamper-proof accounting ledger.
 - Reports use bounded source intervals, stable offset pagination and synchronous count/execution. They are not a materialized analytics warehouse or streaming/current-sales dashboard. Large offsets, concurrent operational load and production traffic were not benchmarked.
 - Sales uses final snapshot `delivered` status and observed item value, not historical as-of status, audited revenue or settled cash. Payment facts lack per-payment event times. Repeat behavior is observed only within the stated source/window. Seller delivery is an order association, not independently measured seller shipment performance.
@@ -25,7 +25,7 @@ Login/registration/refresh throttles use Django's per-process local-memory cache
 
 ## Prioritized follow-up work
 
-1. Specify idempotent order creation and reservation expiry, including failure recovery and new race tests.
+1. Specify reservation expiry and recovery, including contention with cancellation, payment and keyed replay. Optional creation idempotency is implemented; expiry is not.
 2. Design payment/refund and seller-fulfillment integrations with explicit provider/event contracts; keep imported source facts immutable.
 3. Evaluate actual production report/page workloads and storage/write costs before adopting any measured index through a reviewed migration.
 4. Add deployment configuration, TLS, shared throttling, observability, backup/restore drills and key rotation for a real hosting target.

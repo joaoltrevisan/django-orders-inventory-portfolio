@@ -1,5 +1,7 @@
 # Tests and reproducible evidence
 
+[Continuous integration](ci.md) provides a disposable equivalent on GitHub Actions and locally, with its own database, volume, image and credentials. The commands below remain useful for testing an intentionally configured development environment.
+
 Build the current image, initialize the primary PostgreSQL schema and apply role grants using the [execution guide](getting-started.md). No Olist download is required for automated tests: tiny explicitly fictional source fixtures exercise import/report semantics, while actual source analysis has separate evidence.
 
 ```bash
@@ -12,7 +14,7 @@ docker compose run --rm migrate migrate --check
 docker compose run --rm tests
 ```
 
-The final suite executed **130 tests** against PostgreSQL, not SQLite. The `tests` service uses `olist_test`, creates/destroys `test_olist_case_study` and does not flush the application database. Run suites serially against a given target; concurrent suite invocations can collide on Django's test database name. Do not substitute application/owner credentials for the test service.
+The Stage 6 suite executed **130 tests** against PostgreSQL, not SQLite. The current CI extension adds seven isolation/cleanup safety tests, bringing the suite to **137**; see [CI evidence](ci/verification.md) for actual runs. The `tests` service uses `olist_test`, creates/destroys `test_olist_case_study` and does not flush the application database. Run suites serially against a given target; concurrent suite invocations can collide on Django's test database name. Do not substitute application/owner credentials for the test service.
 
 To retain all seven command arrays, stdout/stderr and exit codes with completed test count/runtime:
 

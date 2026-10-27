@@ -1,0 +1,9 @@
+{
+  "started_at_utc": "2026-10-27T02:50:16.881979+00:00",
+  "passed": false,
+  "project": "olist-ci-8afddfdcdf0a4056",
+  "commands": [],
+  "source_inputs_sha256": "e7c3616665356639d0abaeed04d07ed44ec9f1dc7574f02290e69024723e43c7",
+  "failure": "'migrate'",
+  "finished_at_utc": "2026-10-27T02:50:17.013442+00:00"
+}

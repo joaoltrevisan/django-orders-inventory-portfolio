@@ -1,0 +1,4021 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Order and Inventory Management Service for Olist",
+        "version": "1.0.0",
+        "description": "A service for Olist's marketplace context: orders, inventory, and analytics."
+    },
+    "paths": {
+        "/api/auth/login/": {
+            "post": {
+                "operationId": "auth_login_create",
+                "description": "Takes a set of user credentials and returns an access and refresh JSON web\ntoken pair to prove the authentication of those credentials.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Login"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/me/": {
+            "get": {
+                "operationId": "auth_me_retrieve",
+                "tags": [
+                    "auth"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Profile"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "auth_me_partial_update",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedProfileUpdate"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Profile"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/refresh/": {
+            "post": {
+                "operationId": "auth_refresh_create",
+                "description": "Takes a refresh type JSON web token and returns an access type JSON web\ntoken if the refresh token is valid.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ActiveUserRefresh"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActiveUserRefresh"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/register/": {
+            "post": {
+                "operationId": "auth_register_create",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Registration"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {}
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Profile"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/customers/": {
+            "get": {
+                "operationId": "customers_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedCustomerList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/customers/{id}/": {
+            "get": {
+                "operationId": "customers_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "customers_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedCustomerUpdate"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/inventory/": {
+            "get": {
+                "operationId": "inventory_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "inventory"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedStockList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/inventory/{offer_id}/": {
+            "get": {
+                "operationId": "inventory_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "offer_id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "inventory"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Stock"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/inventory/{offer_id}/changes/": {
+            "post": {
+                "operationId": "inventory_changes_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "offer_id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "inventory"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StockChange"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StockChangeResult"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/inventory/movements/": {
+            "get": {
+                "operationId": "inventory_movements_list",
+                "description": "Administrator-only immutable simulated stock movements. Page size 20.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "offer_id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "order_id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "inventory"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedMovementList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/offers/": {
+            "get": {
+                "operationId": "offers_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "offers"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedOfferList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "offers_create",
+                "tags": [
+                    "offers"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Offer"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Offer"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/offers/{id}/": {
+            "get": {
+                "operationId": "offers_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this offer.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "offers"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Offer"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "offers_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this offer.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "offers"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedOffer"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Offer"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/categories/": {
+            "get": {
+                "operationId": "olist_categories_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedHistoricalCategoryList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/categories/{source_name}/": {
+            "get": {
+                "operationId": "olist_categories_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "source_name",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistoricalCategory"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/customers/": {
+            "get": {
+                "operationId": "olist_customers_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedHistoricalCustomerList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/customers/{source_customer_id}/": {
+            "get": {
+                "operationId": "olist_customers_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "source_customer_id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistoricalCustomer"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/items/": {
+            "get": {
+                "operationId": "olist_items_list",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "order_id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Exact 32-character lowercase hexadecimal source order ID."
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedHistoricalItemList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/items/{id}/": {
+            "get": {
+                "operationId": "olist_items_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this historical order item.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistoricalItem"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/orders/": {
+            "get": {
+                "operationId": "olist_orders_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedHistoricalOrderList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/orders/{source_order_id}/": {
+            "get": {
+                "operationId": "olist_orders_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "source_order_id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistoricalOrder"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/payments/": {
+            "get": {
+                "operationId": "olist_payments_list",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "order_id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Exact 32-character lowercase hexadecimal source order ID."
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedHistoricalPaymentRecordList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/payments/{id}/": {
+            "get": {
+                "operationId": "olist_payments_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this historical payment record.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistoricalPaymentRecord"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/products/": {
+            "get": {
+                "operationId": "olist_products_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedHistoricalProductList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/products/{source_product_id}/": {
+            "get": {
+                "operationId": "olist_products_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "source_product_id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistoricalProduct"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/reports/{report_name}/": {
+            "get": {
+                "operationId": "olist_reports_retrieve",
+                "description": "Administrator-only historical SQL report, page size 20. Sales use snapshot delivered status; source purchase timestamps have no verified time zone. See docs/stage-05/sql-portfolio.md for each result grain and NULL rules.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "end",
+                        "schema": {
+                            "type": "string",
+                            "default": "2018-11-01 00:00:00"
+                        },
+                        "description": "Exclusive source timestamp; increasing interval up to ten years."
+                    },
+                    {
+                        "in": "query",
+                        "name": "min_orders",
+                        "schema": {
+                            "type": "integer",
+                            "default": 2
+                        },
+                        "description": "Repeat threshold, 2 to 1000000."
+                    },
+                    {
+                        "in": "query",
+                        "name": "min_units",
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        },
+                        "description": "Unit threshold, 1 to 1000000."
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Page number, starting at 1."
+                    },
+                    {
+                        "in": "path",
+                        "name": "report_name",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "best_selling_products",
+                                "category_seller_sales",
+                                "customer_coverage",
+                                "customer_spending",
+                                "delivery_performance",
+                                "monthly_sales",
+                                "order_details",
+                                "reconciliation",
+                                "repeat_customer_rate",
+                                "repeat_customers",
+                                "running_monthly_totals",
+                                "seller_delivery"
+                            ]
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "start",
+                        "schema": {
+                            "type": "string",
+                            "default": "2016-09-01 00:00:00"
+                        },
+                        "description": "Inclusive source timestamp: YYYY-MM-DD HH:MM:SS."
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistoricalReportResponse"
+                                }
+                            }
+                        },
+                        "description": ""
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            }
+                        },
+                        "description": "Invalid report parameters."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            }
+                        },
+                        "description": "Missing or invalid access token."
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            }
+                        },
+                        "description": "Administrator access required."
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            }
+                        },
+                        "description": "Unknown report or page."
+                    },
+                    "409": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            }
+                        },
+                        "description": "Complete historical snapshot unavailable."
+                    }
+                }
+            }
+        },
+        "/api/olist/sellers/": {
+            "get": {
+                "operationId": "olist_sellers_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedHistoricalSellerList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/olist/sellers/{source_seller_id}/": {
+            "get": {
+                "operationId": "olist_sellers_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "source_seller_id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "olist"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistoricalSeller"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/orders/": {
+            "get": {
+                "operationId": "orders_list",
+                "description": "Owner-scoped orders; administrators see all orders. Page size 20.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "customer_id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Administrator only; Customer profile PK."
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "CANCELLED",
+                                "DELIVERED",
+                                "PAID",
+                                "PENDING_PAYMENT",
+                                "SHIPPED"
+                            ]
+                        }
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedOrderDetailList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "orders_create",
+                "tags": [
+                    "orders"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderCreate"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/orders/{order_id}/": {
+            "get": {
+                "operationId": "orders_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "order_id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/orders/{order_id}/cancel/": {
+            "post": {
+                "operationId": "orders_cancel_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "order_id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderTransition"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/orders/{order_id}/deliver/": {
+            "post": {
+                "operationId": "orders_deliver_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "order_id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderTransition"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/orders/{order_id}/ship/": {
+            "post": {
+                "operationId": "orders_ship_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "order_id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ShippingAction"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderTransition"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/orders/{order_id}/simulated-payment/": {
+            "post": {
+                "operationId": "orders_simulated_payment_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "order_id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderTransition"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/products/": {
+            "get": {
+                "operationId": "products_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "products"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedProductList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "products_create",
+                "tags": [
+                    "products"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Product"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/products/{id}/": {
+            "get": {
+                "operationId": "products_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this product.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "products"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "products_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this product.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "products"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedProduct"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/schema/": {
+            "get": {
+                "operationId": "schema_retrieve",
+                "description": "OpenApi3 schema for this API. Format can be selected via content negotiation.\n\n- YAML: application/vnd.oai.openapi\n- JSON: application/vnd.oai.openapi+json",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "format",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "json",
+                                "yaml"
+                            ]
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "lang",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "af",
+                                "ar",
+                                "ar-dz",
+                                "ast",
+                                "az",
+                                "be",
+                                "bg",
+                                "bn",
+                                "br",
+                                "bs",
+                                "ca",
+                                "ckb",
+                                "cs",
+                                "cy",
+                                "da",
+                                "de",
+                                "dsb",
+                                "el",
+                                "en",
+                                "en-au",
+                                "en-gb",
+                                "eo",
+                                "es",
+                                "es-ar",
+                                "es-co",
+                                "es-mx",
+                                "es-ni",
+                                "es-ve",
+                                "et",
+                                "eu",
+                                "fa",
+                                "fi",
+                                "fr",
+                                "fy",
+                                "ga",
+                                "gd",
+                                "gl",
+                                "he",
+                                "hi",
+                                "hr",
+                                "hsb",
+                                "hu",
+                                "hy",
+                                "ia",
+                                "id",
+                                "ig",
+                                "io",
+                                "is",
+                                "it",
+                                "ja",
+                                "ka",
+                                "kab",
+                                "kk",
+                                "km",
+                                "kn",
+                                "ko",
+                                "ky",
+                                "lb",
+                                "lt",
+                                "lv",
+                                "mk",
+                                "ml",
+                                "mn",
+                                "mr",
+                                "ms",
+                                "my",
+                                "nb",
+                                "ne",
+                                "nl",
+                                "nn",
+                                "os",
+                                "pa",
+                                "pl",
+                                "pt",
+                                "pt-br",
+                                "ro",
+                                "ru",
+                                "sk",
+                                "sl",
+                                "sq",
+                                "sr",
+                                "sr-latn",
+                                "sv",
+                                "sw",
+                                "ta",
+                                "te",
+                                "tg",
+                                "th",
+                                "tk",
+                                "tr",
+                                "tt",
+                                "udm",
+                                "ug",
+                                "uk",
+                                "ur",
+                                "uz",
+                                "vi",
+                                "zh-hans",
+                                "zh-hant"
+                            ]
+                        }
+                    }
+                ],
+                "tags": [
+                    "schema"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/vnd.oai.openapi": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            },
+                            "application/yaml": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            },
+                            "application/vnd.oai.openapi+json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/sellers/": {
+            "get": {
+                "operationId": "sellers_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "sellers"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedSellerList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "sellers_create",
+                "tags": [
+                    "sellers"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Seller"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Seller"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/sellers/{id}/": {
+            "get": {
+                "operationId": "sellers_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this seller.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "sellers"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Seller"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "sellers_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this seller.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "sellers"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedSeller"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Seller"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ActiveUserRefresh": {
+                "type": "object",
+                "properties": {
+                    "refresh": {
+                        "type": "string",
+                        "writeOnly": true,
+                        "maxLength": 4096
+                    },
+                    "access": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "access",
+                    "refresh"
+                ]
+            },
+            "Customer": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "phone": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    }
+                },
+                "required": [
+                    "data_origin",
+                    "email",
+                    "id",
+                    "is_active",
+                    "name",
+                    "phone",
+                    "user_id"
+                ]
+            },
+            "DataOriginEnum": {
+                "enum": [
+                    "OLIST_HISTORICAL"
+                ],
+                "type": "string",
+                "description": "* `OLIST_HISTORICAL` - OLIST_HISTORICAL"
+            },
+            "HistoricalCategory": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "OLIST_HISTORICAL"
+                    },
+                    "source_name": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 200
+                    },
+                    "english_name": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true,
+                        "maxLength": 200
+                    },
+                    "snapshot": {
+                        "type": "integer",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "data_origin",
+                    "english_name",
+                    "id",
+                    "snapshot",
+                    "source_name"
+                ]
+            },
+            "HistoricalCustomer": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "OLIST_HISTORICAL"
+                    },
+                    "source_customer_id": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 32
+                    },
+                    "customer_unique_id": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 32
+                    },
+                    "zip_code_prefix": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 5
+                    },
+                    "city": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 200
+                    },
+                    "state": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 2
+                    },
+                    "snapshot": {
+                        "type": "integer",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "city",
+                    "customer_unique_id",
+                    "data_origin",
+                    "id",
+                    "snapshot",
+                    "source_customer_id",
+                    "state",
+                    "zip_code_prefix"
+                ]
+            },
+            "HistoricalItem": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "OLIST_HISTORICAL"
+                    },
+                    "order": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "product": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "seller": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "source_order_item_id": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": -2147483648,
+                        "readOnly": true
+                    },
+                    "price": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,14}(?:\\.\\d{0,2})?$",
+                        "readOnly": true
+                    },
+                    "freight_value": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,14}(?:\\.\\d{0,2})?$",
+                        "readOnly": true
+                    },
+                    "shipping_limit_at_raw": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 19
+                    },
+                    "shipping_limit_at_source": {
+                        "type": "string",
+                        "example": "2017-03-01 00:15:00",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "data_origin",
+                    "freight_value",
+                    "id",
+                    "order",
+                    "price",
+                    "product",
+                    "seller",
+                    "shipping_limit_at_raw",
+                    "shipping_limit_at_source",
+                    "source_order_item_id"
+                ]
+            },
+            "HistoricalOrder": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "OLIST_HISTORICAL"
+                    },
+                    "customer": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "customer_unique_id": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "source_order_id": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 32
+                    },
+                    "source_status": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 50
+                    },
+                    "purchased_at_raw": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 19
+                    },
+                    "purchased_at_source": {
+                        "type": "string",
+                        "example": "2017-03-01 00:15:00",
+                        "readOnly": true
+                    },
+                    "approved_at_raw": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 19
+                    },
+                    "approved_at_source": {
+                        "type": "string",
+                        "example": "2017-03-01 00:15:00",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "delivered_carrier_at_raw": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 19
+                    },
+                    "delivered_carrier_at_source": {
+                        "type": "string",
+                        "example": "2017-03-01 00:15:00",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "delivered_customer_at_raw": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 19
+                    },
+                    "delivered_customer_at_source": {
+                        "type": "string",
+                        "example": "2017-03-01 00:15:00",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "estimated_delivery_at_raw": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 19
+                    },
+                    "estimated_delivery_at_source": {
+                        "type": "string",
+                        "example": "2017-03-01 00:15:00",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "snapshot": {
+                        "type": "integer",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "approved_at_raw",
+                    "approved_at_source",
+                    "customer",
+                    "customer_unique_id",
+                    "data_origin",
+                    "delivered_carrier_at_raw",
+                    "delivered_carrier_at_source",
+                    "delivered_customer_at_raw",
+                    "delivered_customer_at_source",
+                    "estimated_delivery_at_raw",
+                    "estimated_delivery_at_source",
+                    "id",
+                    "purchased_at_raw",
+                    "purchased_at_source",
+                    "snapshot",
+                    "source_order_id",
+                    "source_status"
+                ]
+            },
+            "HistoricalPaymentRecord": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "OLIST_HISTORICAL"
+                    },
+                    "order": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "payment_record_kind": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "HISTORICAL_RECORD"
+                    },
+                    "payment_sequential": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": -2147483648,
+                        "readOnly": true
+                    },
+                    "payment_type": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 50
+                    },
+                    "payment_installments": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": -2147483648,
+                        "readOnly": true
+                    },
+                    "payment_value": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,14}(?:\\.\\d{0,2})?$",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "data_origin",
+                    "id",
+                    "order",
+                    "payment_installments",
+                    "payment_record_kind",
+                    "payment_sequential",
+                    "payment_type",
+                    "payment_value"
+                ]
+            },
+            "HistoricalProduct": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "OLIST_HISTORICAL"
+                    },
+                    "category": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "source_product_id": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 32
+                    },
+                    "name_length": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": 0,
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "description_length": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": 0,
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "photos_count": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": 0,
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "weight_g": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": 0,
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "length_cm": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": 0,
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "height_cm": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": 0,
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "width_cm": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": 0,
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "snapshot": {
+                        "type": "integer",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "category",
+                    "data_origin",
+                    "description_length",
+                    "height_cm",
+                    "id",
+                    "length_cm",
+                    "name_length",
+                    "photos_count",
+                    "snapshot",
+                    "source_product_id",
+                    "weight_g",
+                    "width_cm"
+                ]
+            },
+            "HistoricalReportResponse": {
+                "type": "object",
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "next": {
+                        "type": "string",
+                        "format": "uri",
+                        "nullable": true
+                    },
+                    "previous": {
+                        "type": "string",
+                        "format": "uri",
+                        "nullable": true
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": {}
+                        },
+                        "description": "Report-specific columns; exact numeric money is serialized as strings."
+                    },
+                    "data_origin": {
+                        "$ref": "#/components/schemas/DataOriginEnum"
+                    },
+                    "date_basis": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "count",
+                    "data_origin",
+                    "date_basis",
+                    "next",
+                    "previous",
+                    "results"
+                ]
+            },
+            "HistoricalSeller": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "OLIST_HISTORICAL"
+                    },
+                    "source_seller_id": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 32
+                    },
+                    "zip_code_prefix": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 5
+                    },
+                    "city": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 200
+                    },
+                    "state": {
+                        "type": "string",
+                        "readOnly": true,
+                        "maxLength": 2
+                    },
+                    "snapshot": {
+                        "type": "integer",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "city",
+                    "data_origin",
+                    "id",
+                    "snapshot",
+                    "source_seller_id",
+                    "state",
+                    "zip_code_prefix"
+                ]
+            },
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "writeOnly": true,
+                        "maxLength": 254
+                    },
+                    "password": {
+                        "type": "string",
+                        "writeOnly": true,
+                        "maxLength": 128
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ]
+            },
+            "Movement": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "offer_id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "nullable": true,
+                        "readOnly": true
+                    },
+                    "performed_by_id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "movement_type": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/MovementMovementTypeEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "quantity_delta": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "reason": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "data_origin",
+                    "id",
+                    "movement_type",
+                    "offer_id",
+                    "order_id",
+                    "performed_by_id",
+                    "quantity_delta",
+                    "reason"
+                ]
+            },
+            "MovementMovementTypeEnum": {
+                "enum": [
+                    "ENTRY",
+                    "ADJUSTMENT",
+                    "RESERVATION",
+                    "RELEASE"
+                ],
+                "type": "string",
+                "description": "* `ENTRY` - Entry\n* `ADJUSTMENT` - Adjustment\n* `RESERVATION` - Reservation\n* `RELEASE` - Release"
+            },
+            "Offer": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "seller_id": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 1,
+                        "format": "int64"
+                    },
+                    "product_id": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 1,
+                        "format": "int64"
+                    },
+                    "simulated_price": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,8}(?:\\.\\d{0,2})?$"
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "available_quantity": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    }
+                },
+                "required": [
+                    "available_quantity",
+                    "data_origin",
+                    "id",
+                    "product_id",
+                    "seller_id",
+                    "simulated_price"
+                ]
+            },
+            "Order": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "customer_id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "currency": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "total": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,14}(?:\\.\\d{0,2})?$",
+                        "readOnly": true
+                    },
+                    "shipping_address": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "readOnly": true
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderItem"
+                        },
+                        "readOnly": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "paid_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "cancelled_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "shipped_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "delivered_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    },
+                    "payment_mode": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_NO_REAL_CHARGE"
+                    }
+                },
+                "required": [
+                    "cancelled_at",
+                    "created_at",
+                    "currency",
+                    "customer_id",
+                    "data_origin",
+                    "delivered_at",
+                    "id",
+                    "items",
+                    "paid_at",
+                    "payment_mode",
+                    "shipped_at",
+                    "shipping_address",
+                    "status",
+                    "total",
+                    "updated_at"
+                ]
+            },
+            "OrderCreate": {
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderItemInput"
+                        }
+                    },
+                    "shipping_address": {
+                        "$ref": "#/components/schemas/ShippingAddressInput"
+                    }
+                },
+                "required": [
+                    "items",
+                    "shipping_address"
+                ]
+            },
+            "OrderDetail": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "customer_id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "currency": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "total": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,14}(?:\\.\\d{0,2})?$",
+                        "readOnly": true
+                    },
+                    "shipping_address": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "readOnly": true
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderItem"
+                        },
+                        "readOnly": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "paid_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "cancelled_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "shipped_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "delivered_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    },
+                    "payment_mode": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_NO_REAL_CHARGE"
+                    },
+                    "simulated_payment": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SimulatedPayment"
+                            }
+                        ],
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "shipment": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Shipment"
+                            }
+                        ],
+                        "readOnly": true,
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "cancelled_at",
+                    "created_at",
+                    "currency",
+                    "customer_id",
+                    "data_origin",
+                    "delivered_at",
+                    "id",
+                    "items",
+                    "paid_at",
+                    "payment_mode",
+                    "shipment",
+                    "shipped_at",
+                    "shipping_address",
+                    "simulated_payment",
+                    "status",
+                    "total",
+                    "updated_at"
+                ]
+            },
+            "OrderItem": {
+                "type": "object",
+                "properties": {
+                    "offer_id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "product_id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "seller_id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "product_sku": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "product_name": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "seller_label": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "unit_price": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,8}(?:\\.\\d{0,2})?$",
+                        "readOnly": true
+                    },
+                    "subtotal": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,14}(?:\\.\\d{0,2})?$",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "offer_id",
+                    "product_id",
+                    "product_name",
+                    "product_sku",
+                    "quantity",
+                    "seller_id",
+                    "seller_label",
+                    "subtotal",
+                    "unit_price"
+                ]
+            },
+            "OrderItemInput": {
+                "type": "object",
+                "properties": {
+                    "offer_id": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 1,
+                        "format": "int64"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "maximum": 9999,
+                        "minimum": 1
+                    }
+                },
+                "required": [
+                    "offer_id",
+                    "quantity"
+                ]
+            },
+            "OrderTransition": {
+                "type": "object",
+                "properties": {
+                    "order": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Order"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "simulated_payment": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SimulatedPayment"
+                            }
+                        ],
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "shipment": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Shipment"
+                            }
+                        ],
+                        "readOnly": true,
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "order",
+                    "shipment",
+                    "simulated_payment"
+                ]
+            },
+            "PaginatedCustomerList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Customer"
+                        }
+                    }
+                }
+            },
+            "PaginatedHistoricalCategoryList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HistoricalCategory"
+                        }
+                    }
+                }
+            },
+            "PaginatedHistoricalCustomerList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HistoricalCustomer"
+                        }
+                    }
+                }
+            },
+            "PaginatedHistoricalItemList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HistoricalItem"
+                        }
+                    }
+                }
+            },
+            "PaginatedHistoricalOrderList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HistoricalOrder"
+                        }
+                    }
+                }
+            },
+            "PaginatedHistoricalPaymentRecordList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HistoricalPaymentRecord"
+                        }
+                    }
+                }
+            },
+            "PaginatedHistoricalProductList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HistoricalProduct"
+                        }
+                    }
+                }
+            },
+            "PaginatedHistoricalSellerList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HistoricalSeller"
+                        }
+                    }
+                }
+            },
+            "PaginatedMovementList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Movement"
+                        }
+                    }
+                }
+            },
+            "PaginatedOfferList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Offer"
+                        }
+                    }
+                }
+            },
+            "PaginatedOrderDetailList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderDetail"
+                        }
+                    }
+                }
+            },
+            "PaginatedProductList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Product"
+                        }
+                    }
+                }
+            },
+            "PaginatedSellerList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Seller"
+                        }
+                    }
+                }
+            },
+            "PaginatedStockList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Stock"
+                        }
+                    }
+                }
+            },
+            "PatchedCustomerUpdate": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 150
+                    },
+                    "phone": {
+                        "type": "string",
+                        "maxLength": 20
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "PatchedOffer": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "seller_id": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 1,
+                        "format": "int64"
+                    },
+                    "product_id": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 1,
+                        "format": "int64"
+                    },
+                    "simulated_price": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,8}(?:\\.\\d{0,2})?$"
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "available_quantity": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    }
+                }
+            },
+            "PatchedProduct": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "sku": {
+                        "type": "string",
+                        "pattern": "^[A-Z0-9][A-Z0-9._-]{0,63}$",
+                        "maxLength": 64
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 5000
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    }
+                }
+            },
+            "PatchedProfileUpdate": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 150
+                    },
+                    "phone": {
+                        "type": "string",
+                        "maxLength": 20
+                    }
+                }
+            },
+            "PatchedSeller": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "label": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    }
+                }
+            },
+            "Product": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "sku": {
+                        "type": "string",
+                        "pattern": "^[A-Z0-9][A-Z0-9._-]{0,63}$",
+                        "maxLength": 64
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 5000
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    }
+                },
+                "required": [
+                    "data_origin",
+                    "id",
+                    "name",
+                    "sku"
+                ]
+            },
+            "Profile": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "phone": {
+                        "type": "string",
+                        "nullable": true,
+                        "readOnly": true
+                    },
+                    "role": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "data_origin",
+                    "email",
+                    "id",
+                    "is_active",
+                    "name",
+                    "phone",
+                    "role"
+                ]
+            },
+            "Registration": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 254
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 150
+                    },
+                    "password": {
+                        "type": "string",
+                        "writeOnly": true,
+                        "maxLength": 128
+                    },
+                    "phone": {
+                        "type": "string",
+                        "maxLength": 20
+                    }
+                },
+                "required": [
+                    "email",
+                    "name",
+                    "password"
+                ]
+            },
+            "Seller": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "label": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    }
+                },
+                "required": [
+                    "data_origin",
+                    "id",
+                    "label"
+                ]
+            },
+            "Shipment": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "tracking_code": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "shipped_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "delivered_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    }
+                },
+                "required": [
+                    "data_origin",
+                    "delivered_at",
+                    "id",
+                    "shipped_at",
+                    "tracking_code"
+                ]
+            },
+            "ShippingAction": {
+                "type": "object",
+                "properties": {
+                    "tracking_code": {
+                        "type": "string",
+                        "default": "",
+                        "maxLength": 100
+                    }
+                }
+            },
+            "ShippingAddressInput": {
+                "type": "object",
+                "properties": {
+                    "recipient": {
+                        "type": "string",
+                        "maxLength": 150
+                    },
+                    "street": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "number": {
+                        "type": "string",
+                        "maxLength": 20
+                    },
+                    "complement": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "district": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "city": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "state": {
+                        "$ref": "#/components/schemas/StateEnum"
+                    },
+                    "postal_code": {
+                        "type": "string",
+                        "pattern": "^[0-9]{8}$",
+                        "maxLength": 8
+                    }
+                },
+                "required": [
+                    "city",
+                    "district",
+                    "number",
+                    "postal_code",
+                    "recipient",
+                    "state",
+                    "street"
+                ]
+            },
+            "SimulatedPayment": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "amount": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,14}(?:\\.\\d{0,2})?$",
+                        "readOnly": true
+                    },
+                    "reference": {
+                        "type": "string",
+                        "format": "uuid",
+                        "readOnly": true
+                    },
+                    "approved_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "is_simulated": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    },
+                    "payment_record_kind": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_APPROVAL_NO_REAL_CHARGE"
+                    }
+                },
+                "required": [
+                    "amount",
+                    "approved_at",
+                    "data_origin",
+                    "id",
+                    "is_simulated",
+                    "payment_record_kind",
+                    "reference"
+                ]
+            },
+            "StateEnum": {
+                "enum": [
+                    "AC",
+                    "AL",
+                    "AP",
+                    "AM",
+                    "BA",
+                    "CE",
+                    "DF",
+                    "ES",
+                    "GO",
+                    "MA",
+                    "MT",
+                    "MS",
+                    "MG",
+                    "PA",
+                    "PB",
+                    "PR",
+                    "PE",
+                    "PI",
+                    "RJ",
+                    "RN",
+                    "RS",
+                    "RO",
+                    "RR",
+                    "SC",
+                    "SP",
+                    "SE",
+                    "TO"
+                ],
+                "type": "string",
+                "description": "* `AC` - AC\n* `AL` - AL\n* `AP` - AP\n* `AM` - AM\n* `BA` - BA\n* `CE` - CE\n* `DF` - DF\n* `ES` - ES\n* `GO` - GO\n* `MA` - MA\n* `MT` - MT\n* `MS` - MS\n* `MG` - MG\n* `PA` - PA\n* `PB` - PB\n* `PR` - PR\n* `PE` - PE\n* `PI` - PI\n* `RJ` - RJ\n* `RN` - RN\n* `RS` - RS\n* `RO` - RO\n* `RR` - RR\n* `SC` - SC\n* `SP` - SP\n* `SE` - SE\n* `TO` - TO"
+            },
+            "StatusEnum": {
+                "enum": [
+                    "PENDING_PAYMENT",
+                    "PAID",
+                    "SHIPPED",
+                    "DELIVERED",
+                    "CANCELLED"
+                ],
+                "type": "string",
+                "description": "* `PENDING_PAYMENT` - Pending simulated payment\n* `PAID` - Paid (simulated)\n* `SHIPPED` - Shipped (simulated)\n* `DELIVERED` - Delivered (simulated)\n* `CANCELLED` - Cancelled"
+            },
+            "Stock": {
+                "type": "object",
+                "properties": {
+                    "offer_id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "available_quantity": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "data_origin": {
+                        "type": "string",
+                        "readOnly": true,
+                        "default": "SIMULATED_API"
+                    }
+                },
+                "required": [
+                    "available_quantity",
+                    "data_origin",
+                    "offer_id",
+                    "updated_at"
+                ]
+            },
+            "StockChange": {
+                "type": "object",
+                "properties": {
+                    "movement_type": {
+                        "$ref": "#/components/schemas/StockChangeMovementTypeEnum"
+                    },
+                    "quantity_delta": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": -2147483647
+                    },
+                    "reason": {
+                        "type": "string",
+                        "maxLength": 500
+                    }
+                },
+                "required": [
+                    "movement_type",
+                    "quantity_delta",
+                    "reason"
+                ]
+            },
+            "StockChangeMovementTypeEnum": {
+                "enum": [
+                    "ENTRY",
+                    "ADJUSTMENT"
+                ],
+                "type": "string",
+                "description": "* `ENTRY` - ENTRY\n* `ADJUSTMENT` - ADJUSTMENT"
+            },
+            "StockChangeResult": {
+                "type": "object",
+                "properties": {
+                    "stock": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Stock"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "movement": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Movement"
+                            }
+                        ],
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "movement",
+                    "stock"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "jwtAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

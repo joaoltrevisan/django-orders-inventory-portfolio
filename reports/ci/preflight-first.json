@@ -1,0 +1,9 @@
+{
+  "started_at_utc": "2026-10-27T02:49:32.129807+00:00",
+  "passed": false,
+  "project": "olist-ci-eea09958a21943c8",
+  "commands": [],
+  "source_inputs_sha256": "5bb167131a7cfea4038220bdd79b8afb419a3d40078dd16e0c5300159441071c",
+  "failure": "CI may use only its own default network.",
+  "finished_at_utc": "2026-10-27T02:49:32.434844+00:00"
+}

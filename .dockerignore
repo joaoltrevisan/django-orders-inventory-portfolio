@@ -1,4 +1,8 @@
 .git
+.github
+ci-results
+compose.ci.yaml
+.ci-owner.json
 .env
 .env.*
 !.env.example

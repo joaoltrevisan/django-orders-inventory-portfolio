@@ -31,7 +31,7 @@ The guarded [real-curl workflow](scripts/verify_curl.py) exercises registration,
 
 ## Verified results
 
-The final complete suite passed **130 PostgreSQL tests**. **39 real curl requests** passed on a separate seeded review environment. Strict OpenAPI validation passed for **38 paths**; SQL export/restore verification confirmed **28 tables and 20 migrations**. The [final verification](docs/stage-06/verification.md) records commands, outcomes, the corrected initial curl example, environment isolation and remaining limits.
+The Stage 6 suite passed **130 PostgreSQL tests**. The continuous-integration extension passed **137 PostgreSQL tests** locally; [CI verification](docs/ci/verification.md) records local and hosted outcomes. **39 real curl requests** passed on a separate seeded review environment. Strict OpenAPI validation passed for **38 paths**; SQL export/restore verification confirmed **28 tables and 20 migrations**. The [final verification](docs/stage-06/verification.md) records commands, outcomes, the corrected initial curl example, environment isolation and remaining limits.
 
 The imported historical snapshot contains **99,441 orders, 112,650 item rows, 103,886 payment records, 32,951 products and 3,095 sellers**. Import accepted **451,535 source rows / 451,537 entities**, rejected none and retained **3,739 warning issues across 3,116 rows** without repairing the source. Repeat identities use `customer_unique_id`; order joins use `customer_id`. Delivered-order SQL identified **2,801 repeat identities among 93,358 eligible identities (3.00%)** in the defined source window.
 
@@ -48,6 +48,7 @@ One delivered-order page query was measured in Stage 5 with identical SQL/data, 
 | [SQL portfolio](docs/stage-05/sql-portfolio.md) | Twelve business questions with JOIN/aggregation/CTE/window SQL, grains, statuses and NULL rules |
 | [Index analysis](docs/stage-05/index-experiment.md) | Hypothesis, individual measurements/medians, raw plans, buffers/storage and limitations |
 | [Test guide](docs/testing.md) | PostgreSQL suite, controlled concurrency, schema restoration and actual versus illustrative HTTP evidence |
+| [Continuous integration](docs/ci.md) | GitHub Actions and a shared disposable local/hosted PostgreSQL verification pipeline |
 | [Technical presentation](docs/portfolio.md) | Service problem, delivered behavior, implementation evidence and walkthrough |
 | [Security and limitations](docs/limitations.md) | Implemented controls, functional/deployment limits and prioritized future work |
 | [Final verification](docs/stage-06/verification.md), [review](docs/stage-06/review.md), [file inventory](docs/stage-06/changes.md) | Actual commands/results, independent findings and every changed/created file |

@@ -1,0 +1,7 @@
+{
+  "recorded_local_source_inputs_sha256": "e0496e259772ee8ea06efcb596ed6b133cca94a8a28ae7838e870e8f614a1b2e",
+  "reconstructed_pre_documentation_update_sha256": "e0496e259772ee8ea06efcb596ed6b133cca94a8a28ae7838e870e8f614a1b2e",
+  "current_source_inputs_sha256": "162c3e5a80782a26ccb8103abb5ac280fae8db9d74d37959a0790b8c2afab511",
+  "hashed_input_change": "README.md was updated after the local run to distinguish Stage6 130 tests from the new CI137 tests; its CI documentation table row was already present during that run.",
+  "reconstruction_matches": true
+}

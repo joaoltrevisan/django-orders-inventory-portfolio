@@ -1,0 +1,55 @@
+{
+  "role_connections": {
+    "olist_api": {
+      "user": "olist_api",
+      "superuser": false,
+      "create_role": false,
+      "create_database": false,
+      "owns_database": false,
+      "owner_membership": false,
+      "test_membership": false
+    },
+    "olist_importer": {
+      "user": "olist_importer",
+      "superuser": false,
+      "create_role": false,
+      "create_database": false,
+      "owns_database": false,
+      "owner_membership": false,
+      "test_membership": false
+    },
+    "olist_test": {
+      "user": "olist_test",
+      "superuser": false,
+      "create_role": false,
+      "create_database": true,
+      "owns_database": false,
+      "owner_membership": false,
+      "test_membership": true
+    },
+    "olist_owner": {
+      "user": "olist_owner",
+      "superuser": false,
+      "create_role": false,
+      "create_database": false,
+      "owns_database": true,
+      "owner_membership": true,
+      "test_membership": false
+    }
+  },
+  "checks_passed": 75,
+  "historical_tables_checked": [
+    "olist_category",
+    "olist_customer",
+    "olist_dataset_snapshot",
+    "olist_import_issue",
+    "olist_import_run",
+    "olist_order",
+    "olist_order_item",
+    "olist_payment_record",
+    "olist_product",
+    "olist_seller"
+  ],
+  "historical_domain_rows": 0,
+  "note": "Role authorization checked with separate psql sessions inside the isolated container. Application TCP password authentication is checked by health startup. No source data imported."
+}

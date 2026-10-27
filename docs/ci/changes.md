@@ -1,0 +1,25 @@
+# Continuous integration file inventory
+
+Files changed or created relative to completed Stage 6 commit `6023973`. Generated CI workspaces, credentials and cleanup state remain local/ignored. Application models, migrations, source SQL, dated index plans and existing databases are unchanged.
+
+- [.dockerignore](../../.dockerignore)
+- [.github/workflows/ci.yml](../../.github/workflows/ci.yml)
+- [.gitignore](../../.gitignore)
+- [README.md](../../README.md)
+- [docs/ci.md](../../docs/ci.md)
+- [docs/ci/changes.md](../../docs/ci/changes.md)
+- [docs/ci/review.md](../../docs/ci/review.md)
+- [docs/ci/verification.md](../../docs/ci/verification.md)
+- [docs/testing.md](../../docs/testing.md)
+- [reports/ci/local-cleanup.json](../../reports/ci/local-cleanup.json)
+- [reports/ci/local-provenance.json](../../reports/ci/local-provenance.json)
+- [reports/ci/local/checks.json](../../reports/ci/local/checks.json)
+- [reports/ci/local/openapi.json](../../reports/ci/local/openapi.json)
+- [reports/ci/local/roles.json](../../reports/ci/local/roles.json)
+- [reports/ci/local/runtime.json](../../reports/ci/local/runtime.json)
+- [reports/ci/local/schema.json](../../reports/ci/local/schema.json)
+- [reports/ci/local/summary.json](../../reports/ci/local/summary.json)
+- [reports/ci/preflight-first.json](../../reports/ci/preflight-first.json)
+- [reports/ci/preflight-second.json](../../reports/ci/preflight-second.json)
+- [scripts/run_ci.py](../../scripts/run_ci.py)
+- [tests/test_ci_runner.py](../../tests/test_ci_runner.py)

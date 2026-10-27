@@ -15,6 +15,7 @@ __pycache__/
 .coverage
 htmlcov/
 .local/
+ci-results/
 *.log
 .DS_Store
 

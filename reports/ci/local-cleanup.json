@@ -1,0 +1,7 @@
+{
+  "project": "olist-ci-a58fb576fb6140da",
+  "image": "olist-ci-app:olist-ci-a58fb576fb6140da",
+  "cleanup_complete": true,
+  "cleanup_exit_code": 0,
+  "image_cleanup_exit_code": 0
+}

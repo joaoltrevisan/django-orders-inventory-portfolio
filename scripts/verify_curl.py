@@ -427,7 +427,7 @@ def workflow(base_url, values, report):
         "source-free report refusal", "GET", "/api/olist/reports/monthly_sales/", 409, token=admin
     )
     schema = request("authenticated OpenAPI", "GET", "/api/schema/?format=json", token=admin)
-    require(schema["info"]["version"] == "1.2.0", "The API schema version differs.")
+    require(schema["info"]["version"] == "1.3.0", "The API schema version differs.")
     report["assertions"] = {
         "multi_seller_total": order["total"],
         "new_price_total": processed["total"],

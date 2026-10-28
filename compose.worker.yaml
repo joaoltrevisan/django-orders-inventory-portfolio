@@ -1,0 +1,33 @@
+# Explicit opt-in overlay; never enabled by the default application or CI.
+services:
+  expiry-worker:
+    image: olist-case-study-app:1.3.0
+    build: .
+    profiles: [workers]
+    init: true
+    restart: "no"
+    stop_grace_period: 30s
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Generate private configuration}
+      PGHOST: db
+      PGPORT: "5432"
+      PGDATABASE: ${PGDATABASE:-olist_case_study}
+      PGUSER: olist_api
+      PGPASSWORD: ${APP_DB_PASSWORD:?Generate private configuration}
+    command:
+      - run_reservation_expiry
+      - --expected-database
+      - ${EXPIRY_EXPECTED_DATABASE:?Confirm the intended worker database}
+      - --actor-email
+      - ${EXPIRY_ACTOR_EMAIL:?Choose an existing active administrator}
+      - --interval-seconds
+      - ${EXPIRY_INTERVAL_SECONDS:-60}
+      - --limit
+      - ${EXPIRY_BATCH_LIMIT:-100}

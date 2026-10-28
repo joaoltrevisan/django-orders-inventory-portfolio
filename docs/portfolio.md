@@ -6,13 +6,13 @@
 
 A multi-seller basket must either reserve every selected offer or fail completely. Catalog edits must preserve what the buyer purchased; cancellation must restore quantities once; customers must not access other customers' orders. Marketplace analysis must retain the meaning of source identities, statuses and monetary facts rather than multiplying item/payment rows or inventing current inventory from old sales.
 
-The service delivers JWT registration/login and scoped profiles/orders, administrative catalog/customer/inventory/processing, immutable purchase snapshots, optional customer-scoped idempotent creation, fixed payment deadlines and audited administrative expiry, stock movement history, controlled state transitions and twelve parameterized SQL reports. PostgreSQL constraints protect local integrity while services coordinate cross-table invariants with atomic transactions and consistently ordered locks. [Architecture](architecture.md) and [ER diagrams](olist/data-model.md) explain these decisions.
+The service delivers JWT registration/login and scoped profiles/orders, administrative catalog/customer/inventory/processing, immutable purchase snapshots, optional customer-scoped idempotent creation, fixed payment deadlines, audited administrative expiry and optional periodic execution with observed backlog, stock movement history, controlled state transitions and twelve parameterized SQL reports. PostgreSQL constraints protect local integrity while services coordinate cross-table invariants with atomic transactions and consistently ordered locks. [Architecture](architecture.md) and [ER diagrams](olist/data-model.md) explain these decisions.
 
 ## Technical evidence to inspect
 
 | Competency | Concrete implementation / evidence |
 | --- | --- |
-| Backend design | Clear accounts/catalog/inventory/orders/olist modules; DRF validation, permissions, pagination and [OpenAPI](../reports/reservations/local/openapi.json) |
+| Backend design | Clear accounts/catalog/inventory/orders/olist modules; DRF validation, permissions, pagination and [OpenAPI](../reports/worker/local/openapi.json) |
 | Relational modeling | Multi-seller historical item relationships and operational seller/product offers; PK/FK/unique/check constraints; migration-consistent [SQL export](../sql/schema.sql) |
 | Integrity/concurrency | Atomic offer reservations, consistent lock hierarchy, server totals/snapshots, cancellation once; separate-connection controlled PostgreSQL tests |
 | Data engineering | Locked-source repeatable importer with field/relationship fingerprints, duplicate/no-op protection, atomic publication and retained anomaly reports |
@@ -38,4 +38,4 @@ Final execution results and the initially failed/corrected curl example are reta
 
 This independently developed service uses Olist's publicly released anonymized dataset for historical analysis. It does not imply employment, a commissioned contract, partnership, endorsement or internal-system access. Technical source identity, version ambiguity, attribution and **CC BY-NC-SA 4.0** requirements are in [THIRD_PARTY_DATA.md](../THIRD_PARTY_DATA.md).
 
-Authentication, current prices/offers, inventory, new payments and operational fulfillment are explicitly simulated and separate from historical facts. The service is locally reproducible, not publicly deployed or production-certified. Optional keyed creation retries are implemented with transaction serialization and preserved snapshots. Expiry scheduling, real integrations and deployment hardening remain prioritized [future improvements](limitations.md).
+Authentication, current prices/offers, inventory, new payments and operational fulfillment are explicitly simulated and separate from historical facts. The service is locally reproducible, not publicly deployed or production-certified. Optional keyed creation retries are implemented with transaction serialization and preserved snapshots. Production supervision/alerts, real integrations and deployment hardening remain prioritized [future improvements](limitations.md).

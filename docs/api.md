@@ -1,6 +1,6 @@
 # API reference and curl workflows
 
-Base URL for the isolated seeded demo is `http://127.0.0.1:18022`; the existing primary service uses port 18020. All routes end in `/`. Bodies are JSON, identifiers are integers unless explicitly historical source keys, money is decimal BRL, and collection page size is 20. The [OpenAPI document for API 1.2.0](../reports/reservations/local/openapi.json) is the current machine-readable contract; `GET /api/schema/` requires an administrator token. This is the API's version label, not a production readiness claim.
+Base URL for the isolated seeded demo is `http://127.0.0.1:18022`; the existing primary service uses port 18020. All routes end in `/`. Bodies are JSON, identifiers are integers unless explicitly historical source keys, money is decimal BRL, and collection page size is 20. The [OpenAPI document for API 1.3.0](../reports/worker/local/openapi.json) is the current machine-readable contract; `GET /api/schema/` requires an administrator token. This is the API's version label, not a production readiness claim.
 
 ## Authentication and permissions
 
@@ -176,7 +176,7 @@ docker compose -p olist-demo --env-file .local/analysis/demo.env run --rm app \
   --actor-email admin@example.com --limit 100
 ```
 
-No scheduler is bundled. The command uses one transaction per attempted order and skips locked rows. It restores every item quantity once through positive RELEASE movements, attributed to the named administrator, and writes `EXPIRED`/`expired_at`. Its JSON includes cutoff, limit, attempted/expired/selected-skipped IDs and sanitized failures. Locked-row skips are not enumerated; an empty report does not prove no due work remains. Attempts are bounded to 1–1000; query scan/wait time is not bounded by that count. Failures return a nonzero exit while retaining earlier committed successes; inspect the report before rerunning. Legacy NULL-deadline, paid and other terminal orders are not selected. [Rules and recovery](reservations/design.md) explain authority rechecks, cutoff and rollback.
+An [optional periodic worker](worker/operations.md) can invoke this service; default startup leaves it disabled. The command uses one transaction per attempted order and skips locked rows. It restores every item quantity once through positive RELEASE movements, attributed to the named administrator, and writes `EXPIRED`/`expired_at`. Its JSON includes cutoff, limit, attempted/expired/selected-skipped IDs and sanitized failures. Locked-row skips are not enumerated; an empty report does not prove no due work remains. Attempts are bounded to 1–1000; query scan/wait time is not bounded by that count. Failures return a nonzero exit while retaining earlier committed successes; inspect the report before rerunning. Legacy NULL-deadline, paid and other terminal orders are not selected. [Rules and recovery](reservations/design.md) explain authority rechecks, cutoff and rollback.
 
 ## Historical reads and reports
 

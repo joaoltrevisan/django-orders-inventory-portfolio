@@ -1,0 +1,31 @@
+{
+  "base_services": [
+    "app",
+    "db",
+    "importer",
+    "migrate",
+    "tests"
+  ],
+  "overlay_services": [
+    "app",
+    "db",
+    "expiry-worker",
+    "importer",
+    "migrate",
+    "tests"
+  ],
+  "worker_profile": [
+    "workers"
+  ],
+  "worker_database_role": "olist_api",
+  "worker_database": "olist_demo",
+  "worker_no_published_ports_or_bind_mounts": true,
+  "worker_init": true,
+  "worker_read_only": true,
+  "worker_image_user": "app",
+  "worker_restart_policy": "no",
+  "worker_stop_timeout_seconds": 30,
+  "worker_final_state": "exited",
+  "worker_final_exit_code": 0,
+  "resolved_config_not_published": true
+}

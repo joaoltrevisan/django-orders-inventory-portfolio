@@ -1,0 +1,723 @@
+{
+  "started_at_utc": "2026-10-28T03:55:09.036712+00:00",
+  "passed": true,
+  "project": "olist-worker-review",
+  "commands": [
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "run",
+        "--rm",
+        "--entrypoint",
+        "python",
+        "app",
+        "-c",
+        "import django,json;django.setup();from django.db import connection;c=connection.cursor();c.execute('SELECT current_database(),current_user,(SELECT COUNT(*) FROM olist_order),(SELECT COUNT(*) FROM accounts_user),(SELECT COUNT(*) FROM orders_order),(SELECT COUNT(*) FROM catalog_offer),(SELECT COUNT(*) FROM inventory_stock_movement)');print(json.dumps(c.fetchone()))"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "ps",
+        "--all",
+        "--quiet",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "run",
+        "--rm",
+        "--entrypoint",
+        "python",
+        "app",
+        "-c",
+        "import django,json;django.setup()\nfrom datetime import timedelta\nfrom django.db import transaction\nfrom django.utils import timezone\nfrom accounts.models import User\nfrom catalog.models import Offer\nfrom orders.demo import ADDRESS\nfrom orders.models import Order\nfrom orders.services import create_order\nfrom orders.worker import backlog_observation\nfrom inventory.models import StockMovement\nwith transaction.atomic():\n offer=Offer.objects.order_by('id').first()\n order=create_order(actor=User.objects.get(email='customer1@example.com'),\n  items=[{'offer_id':offer.pk,'quantity':1}],shipping_address=dict(ADDRESS))\n created=timezone.now()-timedelta(hours=1)\n Order.objects.filter(pk=order.pk).update(created_at=created,\n  reservation_expires_at=created+timedelta(minutes=30))\n StockMovement.objects.filter(order=order,movement_type='RESERVATION').update(\n  created_at=created+timedelta(microseconds=1))\nprint(json.dumps({'new_order_id':order.pk,'before_worker':backlog_observation()}))\n"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "run",
+        "--rm",
+        "expiry-worker",
+        "run_reservation_expiry",
+        "--expected-database",
+        "olist_demo",
+        "--actor-email",
+        "admin@example.com",
+        "--interval-seconds",
+        "1",
+        "--max-cycles",
+        "2"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "up",
+        "-d",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "logs",
+        "--no-color",
+        "--no-log-prefix",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "logs",
+        "--no-color",
+        "--no-log-prefix",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "logs",
+        "--no-color",
+        "--no-log-prefix",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "logs",
+        "--no-color",
+        "--no-log-prefix",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "stop",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "ps",
+        "--all",
+        "--quiet",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "logs",
+        "--no-color",
+        "--no-log-prefix",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "up",
+        "-d",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "logs",
+        "--no-color",
+        "--no-log-prefix",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "logs",
+        "--no-color",
+        "--no-log-prefix",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "logs",
+        "--no-color",
+        "--no-log-prefix",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "logs",
+        "--no-color",
+        "--no-log-prefix",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "stop",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "ps",
+        "--all",
+        "--quiet",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "logs",
+        "--no-color",
+        "--no-log-prefix",
+        "expiry-worker"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio",
+        "-p",
+        "olist-worker-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/worker/review.env",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.yaml",
+        "-f",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/compose.worker.yaml",
+        "--profile",
+        "workers",
+        "run",
+        "--rm",
+        "--entrypoint",
+        "python",
+        "app",
+        "-c",
+        "import django,json,sys;django.setup()\nfrom orders.models import Order\nfrom orders.worker import backlog_observation\nfrom inventory.models import StockMovement\norder=Order.objects.get(pk=int(sys.argv[1]))\nprint(json.dumps({'status':order.status,'release_count':StockMovement.objects.filter(\n order=order,movement_type='RELEASE').count(),'backlog':backlog_observation()}))\n",
+        "6"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    }
+  ],
+  "fixture_time_travel": "Only a new fictional purchase/reservation is shifted one hour; no real 30-minute wait is claimed.",
+  "initial_identity": [
+    "olist_demo",
+    "olist_api",
+    0,
+    4,
+    5,
+    3,
+    10
+  ],
+  "fixture": {
+    "new_order_id": 6,
+    "before_worker": {
+      "as_of": "2026-10-28T03:55:11.533610+00:00",
+      "due_pending_count": 1,
+      "oldest_deadline": "2026-10-28T03:25:11.532335+00:00",
+      "oldest_overdue_seconds": 1800.001275,
+      "observation_only": true
+    }
+  },
+  "finite_events": [
+    {
+      "at_utc": "2026-10-28T03:55:12.815881+00:00",
+      "batch_limit": 100,
+      "event": "worker_started",
+      "interval_seconds": 1,
+      "max_cycles": 2
+    },
+    {
+      "at_utc": "2026-10-28T03:55:12.815912+00:00",
+      "cycle": 1,
+      "event": "cycle_started"
+    },
+    {
+      "at_utc": "2026-10-28T03:55:12.836485+00:00",
+      "backlog": {
+        "as_of": "2026-10-28T03:55:12.835982+00:00",
+        "due_pending_count": 0,
+        "observation_only": true,
+        "oldest_deadline": null,
+        "oldest_overdue_seconds": null
+      },
+      "batch": {
+        "attempted_count": 1,
+        "expired_count": 1,
+        "failure_codes": {},
+        "locked_skips_not_enumerated": true,
+        "passed": true,
+        "selected_skipped_count": 0,
+        "stopped": false
+      },
+      "cycle": 1,
+      "duration_seconds": 0.021,
+      "event": "cycle_finished",
+      "outcome": "ok"
+    },
+    {
+      "at_utc": "2026-10-28T03:55:13.839952+00:00",
+      "cycle": 2,
+      "event": "cycle_started"
+    },
+    {
+      "at_utc": "2026-10-28T03:55:13.846280+00:00",
+      "backlog": {
+        "as_of": "2026-10-28T03:55:13.845850+00:00",
+        "due_pending_count": 0,
+        "observation_only": true,
+        "oldest_deadline": null,
+        "oldest_overdue_seconds": null
+      },
+      "batch": {
+        "attempted_count": 0,
+        "expired_count": 0,
+        "failure_codes": {},
+        "locked_skips_not_enumerated": true,
+        "passed": true,
+        "selected_skipped_count": 0,
+        "stopped": false
+      },
+      "cycle": 2,
+      "duration_seconds": 0.006,
+      "event": "cycle_finished",
+      "outcome": "ok"
+    },
+    {
+      "at_utc": "2026-10-28T03:55:13.846314+00:00",
+      "cycles": 2,
+      "event": "worker_stopped",
+      "reason": "limit",
+      "stop_requested": false
+    }
+  ],
+  "signal_sessions": [
+    {
+      "events": [
+        {
+          "at_utc": "2026-10-28T03:55:15.116275+00:00",
+          "batch_limit": 100,
+          "event": "worker_started",
+          "interval_seconds": 60,
+          "max_cycles": null
+        },
+        {
+          "at_utc": "2026-10-28T03:55:15.116309+00:00",
+          "cycle": 1,
+          "event": "cycle_started"
+        },
+        {
+          "at_utc": "2026-10-28T03:55:15.129518+00:00",
+          "backlog": {
+            "as_of": "2026-10-28T03:55:15.128916+00:00",
+            "due_pending_count": 0,
+            "observation_only": true,
+            "oldest_deadline": null,
+            "oldest_overdue_seconds": null
+          },
+          "batch": {
+            "attempted_count": 0,
+            "expired_count": 0,
+            "failure_codes": {},
+            "locked_skips_not_enumerated": true,
+            "passed": true,
+            "selected_skipped_count": 0,
+            "stopped": false
+          },
+          "cycle": 1,
+          "duration_seconds": 0.013,
+          "event": "cycle_finished",
+          "outcome": "ok"
+        },
+        {
+          "at_utc": "2026-10-28T03:55:15.228130+00:00",
+          "cycles": 1,
+          "event": "worker_stopped",
+          "reason": "signal",
+          "stop_requested": true
+        }
+      ],
+      "container_exit_code": 0
+    },
+    {
+      "events": [
+        {
+          "at_utc": "2026-10-28T03:55:16.592317+00:00",
+          "batch_limit": 100,
+          "event": "worker_started",
+          "interval_seconds": 60,
+          "max_cycles": null
+        },
+        {
+          "at_utc": "2026-10-28T03:55:16.592346+00:00",
+          "cycle": 1,
+          "event": "cycle_started"
+        },
+        {
+          "at_utc": "2026-10-28T03:55:16.604080+00:00",
+          "backlog": {
+            "as_of": "2026-10-28T03:55:16.603627+00:00",
+            "due_pending_count": 0,
+            "observation_only": true,
+            "oldest_deadline": null,
+            "oldest_overdue_seconds": null
+          },
+          "batch": {
+            "attempted_count": 0,
+            "expired_count": 0,
+            "failure_codes": {},
+            "locked_skips_not_enumerated": true,
+            "passed": true,
+            "selected_skipped_count": 0,
+            "stopped": false
+          },
+          "cycle": 1,
+          "duration_seconds": 0.012,
+          "event": "cycle_finished",
+          "outcome": "ok"
+        },
+        {
+          "at_utc": "2026-10-28T03:55:16.717308+00:00",
+          "cycles": 1,
+          "event": "worker_stopped",
+          "reason": "signal",
+          "stop_requested": true
+        }
+      ],
+      "container_exit_code": 0
+    }
+  ],
+  "final_state": {
+    "status": "EXPIRED",
+    "release_count": 1,
+    "backlog": {
+      "as_of": "2026-10-28T03:55:18.133936+00:00",
+      "due_pending_count": 0,
+      "oldest_deadline": null,
+      "oldest_overdue_seconds": null,
+      "observation_only": true
+    }
+  },
+  "finished_at_utc": "2026-10-28T03:55:18.241226+00:00"
+}

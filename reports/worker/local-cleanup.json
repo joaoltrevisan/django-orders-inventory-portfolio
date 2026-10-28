@@ -1,0 +1,19 @@
+{
+  "project": "olist-ci-f6b284541d4e4616",
+  "exclusive_ci_cleanup_verified": true,
+  "preserved_volumes": [
+    "olist-case-study_olist_postgres_data",
+    "olist-benchmark_olist_postgres_data",
+    "olist-demo_olist_postgres_data",
+    "olist-idempotency-review_olist_postgres_data",
+    "olist-reservation-review_olist_postgres_data",
+    "olist-worker-review_olist_postgres_data",
+    "loja-stage3-20261023223148_postgres_data"
+  ],
+  "previous_images_present": [
+    "stage6",
+    "1.1.0",
+    "1.2.0"
+  ],
+  "note": "Presence checks only; no fresh row-hash audit of previous environments. Review worker is stopped."
+}

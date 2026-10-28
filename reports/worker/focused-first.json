@@ -1,0 +1,74 @@
+[
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-worker-review",
+      "--env-file",
+      ".local/worker/review.env",
+      "up",
+      "-d",
+      "--wait",
+      "db"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": " Network olist-worker-review_default Creating \n Volume olist-worker-review_olist_postgres_data Creating \n Volume olist-worker-review_olist_postgres_data Creating \n Network olist-worker-review_default Creating \n Volume olist-worker-review_olist_postgres_data Created \n Volume olist-worker-review_olist_postgres_data Created \n Network olist-worker-review_default Created \n Network olist-worker-review_default Created \n Container olist-worker-review-db-1 Creating \n Container olist-worker-review-db-1 Created \n Container olist-worker-review-db-1 Starting \n Container olist-worker-review-db-1 Started \n Container olist-worker-review-db-1 Waiting \n Container olist-worker-review-db-1 Healthy \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-worker-review",
+      "--env-file",
+      ".local/worker/review.env",
+      "run",
+      "--rm",
+      "migrate"
+    ],
+    "exit_code": 0,
+    "stdout": "Operations to perform:\n  Apply all migrations: accounts, auth, catalog, contenttypes, inventory, olist, orders\nRunning migrations:\n  Applying contenttypes.0001_initial... OK\n  Applying contenttypes.0002_remove_content_type_name... OK\n  Applying auth.0001_initial... OK\n  Applying auth.0002_alter_permission_name_max_length... OK\n  Applying auth.0003_alter_user_email_max_length... OK\n  Applying auth.0004_alter_user_username_opts... OK\n  Applying auth.0005_alter_user_last_login_null... OK\n  Applying auth.0006_require_contenttypes_0002... OK\n  Applying auth.0007_alter_validators_add_error_messages... OK\n  Applying auth.0008_alter_user_username_max_length... OK\n  Applying auth.0009_alter_user_last_name_max_length... OK\n  Applying auth.0010_alter_group_name_max_length... OK\n  Applying auth.0011_update_proxy_permissions... OK\n  Applying auth.0012_alter_user_first_name_max_length... OK\n  Applying accounts.0001_initial... OK\n  Applying catalog.0001_initial... OK\n  Applying catalog.0002_offer_identity... OK\n  Applying orders.0001_initial... OK\n  Applying inventory.0001_initial... OK\n  Applying olist.0001_initial... OK\n  Applying orders.0002_creation_idempotency... OK\n  Applying orders.0003_reservation_expiry... OK\n",
+    "stderr": " Container olist-worker-review-db-1 Running \n Container olist-worker-review-db-1 Waiting \n Container olist-worker-review-db-1 Healthy \n Container olist-worker-review-migrate-run-53459317a74a Creating \n Container olist-worker-review-migrate-run-53459317a74a Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-worker-review",
+      "--env-file",
+      ".local/worker/review.env",
+      "run",
+      "--rm",
+      "migrate",
+      "configure_database_roles"
+    ],
+    "exit_code": 0,
+    "stdout": "Configured historical read-only API access and scoped importer grants.\n",
+    "stderr": " Container olist-worker-review-db-1 Running \n Container olist-worker-review-db-1 Waiting \n Container olist-worker-review-db-1 Healthy \n Container olist-worker-review-migrate-run-b79b68e8c1f2 Creating \n Container olist-worker-review-migrate-run-b79b68e8c1f2 Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-worker-review",
+      "--env-file",
+      ".local/worker/review.env",
+      "run",
+      "--rm",
+      "tests",
+      "test",
+      "tests.test_expiry_worker",
+      "tests.test_reservation_expiry",
+      "--noinput",
+      "--verbosity",
+      "2"
+    ],
+    "exit_code": 0,
+    "stdout": "Found 40 test(s).\nOperations to perform:\n  Synchronize unmigrated apps: common, drf_spectacular, rest_framework\n  Apply all migrations: accounts, auth, catalog, contenttypes, inventory, olist, orders\nSynchronizing apps without migrations:\n  Creating tables...\n    Running deferred SQL...\nRunning migrations:\n  Applying contenttypes.0001_initial... OK\n  Applying contenttypes.0002_remove_content_type_name... OK\n  Applying auth.0001_initial... OK\n  Applying auth.0002_alter_permission_name_max_length... OK\n  Applying auth.0003_alter_user_email_max_length... OK\n  Applying auth.0004_alter_user_username_opts... OK\n  Applying auth.0005_alter_user_last_login_null... OK\n  Applying auth.0006_require_contenttypes_0002... OK\n  Applying auth.0007_alter_validators_add_error_messages... OK\n  Applying auth.0008_alter_user_username_max_length... OK\n  Applying auth.0009_alter_user_last_name_max_length... OK\n  Applying auth.0010_alter_group_name_max_length... OK\n  Applying auth.0011_update_proxy_permissions... OK\n  Applying auth.0012_alter_user_first_name_max_length... OK\n  Applying accounts.0001_initial... OK\n  Applying catalog.0001_initial... OK\n  Applying catalog.0002_offer_identity... OK\n  Applying orders.0001_initial... OK\n  Applying inventory.0001_initial... OK\n  Applying olist.0001_initial... OK\n  Applying orders.0002_creation_idempotency... OK\n  Applying orders.0003_reservation_expiry... OK\nSystem check identified no issues (0 silenced).\nPostgreSQL worker backlog: {\"holder_backend_pid\": 91, \"observer_backend_pid\": 92, \"locked_row_included\": true}\nPostgreSQL worker stop: {\"signal_during_atomic_release\": true, \"current_order_committed\": true, \"next_order_unmodified\": true}\nPostgreSQL skip-locked: {\"scenario\": \"test_accepted_payment_makes_sweep_skip_and_never_release\", \"first_backend_pid\": 125, \"second_backend_pid\": 126, \"locked_row_skipped\": true}\nPostgreSQL skip-locked: {\"scenario\": \"test_cancellation_makes_sweep_skip_without_second_release\", \"first_backend_pid\": 128, \"second_backend_pid\": 129, \"locked_row_skipped\": true}\nPostgreSQL contention: {\"scenario\": \"test_expiry_blocks_cancellation_and_keeps_terminal_identity\", \"first_backend_pid\": 131, \"second_backend_pid\": 132, \"blocking_observed\": true}\nPostgreSQL contention: {\"scenario\": \"test_expiry_blocks_payment_and_releases_once\", \"first_backend_pid\": 134, \"second_backend_pid\": 135, \"blocking_observed\": true}\nPostgreSQL contention: {\"scenario\": \"test_expiry_rechecks_administrator_after_catalog_lock_wait\", \"first_backend_pid\": 137, \"second_backend_pid\": 138, \"blocking_observed\": true}\nPostgreSQL contention: {\"scenario\": \"test_keyed_replay_waits_for_expiry_and_preserves_snapshots\", \"first_backend_pid\": 140, \"second_backend_pid\": 141, \"blocking_observed\": true}\nPostgreSQL contention: {\"scenario\": \"test_payment_rechecks_clock_after_waiting_for_order\", \"first_backend_pid\": 143, \"second_backend_pid\": 144, \"blocking_observed\": true}\nPostgreSQL skip-locked: {\"scenario\": \"test_two_sweep_workers_skip_locked_order_and_release_once\", \"first_backend_pid\": 146, \"second_backend_pid\": 147, \"locked_row_skipped\": true}\n",
+    "stderr": " Container olist-worker-review-db-1 Running \n Container olist-worker-review-db-1 Waiting \n Container olist-worker-review-db-1 Healthy \n Container olist-worker-review-tests-run-1c38ba86f5a1 Creating \n Container olist-worker-review-tests-run-1c38ba86f5a1 Created \nCreating test database for alias 'default' ('test_olist_demo')...\ntest_backlog_excludes_legacy_future_and_terminal_orders (tests.test_expiry_worker.ExpiryWorkerTests.test_backlog_excludes_legacy_future_and_terminal_orders) ... ok\ntest_backlog_includes_a_locked_due_row_using_a_separate_connection (tests.test_expiry_worker.ExpiryWorkerTests.test_backlog_includes_a_locked_due_row_using_a_separate_connection) ... ok\ntest_database_failure_retries_after_delay_without_leaking_details (tests.test_expiry_worker.ExpiryWorkerTests.test_database_failure_retries_after_delay_without_leaking_details) ... ok\ntest_empty_backlog_is_zero_with_null_oldest_not_an_unavailable_observation (tests.test_expiry_worker.ExpiryWorkerTests.test_empty_backlog_is_zero_with_null_oldest_not_an_unavailable_observation) ... ok\ntest_finite_cycles_use_fixed_delay_fresh_connections_and_local_timeouts (tests.test_expiry_worker.ExpiryWorkerTests.test_finite_cycles_use_fixed_delay_fresh_connections_and_local_timeouts) ... ok\ntest_metrics_failure_keeps_known_committed_count_and_missing_backlog (tests.test_expiry_worker.ExpiryWorkerTests.test_metrics_failure_keeps_known_committed_count_and_missing_backlog) ... ok\ntest_outer_transaction_is_rejected_without_closing_it (tests.test_expiry_worker.ExpiryWorkerTests.test_outer_transaction_is_rejected_without_closing_it) ... ok\ntest_partial_failure_remains_visible_and_never_retries_without_delay (tests.test_expiry_worker.ExpiryWorkerTests.test_partial_failure_remains_visible_and_never_retries_without_delay) ... ok\ntest_real_test_database_role_cannot_run_worker (tests.test_expiry_worker.ExpiryWorkerTests.test_real_test_database_role_cannot_run_worker) ... ok\ntest_revoked_actor_stops_next_cycle_without_another_batch (tests.test_expiry_worker.ExpiryWorkerTests.test_revoked_actor_stops_next_cycle_without_another_batch) ... ok\ntest_target_failure_is_fatal_and_not_retried (tests.test_expiry_worker.ExpiryWorkerTests.test_target_failure_is_fatal_and_not_retried) ... ok\ntest_term_during_controlled_postgresql_release_finishes_only_current_order (tests.test_expiry_worker.ExpiryWorkerTests.test_term_during_controlled_postgresql_release_finishes_only_current_order) ... ok\ntest_term_during_wait_stops_normally_and_restores_previous_handlers (tests.test_expiry_worker.ExpiryWorkerTests.test_term_during_wait_stops_normally_and_restores_previous_handlers) ... ok\ntest_invalid_bounds_fail_before_installing_signal_handlers (tests.test_expiry_worker.WorkerConfigurationTests.test_invalid_bounds_fail_before_installing_signal_handlers) ... ok\ntest_real_term_int_only_signal_event_and_restore_handlers_on_error (tests.test_expiry_worker.WorkerConfigurationTests.test_real_term_int_only_signal_event_and_restore_handlers_on_error) ... ok\ntest_worker_is_opt_in_and_has_no_shared_mounts_or_published_port (tests.test_expiry_worker.WorkerConfigurationTests.test_worker_is_opt_in_and_has_no_shared_mounts_or_published_port) ... ok\ntest_accepted_payment_makes_sweep_skip_and_never_release (tests.test_reservation_expiry.ReservationExpiryConcurrencyTests.test_accepted_payment_makes_sweep_skip_and_never_release) ... ok\ntest_cancellation_makes_sweep_skip_without_second_release (tests.test_reservation_expiry.ReservationExpiryConcurrencyTests.test_cancellation_makes_sweep_skip_without_second_release) ... ok\ntest_expiry_blocks_cancellation_and_keeps_terminal_identity (tests.test_reservation_expiry.ReservationExpiryConcurrencyTests.test_expiry_blocks_cancellation_and_keeps_terminal_identity) ... ok\ntest_expiry_blocks_payment_and_releases_once (tests.test_reservation_expiry.ReservationExpiryConcurrencyTests.test_expiry_blocks_payment_and_releases_once) ... ok\ntest_expiry_rechecks_administrator_after_catalog_lock_wait (tests.test_reservation_expiry.ReservationExpiryConcurrencyTests.test_expiry_rechecks_administrator_after_catalog_lock_wait) ... ok\ntest_keyed_replay_waits_for_expiry_and_preserves_snapshots (tests.test_reservation_expiry.ReservationExpiryConcurrencyTests.test_keyed_replay_waits_for_expiry_and_preserves_snapshots) ... ok\ntest_payment_rechecks_clock_after_waiting_for_order (tests.test_reservation_expiry.ReservationExpiryConcurrencyTests.test_payment_rechecks_clock_after_waiting_for_order) ... ok\ntest_two_sweep_workers_skip_locked_order_and_release_once (tests.test_reservation_expiry.ReservationExpiryConcurrencyTests.test_two_sweep_workers_skip_locked_order_and_release_once) ... ok\ntest_attempt_limit_bounds_failures_and_progress (tests.test_reservation_expiry.ReservationExpiryTests.test_attempt_limit_bounds_failures_and_progress) ... ok\ntest_command_partial_failure_emits_sanitized_json_and_nonzero (tests.test_reservation_expiry.ReservationExpiryTests.test_command_partial_failure_emits_sanitized_json_and_nonzero) ... ok\ntest_command_target_guard_success_and_role_guard (tests.test_reservation_expiry.ReservationExpiryTests.test_command_target_guard_success_and_role_guard) ... ok\ntest_database_rejects_incoherent_deadline_and_expired_states (tests.test_reservation_expiry.ReservationExpiryTests.test_database_rejects_incoherent_deadline_and_expired_states) ... ok\ntest_deadline_is_exact_and_client_cannot_override_it (tests.test_reservation_expiry.ReservationExpiryTests.test_deadline_is_exact_and_client_cannot_override_it) ... ok\ntest_expired_order_replay_is_coherent_and_transitions_rejected (tests.test_reservation_expiry.ReservationExpiryTests.test_expired_order_replay_is_coherent_and_transitions_rejected) ... ok\ntest_expiry_failure_rolls_back_every_write_and_retry_succeeds (tests.test_reservation_expiry.ReservationExpiryTests.test_expiry_failure_rolls_back_every_write_and_retry_succeeds) ... ok\ntest_legacy_null_deadline_remains_payable_and_not_swept (tests.test_reservation_expiry.ReservationExpiryTests.test_legacy_null_deadline_remains_payable_and_not_swept) ... ok\ntest_live_paid_cancelled_orders_are_not_expired (tests.test_reservation_expiry.ReservationExpiryTests.test_live_paid_cancelled_orders_are_not_expired) ... ok\ntest_multi_offer_expiry_audited_once_despite_inactive_customer_catalog (tests.test_reservation_expiry.ReservationExpiryTests.test_multi_offer_expiry_audited_once_despite_inactive_customer_catalog) ... ok\ntest_overdue_customer_cancellation_still_wins_and_repeats (tests.test_reservation_expiry.ReservationExpiryTests.test_overdue_customer_cancellation_still_wins_and_repeats) ... ok\ntest_overdue_payment_refusal_does_not_release_or_autoexpire (tests.test_reservation_expiry.ReservationExpiryTests.test_overdue_payment_refusal_does_not_release_or_autoexpire) ... ok\ntest_overdue_pending_still_counts_toward_release_headroom (tests.test_reservation_expiry.ReservationExpiryTests.test_overdue_pending_still_counts_toward_release_headroom) ... ok\ntest_partial_batch_commits_good_order_without_looping_on_corrupt_oldest (tests.test_reservation_expiry.ReservationExpiryTests.test_partial_batch_commits_good_order_without_looping_on_corrupt_oldest) ... ok\ntest_payment_strict_before_equal_after_boundary (tests.test_reservation_expiry.ReservationExpiryTests.test_payment_strict_before_equal_after_boundary) ... ok\ntest_permissions_limits_and_outer_transaction_are_rejected (tests.test_reservation_expiry.ReservationExpiryTests.test_permissions_limits_and_outer_transaction_are_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 40 tests in 1.814s\n\nOK\nDestroying test database for alias 'default' ('test_olist_demo')...\n"
+  }
+]

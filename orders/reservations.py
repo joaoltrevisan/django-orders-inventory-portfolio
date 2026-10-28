@@ -71,7 +71,7 @@ def release_locked_reservation(*, order, history, actor, expired):
     return True
 
 
-def expire_due_reservations(*, actor, limit=100):
+def expire_due_reservations(*, actor, limit=100, should_stop=None):
     """Commit each attempt separately; report failures without discarding earlier success."""
     if connection.in_atomic_block:
         raise RuntimeError("Run the expiry batch outside an enclosing transaction.")
@@ -87,10 +87,14 @@ def expire_due_reservations(*, actor, limit=100):
         "expired_order_ids": [],
         "skipped_order_ids": [],
         "failures": [],
+        "stopped": False,
         "locked_skips_not_enumerated": True,
         "note": "Selected skips only; locked rows and all outstanding due orders are not counted.",
     }
     for _ in range(limit):
+        if should_stop is not None and should_stop():
+            report["stopped"] = True
+            break
         order_id = None
         try:
             require_administrator(actor)

@@ -1,7 +1,7 @@
 name: olist-case-study
 
 x-app: &app
-  image: olist-case-study-app:1.2.0
+  image: olist-case-study-app:1.3.0
   build: .
   read_only: true
   tmpfs: [/tmp]

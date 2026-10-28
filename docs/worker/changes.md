@@ -17,4 +17,4 @@ Relative to `0b6729c`:
 | `reports/worker/compose-isolation.json`, `local-cleanup.json`, `local-provenance.json` | Real configuration/process facts, preserved resources and exact candidate reconstruction |
 | `reports/worker/local/*.json` | Six actual disposable-CI summary/check/role/OpenAPI/schema/runtime artifacts |
 
-Hosted artifacts/metadata are retained only after execution and documented in verification. No model, migration, SQL schema, historical importer/report or dated index measurement changed. Private configuration, raw logs, helpers and data volumes stay ignored.
+`reports/worker/github/*.json` retains six actual hosted artifacts; `github-run.json`, `github-artifacts.json` and `github-log-review.json` identify exact revision/run/archive and bounded log/source-hash inspection. No model, migration, SQL schema, historical importer/report or dated index measurement changed. Private configuration, raw logs, helpers and data volumes stay ignored.

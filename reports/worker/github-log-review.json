@@ -1,0 +1,22 @@
+{
+  "run": "https://github.com/joaoltrevisan/django-orders-inventory-portfolio/actions/runs/40630141048",
+  "head_sha": "e3b30157d18121430cbe512a9dcb2b1bbe2f7ee1",
+  "published_artifact_files": [
+    "checks.json",
+    "openapi.json",
+    "roles.json",
+    "runtime.json",
+    "schema.json",
+    "summary.json"
+  ],
+  "hosted_source_fingerprint_matches_revision": true,
+  "source_inputs_sha256": "83cff39fa7024bc55f924f4dfccfa374428a5a2ddbc58af399ee969e1b25a85a",
+  "configured_local_secret_matches": 0,
+  "sensitive_pattern_matches": 0,
+  "patterns_inspected": [
+    "jwt",
+    "github_token",
+    "private_key"
+  ],
+  "note": "Raw logs stay ignored. Exact ephemeral hosted secret values are unavailable after cleanup; this scan covers configured local secrets and token/private-key patterns, not a claim to recover deleted hosted credentials."
+}

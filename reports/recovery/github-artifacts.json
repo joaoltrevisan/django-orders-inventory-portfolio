@@ -1,0 +1,25 @@
+{
+  "total_count": 1,
+  "artifacts": [
+    {
+      "id": 12792699187,
+      "node_id": "MDg6QXJ0aWZhY3QxMjc5MjY5OTE4Nw==",
+      "name": "postgresql-verification-40635471087-1",
+      "size_in_bytes": 33417,
+      "url": "https://api.github.com/repos/joaoltrevisan/django-orders-inventory-portfolio/actions/artifacts/12792699187",
+      "archive_download_url": "https://api.github.com/repos/joaoltrevisan/django-orders-inventory-portfolio/actions/artifacts/12792699187/zip",
+      "expired": false,
+      "digest": "sha256:a13af20372922b9308e8615f92ebce74c051a154a60914d2ed8a1b7605114146",
+      "created_at": "2026-10-28T05:02:02Z",
+      "updated_at": "2026-10-28T05:02:02Z",
+      "expires_at": "2026-11-04T05:02:00Z",
+      "workflow_run": {
+        "id": 40635471087,
+        "repository_id": 1434306686,
+        "head_repository_id": 1434306686,
+        "head_branch": "main",
+        "head_sha": "882d36a5df67266cebe5491ce9630f89a20b9061"
+      }
+    }
+  ]
+}

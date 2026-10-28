@@ -17,4 +17,4 @@ Relative to `6e6a29f`:
 | `reports/recovery/source-preservation.json`, `private-artifact-checks.json`, `local-cleanup.json`, `local-provenance.json` | Independent source recapture, private modes/checksums/ignore coverage, retained resources and exact candidate reconstruction |
 | `reports/recovery/local/*.json` | Six final disposable CI command/check/role/OpenAPI/schema/runtime artifacts |
 
-Hosted artifacts/metadata are retained only after actual execution. No application model/migration/current SQL schema, historical importer/report or dated index measurement changes. Backups, manifests, schema captures, private envs/helpers/raw logs and restored row data remain outside Git.
+`reports/recovery/github/*.json` retains six actual hosted artifacts; `github-run.json`, `github-artifacts.json` and `github-log-review.json` identify exact run/revision/archive and bounded source-hash/log inspection. No application model/migration/current SQL schema, historical importer/report or dated index measurement changes. Backups, manifests, schema captures, private envs/helpers/raw logs and restored row data remain outside Git.

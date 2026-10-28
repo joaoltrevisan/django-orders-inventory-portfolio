@@ -20,4 +20,4 @@ Relative to `d4d8ee1`, the delivery changes these groups:
 | `reports/reservations/curl.json`, `expiry-http.json`, `expiry-http-verified.json` | Actual general/initial/strengthened HTTP/CLI evidence |
 | `reports/reservations/local/*.json`, `local-cleanup.json`, `local-provenance.json` | Six final CI artifacts, exclusive cleanup/preservation checks and exact candidate source reconstruction |
 
-Hosted artifacts/metadata are added only after actual execution and documented in verification. Private env files, helpers, raw logs and database/source data are not published. No Olist historical importer/report/benchmark implementation or dated measurement is changed.
+`reports/reservations/github/*.json` preserves the six actual hosted artifacts. `github-run.json`, `github-artifacts.json` and `github-log-review.json` identify the tested revision/run/archive and bounded log/source-hash inspection. Private env files, helpers, raw logs and database/source data are not published. No Olist historical importer/report/benchmark implementation or dated measurement is changed.

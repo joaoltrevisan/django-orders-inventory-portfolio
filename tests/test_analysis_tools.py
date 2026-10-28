@@ -32,8 +32,10 @@ class DemoSeedTests(TestCase):
         self.assertEqual(report["data_origin"], "SIMULATED_API")
         self.assertEqual(User.objects.count(), 4)
         self.assertEqual(Customer.objects.count(), 3)
+        # The stable seed retains five states; expiry uses a separate scoped fixture.
         self.assertEqual(
-            set(Order.objects.values_list("status", flat=True)), set(Order.Status.values)
+            set(Order.objects.values_list("status", flat=True)),
+            set(Order.Status.values) - {Order.Status.EXPIRED},
         )
         self.assertTrue(
             User.objects.get(email="admin@example.com").check_password(

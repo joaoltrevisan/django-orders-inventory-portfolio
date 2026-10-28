@@ -36,20 +36,23 @@ def inspect_order_history(order):
             or movement.created_at < order.created_at
         ):
             raise OrderIntegrityConflict("reservation_mismatch")
-    if order.status == Order.Status.CANCELLED:
+    if order.status in {Order.Status.CANCELLED, Order.Status.EXPIRED}:
         if set(releases) != expected:
             raise OrderIntegrityConflict("releases_missing_or_extra")
         actors = {movement.performed_by_id for movement in releases.values()}
         if len(actors) != 1:
             raise OrderIntegrityConflict("release_actor_mismatch")
+        released_at = (
+            order.expired_at if order.status == Order.Status.EXPIRED else order.cancelled_at
+        )
         for item in items:
             movement = releases[item.offer_id]
-            if movement.quantity_delta != item.quantity or movement.created_at < order.cancelled_at:
+            if movement.quantity_delta != item.quantity or movement.created_at < released_at:
                 raise OrderIntegrityConflict("release_mismatch")
         # The actor may be the buyer or an administrator. Current staff flags
         # cannot reconstruct historical authorization after a role change.
     elif releases:
-        raise OrderIntegrityConflict("release_before_cancellation")
+        raise OrderIntegrityConflict("release_before_terminal_state")
     payment = SimulatedPayment.objects.filter(order=order).first()
     shipment = Shipment.objects.filter(order=order).first()
     if order.status in {Order.Status.PAID, Order.Status.SHIPPED, Order.Status.DELIVERED}:

@@ -1,6 +1,6 @@
 # Execution guide
 
-Use Docker Engine with Compose v2+, Python 3.11+ on the host, and curl for HTTP examples. Python application dependencies run inside the pinned Python 3.12.15 container; a host virtual environment is optional. Run commands from the repository root. Current image: `olist-case-study-app:1.1.0`; health returns `{"status":"ok","stage":6}`. [Runtime evidence](../reports/stage-06/runtime.json) records versions actually used.
+Use Docker Engine with Compose v2+, Python 3.11+ on the host, and curl for HTTP examples. Python application dependencies run inside the pinned Python 3.12.15 container; a host virtual environment is optional. Run commands from the repository root. Current image: `olist-case-study-app:1.2.0`; health returns `{"status":"ok","stage":6}`. [Runtime evidence](../reports/stage-06/runtime.json) records versions actually used.
 
 There are two independent paths: a small operational demonstration that needs no source download, and historical analysis using the locked Olist archive. Existing service data is a third, preserved environment. Never substitute one project's env file for another's or remove populated volumes to repeat an example.
 
@@ -24,7 +24,7 @@ curl --fail-with-body -sS http://127.0.0.1:18022/health/
 
 Skip the env generator if its file already exists. Skip seeding if the database is already populated: the command refuses to replace data. Use a new report filename for every invocation. The owner tool's report appears under `.local/analysis-reports`; host UID/GID permits writing that bind mount while the web application still runs as nonroot `app`.
 
-The seed creates 4 fictional hashed accounts, 2 products, 2 sellers, 3 offers and 5 orders, one per operational state, with balances 18/17/19. Administrator email is `admin@example.com`; customer emails are `customer1@example.com` through `customer3@example.com`. Their private generated password is `DEMO_PASSWORD` in the ignored mode-0600 demo env file. No historical customers, orders or prices are copied into this domain. No payment provider is called. See [dataset details](stage-05/datasets.md).
+The seed creates 4 fictional hashed accounts, 2 products, 2 sellers, 3 offers and 5 orders, covering the original five operational states, with balances 18/17/19. Administrator email is `admin@example.com`; customer emails are `customer1@example.com` through `customer3@example.com`. Their private generated password is `DEMO_PASSWORD` in the ignored mode-0600 demo env file. No historical customers, orders or prices are copied into this domain. No payment provider is called. See [dataset details](stage-05/datasets.md).
 
 Execute the documented workflow with **real curl**, without exposing token/password arguments:
 
@@ -88,7 +88,7 @@ After every migration, reapply `configure_database_roles`. PostgreSQL initializa
 
 ## Updating an existing operational environment
 
-API 1.1.0 adds `orders.0002_creation_idempotency` without rewriting historical/order rows. Preserve the existing env file and volume; build the current image, apply migrations, reapply classified grants, then recreate the API container using the same Compose project/env selection. For the default primary project:
+API 1.2.0 adds `orders.0003_reservation_expiry` (and applies earlier missing migrations, including `0002_creation_idempotency`) without rewriting historical/order rows. Preserve the existing env file and volume; build the current image, apply migrations, reapply classified grants, then recreate the API container using the same Compose project/env selection. For the default primary project:
 
 ```bash
 docker compose build app
@@ -97,4 +97,16 @@ docker compose run --rm migrate configure_database_roles
 docker compose up -d --wait app
 ```
 
-For named demo/analysis projects, consistently supply their existing `-p` and `--env-file` options instead. Do not regenerate credentials, reseed a populated target or remove volumes. Old orders keep NULL creation hashes; clients opt into safe retry for new purchases with the [documented header](api.md#creation-keys-and-safe-retry). Health's stage remains 6 because the six original stages are complete; the OpenAPI API version is 1.1.0. An existing running container does not upgrade merely by pulling repository changes. This delivery's migration/HTTP verification targets a separate review database, preserving existing primary/benchmark/demo environments.
+For named demo/analysis projects, consistently supply their existing `-p` and `--env-file` options instead. Do not regenerate credentials, reseed a populated target or remove volumes. Old orders keep NULL creation hashes; clients opt into safe retry for new purchases with the [documented header](api.md#creation-keys-and-safe-retry). Health's stage remains 6 because the six original stages are complete; the OpenAPI API version is 1.2.0. An existing running container does not upgrade merely by pulling repository changes. This delivery's migration/HTTP verification targets a separate review database, preserving existing primary/benchmark/demo environments.
+
+## Verify reservation expiry in a separate review environment
+
+Normal operation uses the [explicit administrative command](api.md#reservation-deadlines-and-explicit-expiry) after a real deadline. For a faster reproducible verification, create a **new** private env/project following Path A with `PGDATABASE=olist_demo`, a free loopback port and project name `olist-reservation-review` (or that prefix plus a lowercase suffix). Preserve existing env files/volumes. Build/migrate/grant/seed/start it using that same project and env selection.
+
+```bash
+python3 -m scripts.verify_reservations --project olist-reservation-review \
+  --env-file .local/reservations/review.env --output .local/analysis-reports/expiry-new.json \
+  --allow-new-fixture-time-travel
+```
+
+This verification tool requires an explicitly named review project, source-free `olist_demo`, API role and IPv4 loopback binding. It appends new fictional customer/catalog/order data, then uses the owner tool to shift **only its new, owned, unprocessed order/reservation** backward one hour, retaining a 30-minute deadline. This is disclosed test-fixture preparation, not an API capability or a claim to have waited 30 minutes. It verifies actual late-payment rejection, owner-role refusal, API-role expiry/repetition, restored stock and expired keyed replay using real curl/CLI. Existing rows are not reset. Credentials remain on curl stdin; output excludes tokens/passwords. New evidence filenames are required and appending another run creates another fixture. Never use this tool against primary/benchmark data.

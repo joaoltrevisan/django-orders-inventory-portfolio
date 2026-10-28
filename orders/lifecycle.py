@@ -8,14 +8,13 @@ from django.utils import timezone
 
 from accounts.permissions import require_administrator
 from catalog.locking import lock_offer_inventory
-from common.limits import MAX_STOCK_QUANTITY
 from common.validation import clean_text, validate_id
-from inventory.models import StockMovement
 from inventory.services import inspect_stock
 
 from .exceptions import OrderConflict
 from .integrity import inspect_order_history
 from .models import Order, Shipment, SimulatedPayment
+from .reservations import database_now, release_locked_reservation
 from .selectors import orders_visible_to
 
 
@@ -43,36 +42,11 @@ def cancel_order(*, actor, order_id):
         history = inspect_order_history(order)
         if order.status not in {Order.Status.PENDING_PAYMENT, Order.Status.CANCELLED}:
             raise OrderConflict("invalid_transition", "Only a pending order can be cancelled.")
-        quantities = {item.offer_id: item.quantity for item in history.items}
-        _, _, _, stocks = lock_offer_inventory(quantities)
-        inspect_stock(stocks)
         if order.status == Order.Status.CANCELLED:
+            _, _, _, stocks = lock_offer_inventory([item.offer_id for item in history.items])
+            inspect_stock(stocks)
             return OrderTransitionResult(order, None, None)
-        if any(
-            stock.available_quantity + quantities[key] > MAX_STOCK_QUANTITY
-            for key, stock in stocks.items()
-        ):
-            raise OrderConflict("stock_limit_exceeded", "Cancellation would exceed stock capacity.")
-        at = timezone.now()
-        for key, stock in stocks.items():
-            stock.available_quantity += quantities[key]
-            stock.save(update_fields=["available_quantity", "updated_at"])
-        StockMovement.objects.bulk_create(
-            [
-                StockMovement(
-                    order=order,
-                    offer_id=key,
-                    performed_by=actor,
-                    movement_type="RELEASE",
-                    quantity_delta=quantity,
-                    reason="Release on simulated order cancellation.",
-                )
-                for key, quantity in sorted(quantities.items())
-            ]
-        )
-        order.status = Order.Status.CANCELLED
-        order.cancelled_at = at
-        order.save(update_fields=["status", "cancelled_at", "updated_at"])
+        release_locked_reservation(order=order, history=history, actor=actor, expired=False)
         return OrderTransitionResult(order, None, None)
 
 
@@ -81,11 +55,17 @@ def approve_simulated_payment(*, actor, order_id):
     with transaction.atomic():
         order = locked_order(actor, order_id)
         history = inspect_order_history(order)
-        if order.status == Order.Status.CANCELLED:
-            raise OrderConflict("invalid_transition", "A cancelled order cannot receive payment.")
+        if order.status in {Order.Status.CANCELLED, Order.Status.EXPIRED}:
+            raise OrderConflict(
+                "invalid_transition", "A cancelled or expired order cannot receive payment."
+            )
         if order.status != Order.Status.PENDING_PAYMENT:
             return OrderTransitionResult(order, history.simulated_payment, history.shipment)
-        at = timezone.now()
+        at = database_now()
+        if order.reservation_expires_at is not None and at >= order.reservation_expires_at:
+            raise OrderConflict(
+                "reservation_expired", "The reservation payment deadline has passed."
+            )
         payment = SimulatedPayment.objects.create(
             order=order, amount=order.total, approved_at=at, is_simulated=True
         )

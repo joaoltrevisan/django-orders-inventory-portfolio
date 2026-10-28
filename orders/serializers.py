@@ -72,6 +72,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "updated_at",
             "paid_at",
             "cancelled_at",
+            "reservation_expires_at",
+            "expired_at",
             "shipped_at",
             "delivered_at",
             "data_origin",

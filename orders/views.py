@@ -80,7 +80,8 @@ class OrderListView(PrivateResponseMixin, generics.ListAPIView):
     @extend_schema(
         description=(
             "Create a simulated order. Optional customer-scoped key enables safe retry; "
-            "replay returns current stored state without reserving again."
+            "replay returns current stored state without reserving again or renewing its "
+            "deadline. New orders have a fixed 30-minute reservation payment deadline."
         ),
         request=OrderCreateSerializer,
         parameters=[
@@ -163,11 +164,35 @@ class OrderActionView(PrivateResponseMixin, APIView):
         return Response(OrderTransitionSerializer(result).data)
 
 
+@extend_schema_view(
+    post=extend_schema(
+        description=(
+            "Cancel a pending order, including overdue pending reservations. EXPIRED is terminal."
+        ),
+    )
+)
 class OrderCancelView(OrderActionView):
     permission_classes = [CanAccessOrder]
     transition = staticmethod(cancel_order)
 
 
+@extend_schema_view(
+    post=extend_schema(
+        description=(
+            "Simulated approval only; pending orders require PostgreSQL wall time strictly "
+            "before their reservation deadline. Legacy NULL deadlines remain payable. "
+            "Overdue pending returns reservation_expired (409) without releasing stock; "
+            "EXPIRED is terminal."
+        ),
+        responses={
+            200: OrderTransitionSerializer,
+            409: OpenApiResponse(
+                OpenApiTypes.OBJECT,
+                description="Reservation deadline passed or invalid transition.",
+            ),
+        },
+    )
+)
 class OrderPaymentView(OrderActionView):
     transition = staticmethod(approve_simulated_payment)
 

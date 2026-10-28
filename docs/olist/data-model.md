@@ -158,6 +158,8 @@ erDiagram
         varchar idempotency_key_hash "Nullable SHA-256; unique with customer when present"
         varchar request_fingerprint "Nullable SHA-256; paired CHECK"
         timestamptz created_at
+        timestamptz reservation_expires_at "Nullable legacy; fixed new-order deadline"
+        timestamptz expired_at "Nullable; EXPIRED terminal event"
     }
     orders_order_item {
         bigint id PK
@@ -194,3 +196,5 @@ Simulation locks follow optional creation-key advisory lock -> existing order ->
 PostgreSQL constraints enforce relational references and local ranges/keys; Stage 4 application services enforce operational cross-table totals, snapshot immutability, legal transitions, and ledger reconciliation. Import validation/reporting preserves historical exceptions instead of forcing operational invariants. The [operational contract](../stage-04/rules.md) details the implemented locking/lifecycle behavior; the [adaptation plan](adaptation-plan.md) records the broader delivery boundaries.
 
 API 1.1.0 adds two nullable 64-character lowercase SHA-256 fields through `orders.0002_creation_idempotency`. Both must be NULL or both valid hashes. A partial unique B-tree index on `(customer_id, idempotency_key_hash)` applies only to keyed orders; legacy/unkeyed rows remain NULL and do not collide. Raw keys are not stored, and keys remain with protected orders indefinitely. These fields belong only to the simulated domain and do not alter source identifiers, historical fingerprints or analytics. [Creation-key rules](../idempotency/design.md) define normalization, lock order and replay semantics.
+
+API 1.2.0 adds nullable `reservation_expires_at`/`expired_at` through `orders.0003_reservation_expiry`. Legacy values remain NULL. New service-created deadlines equal creation plus 30 minutes. The status CHECK represents EXPIRED with nonnull deadline/expiry and no payment, shipment or cancellation events. Temporal CHECKs require deadline after creation, expiry at/after deadline and payment strictly before a nonnull deadline. Service-level history requires the same unique per-offer RELEASE for either CANCELLED or EXPIRED; expiration attributes the explicit active administrator. No historical tables or source statuses change. See [expiry rules](../reservations/design.md).

@@ -22,6 +22,7 @@ class Order(TimestampedModel):
         SHIPPED = "SHIPPED", "Shipped (simulated)"
         DELIVERED = "DELIVERED", "Delivered (simulated)"
         CANCELLED = "CANCELLED", "Cancelled"
+        EXPIRED = "EXPIRED", "Reservation expired"
 
     customer = models.ForeignKey(
         "accounts.Customer", on_delete=models.PROTECT, related_name="orders"
@@ -46,6 +47,8 @@ class Order(TimestampedModel):
     cancelled_at = models.DateTimeField(null=True, blank=True)
     shipped_at = models.DateTimeField(null=True, blank=True)
     delivered_at = models.DateTimeField(null=True, blank=True)
+    reservation_expires_at = models.DateTimeField(null=True, blank=True, editable=False)
+    expired_at = models.DateTimeField(null=True, blank=True, editable=False)
     idempotency_key_hash = models.CharField(max_length=64, null=True, blank=True, editable=False)
     request_fingerprint = models.CharField(max_length=64, null=True, blank=True, editable=False)
 
@@ -92,6 +95,7 @@ class Order(TimestampedModel):
                     models.Q(
                         status="PENDING_PAYMENT",
                         paid_at__isnull=True,
+                        expired_at__isnull=True,
                         cancelled_at__isnull=True,
                         shipped_at__isnull=True,
                         delivered_at__isnull=True,
@@ -99,13 +103,24 @@ class Order(TimestampedModel):
                     | models.Q(
                         status="CANCELLED",
                         paid_at__isnull=True,
+                        expired_at__isnull=True,
                         cancelled_at__isnull=False,
                         shipped_at__isnull=True,
                         delivered_at__isnull=True,
                     )
                     | models.Q(
+                        status="EXPIRED",
+                        paid_at__isnull=True,
+                        cancelled_at__isnull=True,
+                        shipped_at__isnull=True,
+                        delivered_at__isnull=True,
+                        expired_at__isnull=False,
+                        reservation_expires_at__isnull=False,
+                    )
+                    | models.Q(
                         status="PAID",
                         paid_at__isnull=False,
+                        expired_at__isnull=True,
                         cancelled_at__isnull=True,
                         shipped_at__isnull=True,
                         delivered_at__isnull=True,
@@ -113,6 +128,7 @@ class Order(TimestampedModel):
                     | models.Q(
                         status="SHIPPED",
                         paid_at__isnull=False,
+                        expired_at__isnull=True,
                         cancelled_at__isnull=True,
                         shipped_at__isnull=False,
                         delivered_at__isnull=True,
@@ -120,12 +136,34 @@ class Order(TimestampedModel):
                     | models.Q(
                         status="DELIVERED",
                         paid_at__isnull=False,
+                        expired_at__isnull=True,
                         cancelled_at__isnull=True,
                         shipped_at__isnull=False,
                         delivered_at__isnull=False,
                     )
                 ),
                 name="order_status_timestamps_valid",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    (
+                        models.Q(reservation_expires_at__isnull=True)
+                        | models.Q(reservation_expires_at__gt=models.F("created_at"))
+                    )
+                    & (
+                        models.Q(expired_at__isnull=True)
+                        | (
+                            models.Q(reservation_expires_at__isnull=False)
+                            & models.Q(expired_at__gte=models.F("reservation_expires_at"))
+                        )
+                    )
+                    & (
+                        models.Q(paid_at__isnull=True)
+                        | models.Q(reservation_expires_at__isnull=True)
+                        | models.Q(paid_at__lt=models.F("reservation_expires_at"))
+                    )
+                ),
+                name="order_reservation_timestamps_valid",
             ),
             models.CheckConstraint(
                 condition=(

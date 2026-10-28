@@ -15,6 +15,7 @@ from .exceptions import OrderConflict
 from .idempotency import key_hash, lock_creation_key, request_fingerprint
 from .integrity import inspect_order_history
 from .models import Order, OrderItem
+from .reservations import RESERVATION_LIFETIME
 from .validation import validate_order_input
 
 
@@ -69,6 +70,8 @@ def create_order(*, actor, items, shipping_address, idempotency_key=None):
             request_fingerprint=fingerprint,
             **{"shipping_" + key: value for key, value in address.items()},
         )
+        order.reservation_expires_at = order.created_at + RESERVATION_LIFETIME
+        order.save(update_fields=["reservation_expires_at"])
         lines = OrderItem.objects.bulk_create(
             [
                 OrderItem(

@@ -1,0 +1,264 @@
+{
+  "started_at_utc": "2026-10-28T02:51:09.109146+00:00",
+  "passed": true,
+  "project": "olist-reservation-review",
+  "database": "olist_demo",
+  "base_url": "http://127.0.0.1:18027",
+  "fixture_time_travel": "Explicitly shifts only a new fictional order/reservation; no waiting 30 minutes is claimed.",
+  "requests": [
+    {
+      "name": "administrator login",
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "fixture customer",
+      "method": "POST",
+      "path": "/api/auth/register/",
+      "status": 201,
+      "expected": 201,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "fixture login",
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "fixture product",
+      "method": "POST",
+      "path": "/api/products/",
+      "status": 201,
+      "expected": 201,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "fixture seller",
+      "method": "POST",
+      "path": "/api/sellers/",
+      "status": 201,
+      "expected": 201,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "fixture offer",
+      "method": "POST",
+      "path": "/api/offers/",
+      "status": 201,
+      "expected": 201,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "fixture supply",
+      "method": "POST",
+      "path": "/api/inventory/7/changes/",
+      "status": 201,
+      "expected": 201,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "keyed fixture purchase",
+      "method": "POST",
+      "path": "/api/orders/",
+      "status": 201,
+      "expected": 201,
+      "curl_exit_code": 0,
+      "idempotency_replayed": "false"
+    },
+    {
+      "name": "overdue still pending",
+      "method": "GET",
+      "path": "/api/orders/10/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "late payment rejected",
+      "method": "POST",
+      "path": "/api/orders/10/simulated-payment/",
+      "status": 409,
+      "expected": 409,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "expired state",
+      "method": "GET",
+      "path": "/api/orders/10/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "expired keyed replay",
+      "method": "POST",
+      "path": "/api/orders/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0,
+      "idempotency_replayed": "true"
+    },
+    {
+      "name": "expired cancellation rejected",
+      "method": "POST",
+      "path": "/api/orders/10/cancel/",
+      "status": 409,
+      "expected": 409,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "expired payment rejected",
+      "method": "POST",
+      "path": "/api/orders/10/simulated-payment/",
+      "status": 409,
+      "expected": 409,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "restored fixture stock",
+      "method": "GET",
+      "path": "/api/inventory/7/",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "exactly one fixture release",
+      "method": "GET",
+      "path": "/api/inventory/movements/?order_id=10",
+      "status": 200,
+      "expected": 200,
+      "curl_exit_code": 0,
+      "idempotency_replayed": null
+    }
+  ],
+  "commands": [
+    {
+      "name": "owner role refused",
+      "command": [
+        "docker",
+        "compose",
+        "-p",
+        "olist-reservation-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/reservations/review.env",
+        "run",
+        "--rm",
+        "migrate",
+        "expire_reservations",
+        "--expected-database",
+        "olist_demo",
+        "--actor-email",
+        "admin@example.com",
+        "--limit",
+        "100"
+      ],
+      "exit_code": 1,
+      "role_guard_message_verified": true
+    },
+    {
+      "name": "explicit expiry",
+      "command": [
+        "docker",
+        "compose",
+        "-p",
+        "olist-reservation-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/reservations/review.env",
+        "run",
+        "--rm",
+        "app",
+        "expire_reservations",
+        "--expected-database",
+        "olist_demo",
+        "--actor-email",
+        "admin@example.com",
+        "--limit",
+        "100"
+      ],
+      "exit_code": 0,
+      "report": {
+        "attempted_order_ids": [
+          10
+        ],
+        "cutoff": "2026-10-28T02:51:13.690045+00:00",
+        "data_origin": "SIMULATED_API",
+        "expired_order_ids": [
+          10
+        ],
+        "failures": [],
+        "limit": 100,
+        "locked_skips_not_enumerated": true,
+        "note": "Selected skips only; locked rows and all outstanding due orders are not counted.",
+        "passed": true,
+        "skipped_order_ids": []
+      }
+    },
+    {
+      "name": "repeated expiry",
+      "command": [
+        "docker",
+        "compose",
+        "-p",
+        "olist-reservation-review",
+        "--env-file",
+        "/Users/a./Documents/ChatGPT/Dev/django-orders-inventory-portfolio/.local/reservations/review.env",
+        "run",
+        "--rm",
+        "app",
+        "expire_reservations",
+        "--expected-database",
+        "olist_demo",
+        "--actor-email",
+        "admin@example.com",
+        "--limit",
+        "100"
+      ],
+      "exit_code": 0,
+      "report": {
+        "attempted_order_ids": [],
+        "cutoff": "2026-10-28T02:51:14.992962+00:00",
+        "data_origin": "SIMULATED_API",
+        "expired_order_ids": [],
+        "failures": [],
+        "limit": 100,
+        "locked_skips_not_enumerated": true,
+        "note": "Selected skips only; locked rows and all outstanding due orders are not counted.",
+        "passed": true,
+        "skipped_order_ids": []
+      }
+    }
+  ],
+  "fixture_preparation": {
+    "prepared_order_id": 10,
+    "only_new_fixture_shifted": true,
+    "exit_code": 0
+  },
+  "assertions": {
+    "late_payment_does_not_autoexpire": true,
+    "owner_role_refused": true,
+    "explicit_expiry_restores_once": true,
+    "keyed_replay_preserves_expired_state_and_snapshots": true,
+    "all_data_simulated": true
+  },
+  "finished_at_utc": "2026-10-28T02:51:15.219051+00:00"
+}

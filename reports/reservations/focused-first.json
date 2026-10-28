@@ -1,0 +1,57 @@
+[
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-reservation-review",
+      "--env-file",
+      ".local/reservations/review.env",
+      "run",
+      "--rm",
+      "migrate"
+    ],
+    "exit_code": 0,
+    "stdout": "Operations to perform:\n  Apply all migrations: accounts, auth, catalog, contenttypes, inventory, olist, orders\nRunning migrations:\n  Applying orders.0003_reservation_expiry... OK\n",
+    "stderr": " Container olist-reservation-review-db-1 Running \n Container olist-reservation-review-db-1 Waiting \n Container olist-reservation-review-db-1 Healthy \n Container olist-reservation-review-migrate-run-1de431ae61a8 Creating \n Container olist-reservation-review-migrate-run-1de431ae61a8 Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-reservation-review",
+      "--env-file",
+      ".local/reservations/review.env",
+      "run",
+      "--rm",
+      "migrate",
+      "configure_database_roles"
+    ],
+    "exit_code": 0,
+    "stdout": "Configured historical read-only API access and scoped importer grants.\n",
+    "stderr": " Container olist-reservation-review-db-1 Running \n Container olist-reservation-review-db-1 Waiting \n Container olist-reservation-review-db-1 Healthy \n Container olist-reservation-review-migrate-run-b32fc7f841ce Creating \n Container olist-reservation-review-migrate-run-b32fc7f841ce Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-reservation-review",
+      "--env-file",
+      ".local/reservations/review.env",
+      "run",
+      "--rm",
+      "tests",
+      "test",
+      "tests.test_reservation_expiry",
+      "tests.test_order_idempotency",
+      "tests.test_operational_services",
+      "--noinput",
+      "--verbosity2"
+    ],
+    "exit_code": 2,
+    "stdout": "",
+    "stderr": " Container olist-reservation-review-db-1 Running \n Container olist-reservation-review-db-1 Waiting \n Container olist-reservation-review-db-1 Healthy \n Container olist-reservation-review-tests-run-044268873b31 Creating \n Container olist-reservation-review-tests-run-044268873b31 Created \nusage: manage.py test [-h] [--noinput] [--testrunner TESTRUNNER] [--failfast]\n                      [-t TOP_LEVEL] [-p PATTERN] [--keepdb]\n                      [--shuffle [SEED]] [-r] [--debug-mode] [-d]\n                      [--parallel [N]] [--tag TAGS]\n                      [--exclude-tag EXCLUDE_TAGS] [--pdb] [-b]\n                      [--no-faulthandler] [--timing] [-k TEST_NAME_PATTERNS]\n                      [--durations N] [--version] [-v {0,1,2,3}]\n                      [--settings SETTINGS] [--pythonpath PYTHONPATH]\n                      [--traceback] [--no-color] [--force-color]\n                      [test_label ...]\nmanage.py test: error: unrecognized arguments: --verbosity2\n\n"
+  }
+]

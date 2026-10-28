@@ -1,0 +1,41 @@
+{
+  "started_at_utc": "2026-10-28T02:50:16.159557+00:00",
+  "commands": [
+    {
+      "command": [
+        "docker",
+        "compose",
+        "run",
+        "--rm",
+        "--entrypoint",
+        "python",
+        "app",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "exit_code": 0,
+      "stdout": "No broken requirements found.\n",
+      "stderr": " Container olist-ci-41b11a5838dd4219-db-1 Running \n Container olist-ci-41b11a5838dd4219-db-1 Waiting \n Container olist-ci-41b11a5838dd4219-db-1 Healthy \n Container olist-ci-41b11a5838dd4219-app-run-f3f5e8c94e9a Creating \n Container olist-ci-41b11a5838dd4219-app-run-f3f5e8c94e9a Created \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "run",
+        "--rm",
+        "--entrypoint",
+        "ruff",
+        "app",
+        "check",
+        "--no-cache",
+        "."
+      ],
+      "exit_code": 1,
+      "stdout": "E501 Line too long (114 > 100)\n  --> tests/test_analysis_tools.py:36:101\n   |\n34 |         self.assertEqual(Customer.objects.count(), 3)\n35 |         self.assertEqual(\n36 |             set(Order.objects.values_list(\"status\", flat=True)), set(Order.Status.values) - {Order.Status.EXPIRED}\n   |                                                                                                     ^^^^^^^^^^^^^^\n37 |         )\n38 |         self.assertTrue(\n   |\n\nFound 1 error.\n",
+      "stderr": " Container olist-ci-41b11a5838dd4219-db-1 Running \n Container olist-ci-41b11a5838dd4219-db-1 Waiting \n Container olist-ci-41b11a5838dd4219-db-1 Healthy \n Container olist-ci-41b11a5838dd4219-app-run-16b01c2619ff Creating \n Container olist-ci-41b11a5838dd4219-app-run-16b01c2619ff Created \n\n"
+    }
+  ],
+  "passed": false,
+  "finished_at_utc": "2026-10-28T02:50:18.167977+00:00"
+}

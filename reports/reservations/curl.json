@@ -1,0 +1,497 @@
+{
+  "started_at_utc": "2026-10-28T02:48:36.098131+00:00",
+  "passed": true,
+  "python_optimized": false,
+  "project": "olist-reservation-review",
+  "database": "olist_demo",
+  "base_url": "http://127.0.0.1:18027",
+  "transport_command": [
+    "curl",
+    "--disable",
+    "--noproxy",
+    "*",
+    "--silent",
+    "--show-error",
+    "--connect-timeout",
+    "5",
+    "--max-time",
+    "30",
+    "--write-out",
+    "\n%{http_code}",
+    "--config",
+    "-"
+  ],
+  "requests": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "anonymous isolation",
+      "method": "GET",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 401,
+      "expected": 401,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "registration",
+      "method": "POST",
+      "path": "/api/auth/register/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "customer login",
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "token refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "self profile",
+      "method": "GET",
+      "path": "/api/auth/me/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "administrator login",
+      "method": "POST",
+      "path": "/api/auth/login/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "existing seeded orders",
+      "method": "GET",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "customer cannot manage inventory",
+      "method": "GET",
+      "path": "/api/inventory/",
+      "curl_exit_code": 0,
+      "status": 403,
+      "expected": 403,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "create product",
+      "method": "POST",
+      "path": "/api/products/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "create seller 1",
+      "method": "POST",
+      "path": "/api/sellers/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "create seller 2",
+      "method": "POST",
+      "path": "/api/sellers/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "create offer 1",
+      "method": "POST",
+      "path": "/api/offers/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "create offer 2",
+      "method": "POST",
+      "path": "/api/offers/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "supply offer",
+      "method": "POST",
+      "path": "/api/inventory/4/changes/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "supply offer",
+      "method": "POST",
+      "path": "/api/inventory/5/changes/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "multi-seller purchase",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": "false"
+    },
+    {
+      "name": "canonical keyed replay",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": "true"
+    },
+    {
+      "name": "key content conflict",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 409,
+      "expected": 409,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "anonymous key is not authorization",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 401,
+      "expected": 401,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "administrator cannot replay customer key",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 403,
+      "expected": 403,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "invalid creation key",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 400,
+      "expected": 400,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "rename and reprice catalog",
+      "method": "PATCH",
+      "path": "/api/offers/4/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "rename product",
+      "method": "PATCH",
+      "path": "/api/products/3/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "keyed replay after catalog edits",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": "true"
+    },
+    {
+      "name": "purchase snapshot",
+      "method": "GET",
+      "path": "/api/orders/6/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "cancel purchase",
+      "method": "POST",
+      "path": "/api/orders/6/cancel/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "repeat cancellation",
+      "method": "POST",
+      "path": "/api/orders/6/cancel/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "keyed replay after cancellation",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": "true"
+    },
+    {
+      "name": "restored stock",
+      "method": "GET",
+      "path": "/api/inventory/4/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "restored stock",
+      "method": "GET",
+      "path": "/api/inventory/5/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "foreign order isolation",
+      "method": "GET",
+      "path": "/api/orders/1/",
+      "curl_exit_code": 0,
+      "status": 404,
+      "expected": 404,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "second purchase",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "simulated approval",
+      "method": "POST",
+      "path": "/api/orders/7/simulated-payment/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "repeat approval",
+      "method": "POST",
+      "path": "/api/orders/7/simulated-payment/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "paid cancellation denied",
+      "method": "POST",
+      "path": "/api/orders/7/cancel/",
+      "curl_exit_code": 0,
+      "status": 409,
+      "expected": 409,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "simulated shipping",
+      "method": "POST",
+      "path": "/api/orders/7/ship/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "simulated delivery",
+      "method": "POST",
+      "path": "/api/orders/7/deliver/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "orders before failed purchase",
+      "method": "GET",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "insufficient stock rollback",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 409,
+      "expected": 409,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "orders after failed purchase",
+      "method": "GET",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "stock after rollback",
+      "method": "GET",
+      "path": "/api/inventory/4/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "stock after rollback",
+      "method": "GET",
+      "path": "/api/inventory/5/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "movement history",
+      "method": "GET",
+      "path": "/api/inventory/movements/?order_id=6",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "uncommitted key accepts corrected content",
+      "method": "POST",
+      "path": "/api/orders/",
+      "curl_exit_code": 0,
+      "status": 201,
+      "expected": 201,
+      "idempotency_replayed": "false"
+    },
+    {
+      "name": "cancel recovered purchase",
+      "method": "POST",
+      "path": "/api/orders/8/cancel/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "stock after recovered cancellation",
+      "method": "GET",
+      "path": "/api/inventory/4/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "stock after recovered cancellation",
+      "method": "GET",
+      "path": "/api/inventory/5/",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "source-free report refusal",
+      "method": "GET",
+      "path": "/api/olist/reports/monthly_sales/",
+      "curl_exit_code": 0,
+      "status": 409,
+      "expected": 409,
+      "idempotency_replayed": null
+    },
+    {
+      "name": "authenticated OpenAPI",
+      "method": "GET",
+      "path": "/api/schema/?format=json",
+      "curl_exit_code": 0,
+      "status": 200,
+      "expected": 200,
+      "idempotency_replayed": null
+    }
+  ],
+  "credential_handling": "Private curl config on stdin; no tokens/passwords in argv or evidence.",
+  "data_origin": "SIMULATED_API",
+  "assertions": {
+    "multi_seller_total": "91.80",
+    "new_price_total": "100.00",
+    "snapshots_preserved": true,
+    "cancellation_restored_once": true,
+    "repeated_payment_same_reference": true,
+    "failed_order_fully_rolled_back": true,
+    "owner_and_admin_boundaries": true,
+    "all_events_simulated": true,
+    "canonical_keyed_replay_same_order": true,
+    "content_conflict_rejected": true,
+    "replay_preserves_purchase_after_catalog_edits": true,
+    "cancelled_replay_does_not_reserve_again": true,
+    "key_does_not_bypass_authorization": true,
+    "uncommitted_key_reusable_after_failure": true,
+    "unkeyed_creation_has_no_replay_header": true,
+    "internal_hashes_not_exposed": true
+  },
+  "finished_at_utc": "2026-10-28T02:48:37.447449+00:00"
+}

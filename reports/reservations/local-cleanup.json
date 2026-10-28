@@ -1,0 +1,56 @@
+{
+  "ci_project": "olist-ci-ede436b773b842a3",
+  "exclusive_cleanup_verified": true,
+  "commands": [
+    {
+      "command": [
+        "docker",
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=olist-ci-ede436b773b842a3",
+        "--format",
+        "{{.ID}}"
+      ],
+      "exit_code": 0,
+      "stdout": ""
+    },
+    {
+      "command": [
+        "docker",
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=olist-ci-ede436b773b842a3",
+        "--format",
+        "{{.Name}}"
+      ],
+      "exit_code": 0,
+      "stdout": ""
+    },
+    {
+      "command": [
+        "docker",
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=olist-ci-ede436b773b842a3",
+        "--format",
+        "{{.Name}}"
+      ],
+      "exit_code": 0,
+      "stdout": ""
+    }
+  ],
+  "ci_image_tag_absent": true,
+  "preserved_existing_volumes": [
+    "olist-case-study_olist_postgres_data",
+    "olist-benchmark_olist_postgres_data",
+    "olist-demo_olist_postgres_data",
+    "olist-idempotency-review_olist_postgres_data",
+    "olist-reservation-review_olist_postgres_data",
+    "loja-stage3-20261023223148_postgres_data"
+  ],
+  "stage6_and_1_1_images_present": true,
+  "note": "Presence checks only; not a fresh row-hash audit of other environments."
+}

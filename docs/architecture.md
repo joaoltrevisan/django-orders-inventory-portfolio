@@ -54,7 +54,7 @@ Foreign keys use Django `PROTECT` on audit/history references; database FKs reje
 
 ## Stock strategy and concurrency
 
-Creation deducts available units and appends a negative `RESERVATION` per offer in the same transaction as order/items. Any insufficient line or failed write rolls back the whole order. Only `PENDING_PAYMENT` can cancel; cancellation appends positive `RELEASE` movements and restores units once. Payment/shipping/delivery do not change stock. Physical on-hand units and reservation expiration are not separately modeled.
+Creation deducts available units and appends a negative `RESERVATION` per offer in the same transaction as order/items. Any insufficient line or failed write rolls back the whole order. Only `PENDING_PAYMENT` can cancel; cancellation appends positive `RELEASE` movements and restores units once. Payment/shipping/delivery do not change stock. Physical on-hand units are not separately modeled. New orders have a fixed 30-minute payment deadline; legacy NULL deadlines remain unchanged. A bounded administrator command expires due pending orders in separate transactions, restores stock once and records EXPIRED/expired_at using the existing release ledger. PostgreSQL wall time is checked after locks; overdue payment is rejected without auto-expiring. Headroom still includes all pending orders until real release. [Expiry rules](reservations/design.md) define the cutoff, SKIP LOCKED omission, actor rechecks and partial-failure report. No scheduler is bundled.
 
 All conflicting catalog/inventory/order services lock in the same hierarchy: **optional creation-key advisory lock → existing order → sellers ascending ID → products ascending ID → offers ascending ID → stock ascending offer ID**. Locking queries are evaluated explicitly; mutable activation, prices and balances are reread after locks. PostgreSQL READ COMMITTED plus these row locks prevents last-unit overselling and lost balance updates. Parent locks are deliberately conservative and may serialize unrelated offers sharing a seller/product. Inventory checks pending cancellation liability without acquiring orders in the reverse direction. The [operational rules](stage-04/rules.md) define headroom, repeat actions and exact lifecycle.
 
@@ -62,10 +62,12 @@ All conflicting catalog/inventory/order services lock in the same hierarchy: **o
 stateDiagram-v2
     [*] --> PENDING_PAYMENT: Create and deduct stock
     PENDING_PAYMENT --> CANCELLED: Release stock once
-    PENDING_PAYMENT --> PAID: Simulated approval
+    PENDING_PAYMENT --> EXPIRED: Administrator expires due reservation
+    PENDING_PAYMENT --> PAID: Simulated approval before deadline
     PAID --> SHIPPED: Simulated shipment
     SHIPPED --> DELIVERED: Simulated delivery
     CANCELLED --> [*]
+    EXPIRED --> [*]
     DELIVERED --> [*]
 ```
 

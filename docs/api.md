@@ -1,6 +1,6 @@
 # API reference and curl workflows
 
-Base URL for the isolated seeded demo is `http://127.0.0.1:18022`; the existing primary service uses port 18020. All routes end in `/`. Bodies are JSON, identifiers are integers unless explicitly historical source keys, money is decimal BRL, and collection page size is 20. The [OpenAPI document for API 1.1.0](../reports/idempotency/local/openapi.json) is the current machine-readable contract; `GET /api/schema/` requires an administrator token. This is the API's version label, not a production readiness claim.
+Base URL for the isolated seeded demo is `http://127.0.0.1:18022`; the existing primary service uses port 18020. All routes end in `/`. Bodies are JSON, identifiers are integers unless explicitly historical source keys, money is decimal BRL, and collection page size is 20. The [OpenAPI document for API 1.2.0](../reports/reservations/local/openapi.json) is the current machine-readable contract; `GET /api/schema/` requires an administrator token. This is the API's version label, not a production readiness claim.
 
 ## Authentication and permissions
 
@@ -18,7 +18,7 @@ Base URL for the isolated seeded demo is `http://127.0.0.1:18022`; the existing 
 | `/api/orders/` | GET, POST | Own customer orders / all admin-visible orders; POST active nonstaff customer only |
 | `/api/orders/{order_id}/` | GET | Owner or administrator; foreign-owned IDs return 404 |
 | `/api/orders/{order_id}/cancel/` | POST | Owner or administrator; pending only, release once |
-| `/api/orders/{order_id}/simulated-payment/` | POST | Administrator; simulated approval, no real charge |
+| `/api/orders/{order_id}/simulated-payment/` | POST | Administrator; simulated approval before reservation deadline, no real charge |
 | `/api/orders/{order_id}/ship/`, `/api/orders/{order_id}/deliver/` | POST | Administrator; permitted whole-order processing |
 | `/api/inventory/`, `/api/inventory/{offer_id}/` | GET | Administrator; balance identity is offer ID |
 | `/api/inventory/{offer_id}/changes/` | POST | Administrator; ENTRY or signed ADJUSTMENT with reason |
@@ -133,7 +133,7 @@ The key is case-sensitive and must contain 1–128 ASCII letters/digits or `.`, 
 
 Replay returns the current coherent stored order state, not cached original response bytes. It preserves purchase snapshots after catalog edits and returns `CANCELLED` after cancellation without reserving again. Successful keys are retained with their order indefinitely, including after cancellation. Validation, insufficient stock and transaction failures consume no key; errors are not cached and a corrected attempt may reuse an uncommitted key. Only SHA-256 identity/content hashes are stored, hidden from API responses. The guarantee covers this database transaction, not external payment processing. See the [full contract and lock design](idempotency/design.md).
 
-Without a key, investigate an ambiguous commit before retrying. A key cannot be attached retroactively to an existing unkeyed purchase. Reservation expiry remains outside this release.
+Without a key, investigate an ambiguous commit before retrying. A key cannot be attached retroactively to an existing unkeyed purchase. Reservation deadlines are described below; replay never extends them.
 
 ## Cancel or process another order
 
@@ -144,7 +144,7 @@ curl --fail-with-body -sS -X POST "$BASE_URL/api/orders/1/cancel/" \
   -H @.local/api/customer.header -H 'Content-Type: application/json' --data '{}'
 ```
 
-Consistent repetition returns the original cancellation without another release/time change. Only pending orders cancel. For a **different pending order**, an administrator can execute:
+Consistent repetition returns the original cancellation without another release/time change. Only pending orders cancel. For a **different pending order before its deadline**, an administrator can execute:
 
 ```bash
 curl --fail-with-body -sS -X POST "$BASE_URL/api/orders/2/simulated-payment/" \
@@ -159,6 +159,24 @@ curl --fail-with-body -sS "$BASE_URL/api/inventory/movements/?order_id=2" \
 ```
 
 All these order IDs are placeholders to replace, not a script against the preexisting seeded order states. Repeated simulated approval returns the existing reference; shipping repetitions require matching tracking data; delivery repetition preserves the original timestamp. Invalid skips/reversals and paid-order cancellation return 409. Action responses contain `order`, nullable `simulated_payment` and nullable `shipment`; source payments are never processed by these routes. Exact operational rules and lock hierarchy are in [architecture](architecture.md).
+
+## Reservation deadlines and explicit expiry
+
+New operational orders have read-only `reservation_expires_at = created_at + 30 minutes` and nullable `expired_at`. Existing orders retain NULL deadlines and remain payable under the earlier rules. The 30-minute duration is this demonstration's policy, not a fact inferred from Olist data. Historical routes/statuses are unaffected.
+
+For pending orders with a deadline, simulated payment is permitted only when PostgreSQL wall time read after the order lock is strictly earlier. At or after the boundary, return 409 `reservation_expired` without payment, status change or stock release. A payment accepted before the boundary may commit later. Once paid, normal shipping/delivery remains possible after the original deadline.
+
+Overdue orders remain `PENDING_PAYMENT` with stock deducted until cancellation or the explicit administrator command below commits. Owner/admin cancellation still works while pending, including overdue reservations. `EXPIRED` is terminal; cancellation/payment/shipping/delivery reject it. GET and keyed replay return persisted state/deadline without side effects or extension.
+
+Run the command using the correct existing project/env and API database role, with an active staff actor. Example for an intentionally configured isolated demo:
+
+```bash
+docker compose -p olist-demo --env-file .local/analysis/demo.env run --rm app \
+  expire_reservations --expected-database olist_demo \
+  --actor-email admin@example.com --limit 100
+```
+
+No scheduler is bundled. The command uses one transaction per attempted order and skips locked rows. It restores every item quantity once through positive RELEASE movements, attributed to the named administrator, and writes `EXPIRED`/`expired_at`. Its JSON includes cutoff, limit, attempted/expired/selected-skipped IDs and sanitized failures. Locked-row skips are not enumerated; an empty report does not prove no due work remains. Attempts are bounded to 1–1000; query scan/wait time is not bounded by that count. Failures return a nonzero exit while retaining earlier committed successes; inspect the report before rerunning. Legacy NULL-deadline, paid and other terminal orders are not selected. [Rules and recovery](reservations/design.md) explain authority rechecks, cutoff and rollback.
 
 ## Historical reads and reports
 
@@ -184,7 +202,7 @@ Reports return `{count, next, previous, results, data_origin, date_basis}`. Rows
 | 400 | Field/shape validation; usually field-name arrays or `non_field_errors` |
 | 401 / 403 | Missing/invalid token / authenticated role forbidden |
 | 404 / 405 | Missing/foreign-owned object or unknown page/report / unsupported method |
-| 409 | Business conflict `{code, detail}`; insufficient stock, invalid transition, integrity/tracking/capacity conflict, unavailable complete history, committed key/content mismatch |
+| 409 | Business conflict `{code, detail}`; insufficient stock, invalid transition, integrity/tracking/capacity conflict, unavailable complete history, committed key/content mismatch, overdue payment reservation |
 | 429 | Authentication endpoint throttle |
 | 500 / 503 | Sanitized database-operation failure / health database unavailable |
 

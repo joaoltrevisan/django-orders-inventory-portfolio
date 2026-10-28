@@ -1,0 +1,23 @@
+[
+  {
+    "bundle": ".local/recovery/demo-first",
+    "directory_mode": "0700",
+    "file_modes": "0600",
+    "dump_checksum_and_size_match": true,
+    "bundle_ignored": true
+  },
+  {
+    "bundle": ".local/recovery/demo-final",
+    "directory_mode": "0700",
+    "file_modes": "0600",
+    "dump_checksum_and_size_match": true,
+    "bundle_ignored": true
+  },
+  {
+    "bundle": ".local/recovery/olist-full",
+    "directory_mode": "0700",
+    "file_modes": "0600",
+    "dump_checksum_and_size_match": true,
+    "bundle_ignored": true
+  }
+]

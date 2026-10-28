@@ -1,0 +1,324 @@
+{
+  "started_at_utc": "2026-10-28T04:41:27.057847+00:00",
+  "passed": true,
+  "private_bundle": ".local/recovery/demo-first",
+  "new_databases_retained": true,
+  "distinct_cluster_identifiers_verified": true,
+  "source_project": "olist-recovery-source",
+  "target_project": "olist-recovery-review",
+  "source_database": "olist_demo",
+  "source_runtime": {
+    "snapshot": "00000033-00000004-1",
+    "database": "olist_demo",
+    "postgresql_version_num": 170011,
+    "collation": "en_US.utf8",
+    "ctype": "en_US.utf8"
+  },
+  "new_databases": {
+    "olist_recovery_2eb23682f86345b0a761": {
+      "purpose": "data",
+      "created": true
+    },
+    "olist_recovery_d78063c7900b41f083c6": {
+      "purpose": "schema_reference",
+      "created": true
+    }
+  },
+  "restored_database": "olist_recovery_2eb23682f86345b0a761",
+  "reference_database": "olist_recovery_d78063c7900b41f083c6",
+  "target_runtime": {
+    "snapshot": "0000002F-00000004-1",
+    "database": "olist_recovery_2eb23682f86345b0a761",
+    "postgresql_version_num": 170011,
+    "collation": "en_US.utf8",
+    "ctype": "en_US.utf8"
+  },
+  "tables": {
+    "accounts_customer": {
+      "max_id": 3,
+      "rows": 3,
+      "sha256": "f4f3fb913d063b00c3cd98da705a1d909de5a5ce8a20945aa104ddfaaff170ce"
+    },
+    "accounts_user": {
+      "max_id": 4,
+      "rows": 4,
+      "sha256": "29a51278497d432ec59937e82be181afdf572a72bbba98cea56528c4dc03e512"
+    },
+    "accounts_user_groups": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "accounts_user_user_permissions": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "auth_group": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "auth_group_permissions": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "auth_permission": {
+      "max_id": 96,
+      "rows": 96,
+      "sha256": "90c987b9938037f632927b0731ade710c36a119ca8c8f24e2d5469a5ab12cd26"
+    },
+    "catalog_offer": {
+      "max_id": 3,
+      "rows": 3,
+      "sha256": "77dca88623dbeb35c0c0c627492c8542710d3564ec4df44aa7c041372bdbc105"
+    },
+    "catalog_product": {
+      "max_id": 2,
+      "rows": 2,
+      "sha256": "25a0035f6b2cc4d61652a5dd4a15455a979799b6b9cc395accfa2a4d456efa1d"
+    },
+    "catalog_seller": {
+      "max_id": 2,
+      "rows": 2,
+      "sha256": "fc70a99efd362b63a376a9f77f7c54cf2830232651912d80a7943c1fdb371dbc"
+    },
+    "django_content_type": {
+      "max_id": 24,
+      "rows": 24,
+      "sha256": "ac321a725c0debde66c89f723c6927d4fe9177d441524c1911f24fd91c5bc629"
+    },
+    "django_migrations": {
+      "max_id": 22,
+      "rows": 22,
+      "sha256": "be8df5a903102ad6799921368332763c168b755101786c606fbc2ee73f8abb3f"
+    },
+    "inventory_stock": {
+      "max_id": 3,
+      "rows": 3,
+      "sha256": "5f9f3d25fa713d1f13b122cd59fc607e89c6332d349151bbc4928eb29b59767b"
+    },
+    "inventory_stock_movement": {
+      "max_id": 14,
+      "rows": 14,
+      "sha256": "5c4764e2fbe6c1564d4cbeca32d08d88f73a59671f50152f732e8a77f0305789"
+    },
+    "olist_category": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_customer": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_dataset_snapshot": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_import_issue": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_import_run": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_order": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_order_item": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_payment_record": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_product": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "olist_seller": {
+      "max_id": null,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "orders_order": {
+      "max_id": 6,
+      "rows": 6,
+      "sha256": "af8b2bdfe7682469c7ef7af970318a77b499e79fd32821700451287c2ec36c1f"
+    },
+    "orders_order_item": {
+      "max_id": 8,
+      "rows": 8,
+      "sha256": "cdbb81e75d54d4f6176ca354d11eaacf03e90077317c7d4dadbedaaa0dcf9308"
+    },
+    "orders_shipment": {
+      "max_id": 2,
+      "rows": 2,
+      "sha256": "75d27f7eccb2c2888c97d2040d29ed5bc2aab8a5bfe2d9b56b0cf18313d63bab"
+    },
+    "orders_simulated_payment": {
+      "max_id": 3,
+      "rows": 3,
+      "sha256": "435068d8359e9c39c4c55ea6e9280859f0ecd4501344575ffe81792935ce70f9"
+    }
+  },
+  "migration_history": [
+    "accounts:0001_initial",
+    "auth:0001_initial",
+    "auth:0002_alter_permission_name_max_length",
+    "auth:0003_alter_user_email_max_length",
+    "auth:0004_alter_user_username_opts",
+    "auth:0005_alter_user_last_login_null",
+    "auth:0006_require_contenttypes_0002",
+    "auth:0007_alter_validators_add_error_messages",
+    "auth:0008_alter_user_username_max_length",
+    "auth:0009_alter_user_last_name_max_length",
+    "auth:0010_alter_group_name_max_length",
+    "auth:0011_update_proxy_permissions",
+    "auth:0012_alter_user_first_name_max_length",
+    "catalog:0001_initial",
+    "catalog:0002_offer_identity",
+    "contenttypes:0001_initial",
+    "contenttypes:0002_remove_content_type_name",
+    "inventory:0001_initial",
+    "olist:0001_initial",
+    "orders:0001_initial",
+    "orders:0002_creation_idempotency",
+    "orders:0003_reservation_expiry"
+  ],
+  "sequence_safety": {
+    "accounts_customer": {
+      "next_value": 4,
+      "safe": true
+    },
+    "accounts_user": {
+      "next_value": 5,
+      "safe": true
+    },
+    "accounts_user_groups": {
+      "next_value": 1,
+      "safe": true
+    },
+    "accounts_user_user_permissions": {
+      "next_value": 1,
+      "safe": true
+    },
+    "auth_group": {
+      "next_value": 1,
+      "safe": true
+    },
+    "auth_group_permissions": {
+      "next_value": 1,
+      "safe": true
+    },
+    "auth_permission": {
+      "next_value": 97,
+      "safe": true
+    },
+    "catalog_offer": {
+      "next_value": 4,
+      "safe": true
+    },
+    "catalog_product": {
+      "next_value": 3,
+      "safe": true
+    },
+    "catalog_seller": {
+      "next_value": 3,
+      "safe": true
+    },
+    "django_content_type": {
+      "next_value": 25,
+      "safe": true
+    },
+    "django_migrations": {
+      "next_value": 23,
+      "safe": true
+    },
+    "inventory_stock": {
+      "next_value": 4,
+      "safe": true
+    },
+    "inventory_stock_movement": {
+      "next_value": 15,
+      "safe": true
+    },
+    "olist_category": {
+      "next_value": 1,
+      "safe": true
+    },
+    "olist_customer": {
+      "next_value": 1,
+      "safe": true
+    },
+    "olist_dataset_snapshot": {
+      "next_value": 1,
+      "safe": true
+    },
+    "olist_import_issue": {
+      "next_value": 1,
+      "safe": true
+    },
+    "olist_import_run": {
+      "next_value": 1,
+      "safe": true
+    },
+    "olist_order": {
+      "next_value": 1,
+      "safe": true
+    },
+    "olist_order_item": {
+      "next_value": 1,
+      "safe": true
+    },
+    "olist_payment_record": {
+      "next_value": 1,
+      "safe": true
+    },
+    "olist_product": {
+      "next_value": 1,
+      "safe": true
+    },
+    "olist_seller": {
+      "next_value": 1,
+      "safe": true
+    },
+    "orders_order": {
+      "next_value": 7,
+      "safe": true
+    },
+    "orders_order_item": {
+      "next_value": 9,
+      "safe": true
+    },
+    "orders_shipment": {
+      "next_value": 3,
+      "safe": true
+    },
+    "orders_simulated_payment": {
+      "next_value": 4,
+      "safe": true
+    }
+  },
+  "all_rows_match": true,
+  "schema_matches_reparsed_reference": true,
+  "canonical_schema_sha256": "f5b978f3bcf9066cfbda1c4357ddfedb4cab4041b2539f6137d398ba5b91d8f0",
+  "dump_sha256": "2f28c85641664cc19e2c8494bd45cbdb0a6ece162804eaa6938a269044b6ed3f",
+  "dump_bytes": 107259,
+  "global_credentials_or_grants_restored": false,
+  "sequence_exact_equality_claimed": false,
+  "finished_at_utc": "2026-10-28T04:41:29.902240+00:00"
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "project": "olist-recovery-source",
+    "database": "olist_demo",
+    "all_28_table_hashes_unchanged": true,
+    "migration_history_unchanged": true
+  },
+  {
+    "project": "olist-benchmark",
+    "database": "olist_benchmark",
+    "all_28_table_hashes_unchanged": true,
+    "migration_history_unchanged": true
+  }
+]

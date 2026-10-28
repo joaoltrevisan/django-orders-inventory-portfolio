@@ -1,6 +1,6 @@
 # API reference and curl workflows
 
-Base URL for the isolated seeded demo is `http://127.0.0.1:18022`; the existing primary service uses port 18020. All routes end in `/`. Bodies are JSON, identifiers are integers unless explicitly historical source keys, money is decimal BRL, and collection page size is 20. The [OpenAPI document for API 1.3.0](../reports/worker/local/openapi.json) is the current machine-readable contract; `GET /api/schema/` requires an administrator token. This is the API's version label, not a production readiness claim.
+Base URL for the isolated seeded demo is `http://127.0.0.1:18022`; the existing primary service uses port 18020. All routes end in `/`. Bodies are JSON, identifiers are integers unless explicitly historical source keys, money is decimal BRL, and collection page size is 20. The [OpenAPI document for API 1.4.0](../reports/recovery/local/openapi.json) is the current machine-readable contract; `GET /api/schema/` requires an administrator token. This is the API's version label, not a production readiness claim.
 
 ## Authentication and permissions
 

@@ -1,0 +1,22 @@
+{
+  "exclusive_ci_cleanup_verified": true,
+  "snapshot_helpers_remaining": 0,
+  "preserved_volumes": [
+    "olist-case-study_olist_postgres_data",
+    "olist-benchmark_olist_postgres_data",
+    "olist-demo_olist_postgres_data",
+    "olist-idempotency-review_olist_postgres_data",
+    "olist-reservation-review_olist_postgres_data",
+    "olist-worker-review_olist_postgres_data",
+    "olist-recovery-source_olist_postgres_data",
+    "olist-recovery-review_olist_postgres_data",
+    "loja-stage3-20261023223148_postgres_data"
+  ],
+  "old_image_tags_present": [
+    "stage6",
+    "1.1.0",
+    "1.2.0",
+    "1.3.0"
+  ],
+  "note": "Presence checks for earlier environments; exact source-row preservation separately verified."
+}

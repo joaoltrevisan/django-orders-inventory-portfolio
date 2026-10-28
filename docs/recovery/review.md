@@ -1,0 +1,15 @@
+# Independent logical recovery review
+
+The reviewer inspected the existing schema-only restoration, database role initialization, CI isolation and proposed recovery scope before implementation, then reviewed the contract and code read-only. No Docker/database mutation was performed by the reviewer.
+
+Design corrections established that a shared exported snapshot aligns row capture/dump, while sequence state is not MVCC-consistent; the implementation checks next-ID safety instead of claiming concurrent exact equality. Custom archives can retain owner-name metadata, so restore explicitly suppresses ownership/ACL commands. Application password hashes remain sensitive private row data and are not replaced by newly generated target demo credentials. New destination CONNECT/schema access must be restricted before loading.
+
+Implementation review found two related cleanup issues: frontend termination alone was insufficient proof that a snapshot helper stopped, and a second wait timeout could skip cleanup. Helpers now have unique names/invocation/project labels; nested cleanup verifies ownership before removing only that helper, with bounded frontend termination/kill escalation. Nonzero client completion fails the drill, and the source transaction explicitly rolls back with an idle timeout. Target databases are always newly generated; ACL/creation failures preserve their requested/created identities rather than overwriting/removing existing state.
+
+The reviewer found no further material main-flow issue after those corrections. They independently inspected private bundle permissions/checksums/manifests against initial fictional/full Olist reports without reading rows into public output or consulting databases. Initial/final focused and complete-suite evidence review is recorded below after final inspection. Static Ruff lint/format and whitespace checks passed in the reviewed passes.
+
+## Completed local evidence review
+
+The reviewer independently verified nine phases/seven commands exited 0, **221 tests in 13.646 seconds** and test-database destruction; 75 role checks; API 1.4.0/38 paths; unchanged 28 tables/22 migrations/exact SQL hash; exact source-input fingerprint reconstructed from the run's README and current runtime/SQL. All three private archive checksums/sizes/manifests/DDL match their reports, bundle modes are 0700/0600, 28 next-ID safety checks pass, and final access probes remain denied. Six fictional orders/22 migrations and 99,441 historical orders/20 original migrations agree with actual evidence. No inspected configured secret or token/private-key pattern appeared in the new public JSON.
+
+Three documentation clarifications were completed before publication: runnable private env/setup commands, precise positive-increment sequence wording and the portfolio's current-evidence link. No material code/evidence blocker remained. The reviewer approved local publication after these corrections, with actual hosted CI checked separately. This remained a read-only review without Docker/database queries by the reviewer.

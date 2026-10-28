@@ -1,0 +1,90 @@
+[
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-recovery-source",
+      "--env-file",
+      ".local/recovery/source.env",
+      "up",
+      "-d",
+      "--wait",
+      "db"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": " Network olist-recovery-source_default Creating \n Volume olist-recovery-source_olist_postgres_data Creating \n Volume olist-recovery-source_olist_postgres_data Creating \n Network olist-recovery-source_default Creating \n Volume olist-recovery-source_olist_postgres_data Created \n Volume olist-recovery-source_olist_postgres_data Created \n Network olist-recovery-source_default Created \n Network olist-recovery-source_default Created \n Container olist-recovery-source-db-1 Creating \n Container olist-recovery-source-db-1 Created \n Container olist-recovery-source-db-1 Starting \n Container olist-recovery-source-db-1 Started \n Container olist-recovery-source-db-1 Waiting \n Container olist-recovery-source-db-1 Healthy \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-recovery-review",
+      "--env-file",
+      ".local/recovery/target.env",
+      "up",
+      "-d",
+      "--wait",
+      "db"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": " Network olist-recovery-review_default Creating \n Network olist-recovery-review_default Creating \n Volume olist-recovery-review_olist_postgres_data Creating \n Volume olist-recovery-review_olist_postgres_data Creating \n Volume olist-recovery-review_olist_postgres_data Created \n Volume olist-recovery-review_olist_postgres_data Created \n Network olist-recovery-review_default Created \n Network olist-recovery-review_default Created \n Container olist-recovery-review-db-1 Creating \n Container olist-recovery-review-db-1 Created \n Container olist-recovery-review-db-1 Starting \n Container olist-recovery-review-db-1 Started \n Container olist-recovery-review-db-1 Waiting \n Container olist-recovery-review-db-1 Healthy \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-recovery-source",
+      "--env-file",
+      ".local/recovery/source.env",
+      "run",
+      "--rm",
+      "migrate"
+    ],
+    "exit_code": 0,
+    "stdout": "Operations to perform:\n  Apply all migrations: accounts, auth, catalog, contenttypes, inventory, olist, orders\nRunning migrations:\n  Applying contenttypes.0001_initial... OK\n  Applying contenttypes.0002_remove_content_type_name... OK\n  Applying auth.0001_initial... OK\n  Applying auth.0002_alter_permission_name_max_length... OK\n  Applying auth.0003_alter_user_email_max_length... OK\n  Applying auth.0004_alter_user_username_opts... OK\n  Applying auth.0005_alter_user_last_login_null... OK\n  Applying auth.0006_require_contenttypes_0002... OK\n  Applying auth.0007_alter_validators_add_error_messages... OK\n  Applying auth.0008_alter_user_username_max_length... OK\n  Applying auth.0009_alter_user_last_name_max_length... OK\n  Applying auth.0010_alter_group_name_max_length... OK\n  Applying auth.0011_update_proxy_permissions... OK\n  Applying auth.0012_alter_user_first_name_max_length... OK\n  Applying accounts.0001_initial... OK\n  Applying catalog.0001_initial... OK\n  Applying catalog.0002_offer_identity... OK\n  Applying orders.0001_initial... OK\n  Applying inventory.0001_initial... OK\n  Applying olist.0001_initial... OK\n  Applying orders.0002_creation_idempotency... OK\n  Applying orders.0003_reservation_expiry... OK\n",
+    "stderr": " Container olist-recovery-source-db-1 Running \n Container olist-recovery-source-db-1 Waiting \n Container olist-recovery-source-db-1 Healthy \n Container olist-recovery-source-migrate-run-1f4ceb6f546f Creating \n Container olist-recovery-source-migrate-run-1f4ceb6f546f Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-recovery-source",
+      "--env-file",
+      ".local/recovery/source.env",
+      "run",
+      "--rm",
+      "migrate",
+      "configure_database_roles"
+    ],
+    "exit_code": 0,
+    "stdout": "Configured historical read-only API access and scoped importer grants.\n",
+    "stderr": " Container olist-recovery-source-db-1 Running \n Container olist-recovery-source-db-1 Waiting \n Container olist-recovery-source-db-1 Healthy \n Container olist-recovery-source-migrate-run-598f4d6b300e Creating \n Container olist-recovery-source-migrate-run-598f4d6b300e Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-recovery-source",
+      "--env-file",
+      ".local/recovery/source.env",
+      "run",
+      "--rm",
+      "tests",
+      "test",
+      "tests.test_recovery",
+      "--noinput",
+      "--verbosity",
+      "2"
+    ],
+    "exit_code": 0,
+    "stdout": "Found 16 test(s).\nOperations to perform:\n  Synchronize unmigrated apps: common, drf_spectacular, rest_framework\n  Apply all migrations: accounts, auth, catalog, contenttypes, inventory, olist, orders\nSynchronizing apps without migrations:\n  Creating tables...\n    Running deferred SQL...\nRunning migrations:\n  Applying contenttypes.0001_initial... OK\n  Applying contenttypes.0002_remove_content_type_name... OK\n  Applying auth.0001_initial... OK\n  Applying auth.0002_alter_permission_name_max_length... OK\n  Applying auth.0003_alter_user_email_max_length... OK\n  Applying auth.0004_alter_user_username_opts... OK\n  Applying auth.0005_alter_user_last_login_null... OK\n  Applying auth.0006_require_contenttypes_0002... OK\n  Applying auth.0007_alter_validators_add_error_messages... OK\n  Applying auth.0008_alter_user_username_max_length... OK\n  Applying auth.0009_alter_user_last_name_max_length... OK\n  Applying auth.0010_alter_group_name_max_length... OK\n  Applying auth.0011_update_proxy_permissions... OK\n  Applying auth.0012_alter_user_first_name_max_length... OK\n  Applying accounts.0001_initial... OK\n  Applying catalog.0001_initial... OK\n  Applying catalog.0002_offer_identity... OK\n  Applying orders.0001_initial... OK\n  Applying inventory.0001_initial... OK\n  Applying olist.0001_initial... OK\n  Applying orders.0002_creation_idempotency... OK\n  Applying orders.0003_reservation_expiry... OK\nSystem check identified no issues (0 silenced).\nPostgreSQL recovery snapshot: {\"snapshot_backend_pid\": 108, \"writer_backend_pid\": 109, \"later_committed_row_excluded\": true}\n",
+    "stderr": " Container olist-recovery-source-db-1 Running \n Container olist-recovery-source-db-1 Waiting \n Container olist-recovery-source-db-1 Healthy \n Container olist-recovery-source-tests-run-b97147d16969 Creating \n Container olist-recovery-source-tests-run-b97147d16969 Created \nCreating test database for alias 'default' ('test_olist_demo')...\ntest_acl_failure_keeps_created_database_identity_for_inspection (tests.test_recovery.RecoveryGuardTests.test_acl_failure_keeps_created_database_identity_for_inspection) ... ok\ntest_both_frontend_wait_timeouts_still_remove_only_owned_helper (tests.test_recovery.RecoveryGuardTests.test_both_frontend_wait_timeouts_still_remove_only_owned_helper) ... ok\ntest_database_creation_failure_never_reuses_or_cleans_an_existing_database (tests.test_recovery.RecoveryGuardTests.test_database_creation_failure_never_reuses_or_cleans_an_existing_database) ... ok\ntest_database_names_cannot_be_conninfo_paths_or_options (tests.test_recovery.RecoveryGuardTests.test_database_names_cannot_be_conninfo_paths_or_options) ... ok\ntest_endpoint_strips_compose_overrides_and_uses_private_file_values (tests.test_recovery.RecoveryGuardTests.test_endpoint_strips_compose_overrides_and_uses_private_file_values) ... ok\ntest_nonzero_snapshot_exit_is_not_silently_successful (tests.test_recovery.RecoveryGuardTests.test_nonzero_snapshot_exit_is_not_silently_successful) ... ok\ntest_only_owned_snapshot_helper_can_be_removed (tests.test_recovery.RecoveryGuardTests.test_only_owned_snapshot_helper_can_be_removed) ... ok\ntest_private_bundle_requires_new_ignored_directory_and_refuses_symlinks (tests.test_recovery.RecoveryGuardTests.test_private_bundle_requires_new_ignored_directory_and_refuses_symlinks) ... ok\ntest_private_files_are_exclusive_0600_and_corruption_changes_checksum (tests.test_recovery.RecoveryGuardTests.test_private_files_are_exclusive_0600_and_corruption_changes_checksum) ... ok\ntest_shared_clusters_are_refused_before_a_snapshot_or_restore (tests.test_recovery.RecoveryGuardTests.test_shared_clusters_are_refused_before_a_snapshot_or_restore) ... ok\ntest_snapshot_cleanup_refuses_foreign_container (tests.test_recovery.RecoveryGuardTests.test_snapshot_cleanup_refuses_foreign_container) ... ok\ntest_all_tables_password_rows_and_migrations_are_fingerprinted_deterministically (tests.test_recovery.RecoveryPostgreSQLTests.test_all_tables_password_rows_and_migrations_are_fingerprinted_deterministically) ... ok\ntest_capture_requires_an_explicit_read_only_snapshot (tests.test_recovery.RecoveryPostgreSQLTests.test_capture_requires_an_explicit_read_only_snapshot) ... ok\ntest_composite_or_non_id_primary_keys_are_not_silently_skipped (tests.test_recovery.RecoveryPostgreSQLTests.test_composite_or_non_id_primary_keys_are_not_silently_skipped) ... ok\ntest_later_commit_is_excluded_from_exported_snapshot_using_separate_connections (tests.test_recovery.RecoveryPostgreSQLTests.test_later_commit_is_excluded_from_exported_snapshot_using_separate_connections) ... ok\ntest_unsafe_next_id_is_rejected_without_consuming_sequence_values (tests.test_recovery.RecoveryPostgreSQLTests.test_unsafe_next_id_is_rejected_without_consuming_sequence_values) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 0.315s\n\nOK\nDestroying test database for alias 'default' ('test_olist_demo')...\n"
+  }
+]

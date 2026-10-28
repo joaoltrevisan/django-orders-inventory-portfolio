@@ -1,6 +1,6 @@
 # Execution guide
 
-Use Docker Engine with Compose v2+, Python 3.11+ on the host, and curl for HTTP examples. Python application dependencies run inside the pinned Python 3.12.15 container; a host virtual environment is optional. Run commands from the repository root. Current image: `olist-case-study-app:1.3.0`; health returns `{"status":"ok","stage":6}`. [Runtime evidence](../reports/stage-06/runtime.json) records versions actually used.
+Use Docker Engine with Compose v2+, Python 3.11+ on the host, and curl for HTTP examples. Python application dependencies run inside the pinned Python 3.12.15 container; a host virtual environment is optional. Run commands from the repository root. Current image: `olist-case-study-app:1.4.0`; health returns `{"status":"ok","stage":6}`. [Runtime evidence](../reports/stage-06/runtime.json) records versions actually used.
 
 There are two independent paths: a small operational demonstration that needs no source download, and historical analysis using the locked Olist archive. Existing service data is a third, preserved environment. Never substitute one project's env file for another's or remove populated volumes to repeat an example.
 
@@ -97,7 +97,7 @@ docker compose run --rm migrate configure_database_roles
 docker compose up -d --wait app
 ```
 
-For named demo/analysis projects, consistently supply their existing `-p` and `--env-file` options instead. Do not regenerate credentials, reseed a populated target or remove volumes. Old orders keep NULL creation hashes; clients opt into safe retry for new purchases with the [documented header](api.md#creation-keys-and-safe-retry). Health's stage remains 6 because the six original stages are complete; the OpenAPI API version is 1.3.0. An existing running container does not upgrade merely by pulling repository changes. This delivery's migration/HTTP verification targets a separate review database, preserving existing primary/benchmark/demo environments.
+For named demo/analysis projects, consistently supply their existing `-p` and `--env-file` options instead. Do not regenerate credentials, reseed a populated target or remove volumes. Old orders keep NULL creation hashes; clients opt into safe retry for new purchases with the [documented header](api.md#creation-keys-and-safe-retry). Health's stage remains 6 because the six original stages are complete; the OpenAPI API version is 1.4.0. An existing running container does not upgrade merely by pulling repository changes. This delivery's migration/HTTP verification targets a separate review database, preserving existing primary/benchmark/demo environments.
 
 ## Verify reservation expiry in a separate review environment
 
@@ -114,3 +114,7 @@ This verification tool requires an explicitly named review project, source-free 
 ## Optional periodic expiry
 
 API/image 1.3.0 adds the opt-in [worker overlay and operating guide](worker/operations.md). It reuses the existing expiry service and needs no new migration beyond the current 22. Existing installations still need deliberate image rebuild/recreation, unchanged schema/grants checks and an explicitly selected active actor/database before enabling scheduling. Default Compose and CI do not start the worker. Preserve credentials/data and never automatically regenerate or reseed an existing environment. Existing env files will need the new nonsecret worker options set deliberately; the safe template uses placeholders.
+
+## Logical recovery drill
+
+Image/API 1.4.0 adds the [private recovery workflow](recovery/operations.md), using a read-only source and a different recovery-review PostgreSQL cluster. It creates only new generated destination databases and compares actual rows/migrations/schema; no new model migration is introduced. Backup bundles stay ignored and private. Existing environments are not upgraded or overwritten. A restored older schema needs deliberate migrations/grants before application access, and its exact-restore evidence remains separate from that later upgrade.

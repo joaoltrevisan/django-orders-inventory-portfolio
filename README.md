@@ -14,6 +14,7 @@ Built with **Python, Django REST Framework, PostgreSQL, JWT and Docker Compose**
 - Optional customer-scoped creation keys with atomic retry/replay, content conflicts and coherent current-state responses.
 - Fixed new-order payment deadlines and an administrator-attributed expiry command that restores stock once.
 - An optional periodic expiry worker with graceful shutdown, fresh authorization, sanitized cycle logs and observed backlog metrics.
+- Private PostgreSQL logical recovery drills with shared-snapshot row hashes, isolated restores, schema equality and next-ID safety.
 - A constrained order lifecycle with consistently ordered PostgreSQL locks and controlled separate-connection concurrency tests.
 - A repeatable validated historical import and twelve SQL reports covering sales, repeat customers, categories, sellers, delivery and financial completeness.
 - Independent demonstration/analysis databases, migration-consistent SQL export, OpenAPI and actual query-optimization evidence.
@@ -30,7 +31,7 @@ mkdir -p .local/analysis-reports .local/import-reports
 docker compose -p olist-demo --env-file .local/analysis/demo.env build app
 ```
 
-Continue with the guide's migration/grant/seed/start commands. Skip configuration generation if that file already exists. The demo binds to loopback port **18022**, the existing service to **18020**; PostgreSQL is not published. Health returns `{"status":"ok","stage":6}`. API version **1.3.0** denotes this completed scope, not production readiness.
+Continue with the guide's migration/grant/seed/start commands. Skip configuration generation if that file already exists. The demo binds to loopback port **18022**, the existing service to **18020**; PostgreSQL is not published. Health returns `{"status":"ok","stage":6}`. API version **1.4.0** denotes this completed scope, not production readiness.
 
 The guarded [real-curl workflow](scripts/verify_curl.py) exercises registration, JWT, keyed creation/replay/conflicts, catalog, a multi-seller purchase, repricing snapshots, repeated cancellation, simulated processing, stock rollback and permissions on a confirmed fresh seeded demo. It keeps credentials off argv and out of evidence. [API examples](docs/api.md) cover individual requests and token handling.
 
@@ -44,6 +45,8 @@ API 1.2.0 passed **184 PostgreSQL tests locally and on GitHub Actions**, includi
 
 API 1.3.0 passed **204 PostgreSQL tests locally and on GitHub Actions**, including 20 new worker/safety tests. Actual container verification observed two finite cycles, two graceful SIGTERM sessions and a single stock release across repeated execution. Default Compose retains five services; the optional overlay adds only the worker. Schema remains **28 tables / 22 migrations**, with **38 OpenAPI paths**. [Worker verification](docs/worker/verification.md) records exact commands, evidence, independent review and hosted status.
 
+API 1.4.0 passed **221 PostgreSQL tests locally**, including 17 recovery tests. Actual isolated restores verified all 28 table fingerprints/schema and next-ID safety for a six-order operational source (22 migrations) and the **99,441-order historical benchmark** (its original 20 migrations). Source recapture confirmed unchanged data; backups stay private. Current application schema remains **28 tables / 22 migrations**, with **38 OpenAPI paths**. [Recovery verification](docs/recovery/verification.md) records exact commands, trust/privacy limits and hosted status.
+
 The imported historical snapshot contains **99,441 orders, 112,650 item rows, 103,886 payment records, 32,951 products and 3,095 sellers**. Import accepted **451,535 source rows / 451,537 entities**, rejected none and retained **3,739 warning issues across 3,116 rows** without repairing the source. Repeat identities use `customer_unique_id`; order joins use `customer_id`. Delivered-order SQL identified **2,801 repeat identities among 93,358 eligible identities (3.00%)** in the defined source window.
 
 One delivered-order page query was measured in Stage 5 with identical SQL/data, refreshed statistics, three warm-ups and seven measured runs per phase. Median server execution: **5.356 ms baseline, 0.080 ms indexed, 5.135 ms control after removal**. The temporary index occupied **7.90 MiB**. All **30 actual JSON plans**, individual times, buffers, result hashes and storage measurements remain in the [experiment report](docs/stage-05/index-experiment.md). These are warm-cache results for that query; the candidate was removed and is not a production migration. Documentation consolidation did not rerun this dated experiment.
@@ -55,9 +58,10 @@ One delivered-order page query was measured in Stage 5 with identical SQL/data, 
 | [Execution guide](docs/getting-started.md) | Docker, two isolated data paths, credentials, import/seed and real-curl commands |
 | [Architecture](docs/architecture.md) | Modules, transactions, lock hierarchy, constraints versus service invariants, roles and trade-offs |
 | [ER diagrams](docs/olist/data-model.md) / [source dictionary](docs/olist/data-dictionary.md) | Relationships, keys, historical identifiers, source clocks and actual field meanings |
-| [API reference](docs/api.md) / [OpenAPI](reports/worker/local/openapi.json) | Authentication, permissions, all workflows, filters, response/error semantics |
+| [API reference](docs/api.md) / [OpenAPI](reports/recovery/local/openapi.json) | Authentication, permissions, all workflows, filters, response/error semantics |
 | [SQL portfolio](docs/stage-05/sql-portfolio.md) | Twelve business questions with JOIN/aggregation/CTE/window SQL, grains, statuses and NULL rules |
 | [Index analysis](docs/stage-05/index-experiment.md) | Hypothesis, individual measurements/medians, raw plans, buffers/storage and limitations |
+| [Recovery operations](docs/recovery/operations.md) / [verification](docs/recovery/verification.md) | Private custom backups, independent recovery clusters and actual data/schema evidence |
 | [Optional expiry worker](docs/worker/operations.md) / [verification](docs/worker/verification.md) | Opt-in scheduling, shutdown/retry policy, observational backlog and actual container evidence |
 | [Reservation expiry](docs/reservations/design.md) / [verification](docs/reservations/verification.md) | Deadline policy, explicit audited expiry, partial batches and controlled concurrency |
 | [Creation idempotency](docs/idempotency/design.md) / [verification](docs/idempotency/verification.md) | Optional key contract, locking, additive migration, HTTP and test evidence |
@@ -73,7 +77,7 @@ Stage records under `docs/stage-01` through `docs/stage-06` preserve the increme
 
 ## Runtime and data boundaries
 
-Actual container versions: **Python 3.12.15, Django 5.2.18 LTS, DRF 3.18.3, PostgreSQL 17.11, SimpleJWT 5.5.1 and psycopg 3.3.6**. Dependencies are pinned in [requirements.lock](requirements.lock); [current runtime evidence](reports/worker/local/runtime.json) records Python, package, PostgreSQL and architecture versions.
+Actual container versions: **Python 3.12.15, Django 5.2.18 LTS, DRF 3.18.3, PostgreSQL 17.11, SimpleJWT 5.5.1 and psycopg 3.3.6**. Dependencies are pinned in [requirements.lock](requirements.lock); [current runtime evidence](reports/recovery/local/runtime.json) records Python, package, PostgreSQL and architecture versions.
 
 Historical tables and administrator-only `/api/olist/` routes preserve source prices/statuses and recorded payments. They never become current stock, offers, login accounts or payment processing. The operational domain uses fictional `example.com` identities and explicitly simulated accounts, seller offers/prices, stock movements, new payments and delivery actions. Item and payment facts are aggregated separately to prevent double-counting. Source timestamps have no verified timezone; operational events use aware UTC.
 

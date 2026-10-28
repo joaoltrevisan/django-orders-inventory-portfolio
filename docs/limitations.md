@@ -10,7 +10,7 @@ Customers access only their own profile and operational orders. Foreign-owned or
 
 Private configuration is generated once, ignored and mode 0600; `.env.example` contains placeholders. Never commit real identities, credentials, tokens, source archives or full issue payloads. Application/import/migration/test roles are separated; the database port is not published. The web container runs nonroot with a read-only filesystem and temporary `/tmp`. Historical facts are read-only to the API role. Owner/bootstrap access remains privileged; source fingerprints detect inconsistency against stored import metadata but are not a cryptographic trust anchor against an owner changing both facts and metadata.
 
-Login/registration/refresh throttles use Django's per-process local-memory cache in this development setup. They are not a distributed abuse-control system. Browser cookie/session authentication is not configured; Bearer credentials belong in the Authorization header, not URLs. HTTPS termination, deployment secrets, shared rate limiting, monitoring, backups/recovery, stricter network/host configuration and operational rotation require deployment-specific work.
+Login/registration/refresh throttles use Django's per-process local-memory cache in this development setup. They are not a distributed abuse-control system. Browser cookie/session authentication is not configured; Bearer credentials belong in the Authorization header, not URLs. HTTPS termination, deployment secrets, shared rate limiting, monitoring, encrypted/offsite backup retention and PITR, stricter network/host configuration and operational rotation require deployment-specific work.
 
 ## Scope and evidence limits
 
@@ -21,6 +21,7 @@ Login/registration/refresh throttles use Django's per-process local-memory cache
 - Reports use bounded source intervals, stable offset pagination and synchronous count/execution. They are not a materialized analytics warehouse or streaming/current-sales dashboard. Large offsets, concurrent operational load and production traffic were not benchmarked.
 - Sales uses final snapshot `delivered` status and observed item value, not historical as-of status, audited revenue or settled cash. Payment facts lack per-payment event times. Repeat behavior is observed only within the stated source/window. Seller delivery is an order association, not independently measured seller shipment performance.
 - The index experiment is one fixed warm-cache query on the full imported snapshot in aarch64 Docker. Its temporary index was removed. No cold-cache, production, write-load, global API speedup or adopted-index claim follows. Full result hashes for large reports cannot be regenerated from the published first-10 samples alone; rerun the collection on the locked source.
+- Logical recovery verifies private trusted-project public-schema backups into new isolated databases. Password hashes/source rows remain sensitive in backups. Cluster roles/passwords, JWT signing keys, encryption/offsite retention, PostgreSQL internals/statistics and exact concurrent sequence equality are outside the backup equality claim. Older captured schemas remain older until deliberately migrated; no RPO/RTO/PITR/failover guarantee follows.
 - Automated tests and independent review exercise important paths/schedules, not every possible failure. Mermaid source is provided for GitHub rendering; a rendered-diagram screenshot/export was not verified in this delivery.
 
 ## Prioritized follow-up work
@@ -28,7 +29,7 @@ Login/registration/refresh throttles use Django's per-process local-memory cache
 1. Add deployment-specific supervision, retained log monitoring/alerts and recovery drills around the optional periodic worker. Its JSON backlog observations are not health certification; stopped/failed workers and persistent corrupt oldest rows need operator intervention. Queue fairness, quarantine and production scheduling guarantees are not implemented.
 2. Design payment/refund and seller-fulfillment integrations with explicit provider/event contracts; keep imported source facts immutable.
 3. Evaluate actual production report/page workloads and storage/write costs before adopting any measured index through a reviewed migration.
-4. Add deployment configuration, TLS, shared throttling, observability, backup/restore drills and key rotation for a real hosting target.
+4. Add deployment configuration, TLS, shared throttling, observability, encrypted/offsite backup policy, PITR and key rotation for a real hosting target. The implemented isolated logical recovery drill does not define production recovery objectives.
 5. Extend source modeling to reviews/geolocation only after new key/cardinality/privacy validation; add multiple snapshots only with explicit cross-snapshot integrity rules.
 
 These are future changes, not implied completed functionality. Data use remains subject to [source attribution and CC BY-NC-SA 4.0](../THIRD_PARTY_DATA.md); the project makes no employment, partnership, endorsement or internal-access claim.

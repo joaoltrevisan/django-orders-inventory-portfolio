@@ -1,0 +1,47 @@
+[
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-recovery-source",
+      "--env-file",
+      ".local/recovery/source.env",
+      "run",
+      "--rm",
+      "--user",
+      "501:20",
+      "-e",
+      "DEMO_SEED_ENABLED=1",
+      "migrate",
+      "seed_demo",
+      "--expected-database",
+      "olist_demo",
+      "--report",
+      "/reports/recovery-demo-seed.json"
+    ],
+    "exit_code": 0,
+    "stdout": "Created fictional demo data through transactional services; no real charges or historical imports.\n",
+    "stderr": " Container olist-recovery-source-db-1 Running \n Container olist-recovery-source-db-1 Waiting \n Container olist-recovery-source-db-1 Healthy \n Container olist-recovery-source-migrate-run-b8b5962e8434 Creating \n Container olist-recovery-source-migrate-run-b8b5962e8434 Created \n"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "olist-recovery-source",
+      "--env-file",
+      ".local/recovery/source.env",
+      "run",
+      "--rm",
+      "--entrypoint",
+      "python",
+      "migrate",
+      "-c",
+      "import django,json;django.setup()\nfrom datetime import timedelta\nfrom django.db import transaction\nfrom django.utils import timezone\nfrom accounts.models import User\nfrom catalog.models import Offer\nfrom orders.demo import ADDRESS\nfrom orders.models import Order\nfrom orders.services import create_order\nfrom orders.reservations import expire_due_reservations\nfrom inventory.models import StockMovement\nwith transaction.atomic():\n order=create_order(actor=User.objects.get(email='customer1@example.com'),\n  items=[{'offer_id':offer.pk,'quantity':1} for offer in Offer.objects.order_by('id')[:2]],\n  shipping_address=dict(ADDRESS),idempotency_key='recovery-demo-001')\n created=timezone.now()-timedelta(hours=1)\n Order.objects.filter(pk=order.pk).update(created_at=created,reservation_expires_at=created+timedelta(minutes=30))\n StockMovement.objects.filter(order=order,movement_type='RESERVATION').update(created_at=created+timedelta(microseconds=1))\nreport=expire_due_reservations(actor=User.objects.get(email='admin@example.com'))\nprint(json.dumps({'new_order_id':order.pk,'expiry_report':report,'fixture_time_shift_only_new_order':True}))\n"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"new_order_id\": 6, \"expiry_report\": {\"data_origin\": \"SIMULATED_API\", \"cutoff\": \"2026-10-28T04:41:26.834633+00:00\", \"limit\": 100, \"attempted_order_ids\": [6], \"expired_order_ids\": [6], \"skipped_order_ids\": [], \"failures\": [], \"stopped\": false, \"locked_skips_not_enumerated\": true, \"note\": \"Selected skips only; locked rows and all outstanding due orders are not counted.\", \"passed\": true}, \"fixture_time_shift_only_new_order\": true}\n",
+    "stderr": " Container olist-recovery-source-db-1 Running \n Container olist-recovery-source-db-1 Waiting \n Container olist-recovery-source-db-1 Healthy \n Container olist-recovery-source-migrate-run-1e9375e2d85c Creating \n Container olist-recovery-source-migrate-run-1e9375e2d85c Created \n"
+  }
+]

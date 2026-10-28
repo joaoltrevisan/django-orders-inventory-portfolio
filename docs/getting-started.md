@@ -1,6 +1,6 @@
 # Execution guide
 
-Use Docker Engine with Compose v2+, Python 3.11+ on the host, and curl for HTTP examples. Python application dependencies run inside the pinned Python 3.12.15 container; a host virtual environment is optional. Run commands from the repository root. Current image: `olist-case-study-app:1.4.0`; health returns `{"status":"ok","stage":6}`. [Runtime evidence](../reports/stage-06/runtime.json) records versions actually used.
+Use Docker Engine with Compose v2+, Python 3.11+ on the host, and curl for HTTP examples. Python application dependencies run inside the pinned Python 3.12.15 container; a host virtual environment is optional. Run commands from the repository root. Current image: `olist-case-study-app:1.4.0`; health returns `{"status":"ok","stage":6}`. [Runtime evidence](../reports/recovery/local/runtime.json) records versions actually used.
 
 There are two independent paths: a small operational demonstration that needs no source download, and historical analysis using the locked Olist archive. Existing service data is a third, preserved environment. Never substitute one project's env file for another's or remove populated volumes to repeat an example.
 
@@ -34,7 +34,7 @@ python3 scripts/verify_curl.py --project olist-demo \
   --allow-demo-writes
 ```
 
-The runner verifies the connected database is `olist_demo`, the role is `olist_api`, historical orders are absent, the baseline seed counts match and the published port is loopback. It then appends fictional accounts/catalog/orders/movements and checks registration/login/refresh, keyed creation/replay/conflicts/recovery, multi-seller snapshots, cancellation once, simulated processing, rollback and access boundaries. Secrets travel in curl configuration on stdin, not argv or evidence. It uses returned IDs. This is a **single workflow on a freshly seeded target**, not an idempotent/reset command; a previously used target is refused. Do not rerun failed or completed writes blindly. The final delivery used an additional independent project/volume, documented in [verification](stage-06/verification.md), preserving the existing demo.
+The runner verifies the connected database is `olist_demo`, the role is `olist_api`, historical orders are absent, the baseline seed counts match and the published port is loopback. It then appends fictional accounts/catalog/orders/movements and checks registration/login/refresh, keyed creation/replay/conflicts/recovery, multi-seller snapshots, cancellation once, simulated processing, rollback and access boundaries. Secrets travel in curl configuration on stdin, not argv or evidence. It uses returned IDs. This is a **single workflow on a freshly seeded target**, not an idempotent/reset command; a previously used target is refused. Do not rerun failed or completed writes blindly. The current API 1.4.0 closeout used an additional independent project/volume and passed 50 real curl requests; see [delivery verification](delivery.md#final-verification). The earlier [Stage 6 verification](stage-06/verification.md) remains dated evidence. Both deliveries preserved existing demo data.
 
 Use [API examples](api.md) to explore individual requests. Historical reports return 409 in the source-free demo because no completed historical snapshot exists.
 

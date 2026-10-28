@@ -37,15 +37,9 @@ The guarded [real-curl workflow](scripts/verify_curl.py) exercises registration,
 
 ## Verified results
 
-The Stage 6 suite passed **130 PostgreSQL tests**. The continuous-integration extension passed **137 PostgreSQL tests both locally and on GitHub Actions**; [CI verification](docs/ci/verification.md) records actual runs and their artifacts. **39 real curl requests** passed on a separate seeded review environment. Strict OpenAPI validation passed for **38 paths**; SQL export/restore verification confirmed **28 tables and 20 migrations**. The [final verification](docs/stage-06/verification.md) records commands, outcomes, the corrected initial curl example, environment isolation and remaining limits.
+The six planned stages and the subsequent authorized extensions are complete. API **1.4.0** passed **221 PostgreSQL tests locally and on GitHub Actions**, with **75 database-role checks**, strict OpenAPI validation for **38 paths**, and migration/export/restore verification of **28 tables / 22 migrations**. The final fresh-environment workflow passed **50 real curl requests**. See the [delivery closeout](docs/delivery.md) for acceptance coverage, exact evidence, independent review and remaining deployment limits.
 
-API 1.1.0 passed **157 PostgreSQL tests locally and on GitHub Actions**, including **20 creation-key tests and five new controlled contention scenarios**. The extended workflow passed **50 real curl requests**. Strict OpenAPI covers **38 paths**; schema export/restoration confirms **28 tables and 21 migrations**. All 23 existing domain-table row counts/hashes matched across the additive migration in an isolated review database. See [creation-key verification](docs/idempotency/verification.md) for commands, artifacts, independent review and hosted CI status. Earlier Stage 6/CI results above remain dated evidence.
-
-API 1.2.0 passed **184 PostgreSQL tests locally and on GitHub Actions**, including 27 new expiry/verification tests and eight new coordinated concurrency scenarios. General HTTP verification passed **50 real curl requests**; expiry verification passed **16 more requests and three CLI checks**. The additive migration preserved all 23 captured domain-table hashes and five legacy NULL pairs. Current schema/OpenAPI: **28 tables, 22 migrations, API 1.2.0 / 38 paths**. See [expiry verification](docs/reservations/verification.md) for actual commands, corrections, evidence and hosted status.
-
-API 1.3.0 passed **204 PostgreSQL tests locally and on GitHub Actions**, including 20 new worker/safety tests. Actual container verification observed two finite cycles, two graceful SIGTERM sessions and a single stock release across repeated execution. Default Compose retains five services; the optional overlay adds only the worker. Schema remains **28 tables / 22 migrations**, with **38 OpenAPI paths**. [Worker verification](docs/worker/verification.md) records exact commands, evidence, independent review and hosted status.
-
-API 1.4.0 passed **221 PostgreSQL tests locally and on GitHub Actions**, including 17 recovery tests. Actual isolated restores verified all 28 table fingerprints/schema and next-ID safety for a six-order operational source (22 migrations) and the **99,441-order historical benchmark** (its original 20 migrations). Source recapture confirmed unchanged data; backups stay private. Current application schema remains **28 tables / 22 migrations**, with **38 OpenAPI paths**. [Recovery verification](docs/recovery/verification.md) records exact commands, trust/privacy limits and hosted status.
+Private recovery drills also verified all 28 table fingerprints, schema and next-ID safety for both an operational source and the **99,441-order historical benchmark**, preserving each source's captured migration version. Backups remain private. The [recovery verification](docs/recovery/verification.md) retains the complete local/hosted results; older release counts remain dated in the [test guide](docs/testing.md#release-evidence).
 
 The imported historical snapshot contains **99,441 orders, 112,650 item rows, 103,886 payment records, 32,951 products and 3,095 sellers**. Import accepted **451,535 source rows / 451,537 entities**, rejected none and retained **3,739 warning issues across 3,116 rows** without repairing the source. Repeat identities use `customer_unique_id`; order joins use `customer_id`. Delivered-order SQL identified **2,801 repeat identities among 93,358 eligible identities (3.00%)** in the defined source window.
 
@@ -55,6 +49,7 @@ One delivered-order page query was measured in Stage 5 with identical SQL/data, 
 
 | Material | Contents |
 | --- | --- |
+| [Delivery closeout](docs/delivery.md) | Completed requirements, final checks, review and scope boundary |
 | [Execution guide](docs/getting-started.md) | Docker, two isolated data paths, credentials, import/seed and real-curl commands |
 | [Architecture](docs/architecture.md) | Modules, transactions, lock hierarchy, constraints versus service invariants, roles and trade-offs |
 | [ER diagrams](docs/olist/data-model.md) / [source dictionary](docs/olist/data-dictionary.md) | Relationships, keys, historical identifiers, source clocks and actual field meanings |
@@ -68,12 +63,12 @@ One delivered-order page query was measured in Stage 5 with identical SQL/data, 
 | [Test guide](docs/testing.md) | PostgreSQL suite, controlled concurrency, schema restoration and actual versus illustrative HTTP evidence |
 | [Continuous integration](docs/ci.md) | GitHub Actions and a shared disposable local/hosted PostgreSQL verification pipeline |
 | [Technical presentation](docs/portfolio.md) | Service problem, delivered behavior, implementation evidence and walkthrough |
-| [Security and limitations](docs/limitations.md) | Implemented controls, functional/deployment limits and prioritized future work |
+| [Security and limitations](docs/limitations.md) | Implemented controls, deployment limits and optional future work |
 | [Final verification](docs/stage-06/verification.md), [review](docs/stage-06/review.md), [file inventory](docs/stage-06/changes.md) | Actual commands/results, independent findings and every changed/created file |
 | [SQL schema](sql/schema.sql) / [migrations](olist/migrations/0001_initial.py) | Reproducible structural export and representative source-model migration; normal setup uses all migrations |
 | [Data attribution](THIRD_PARTY_DATA.md) | Source version/hash identity, transformations and license requirements |
 
-Stage records under `docs/stage-01` through `docs/stage-06` preserve the incremental work and its actual evidence. Older stage guides describe those deliveries, not the current feature set. All six planned stages are implemented; final technical review remains the user's checkpoint. [Review process](docs/review-process.md) defines the independent-review workflow.
+Stage records under `docs/stage-01` through `docs/stage-06` preserve the incremental work and its actual evidence. Older stage guides describe those deliveries, not the current feature set. All six planned stages are complete; the delivery closeout records the final technical-review checkpoint. [Review process](docs/review-process.md) defines the independent-review workflow.
 
 ## Runtime and data boundaries
 

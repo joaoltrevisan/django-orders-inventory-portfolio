@@ -1,0 +1,89 @@
+{
+  "checked_at_utc": "2026-10-28T05:31:45.046445+00:00",
+  "baseline_revision": "8bec2938dec4b80e561d649aee8c214bfb1bcb76",
+  "baseline_ci_success": true,
+  "scope": "Documentation/evidence closeout; previous functional and index evidence remains dated.",
+  "markdown": {
+    "files_checked": 67,
+    "local_links_checked": 647,
+    "missing_targets": [],
+    "unbalanced_fences": [],
+    "anchors_and_remote_urls_checked": false
+  },
+  "curl": {
+    "passed": true,
+    "requests": 50,
+    "all_transports_and_statuses_match": true,
+    "assertions": {
+      "multi_seller_total": "91.80",
+      "new_price_total": "100.00",
+      "snapshots_preserved": true,
+      "cancellation_restored_once": true,
+      "repeated_payment_same_reference": true,
+      "failed_order_fully_rolled_back": true,
+      "owner_and_admin_boundaries": true,
+      "all_events_simulated": true,
+      "canonical_keyed_replay_same_order": true,
+      "content_conflict_rejected": true,
+      "replay_preserves_purchase_after_catalog_edits": true,
+      "cancelled_replay_does_not_reserve_again": true,
+      "key_does_not_bypass_authorization": true,
+      "uncommitted_key_reusable_after_failure": true,
+      "unkeyed_creation_has_no_replay_header": true,
+      "internal_hashes_not_exposed": true
+    }
+  },
+  "setup": {
+    "steps": 6,
+    "all_exit_zero": true
+  },
+  "retained_evidence": {
+    "local_tests": 221,
+    "local_seconds": 13.646,
+    "hosted_tests": 221,
+    "hosted_seconds": 20.95,
+    "role_checks": 75,
+    "api_version": "1.4.0",
+    "openapi_paths": 38,
+    "schema_tables": 28,
+    "migrations": 22,
+    "schema_file_sha256": "164714cebfd0ae4e6e81575ba017575cd5c69d95933b3d0d79c2dcedef571a02",
+    "schema_hash_matches_retained_evidence": true
+  },
+  "private_configuration": {
+    "git_ignored": true,
+    "mode": "0o600"
+  },
+  "bounded_secret_scan": {
+    "files_checked": [
+      "reports/closeout/audit.json",
+      "reports/closeout/curl.json",
+      "reports/closeout/setup.json",
+      "reports/closeout/baseline-ci.json",
+      "reports/closeout/audit-first.json",
+      "README.md",
+      "docs/delivery.md",
+      "docs/closeout-review.md",
+      "docs/testing.md",
+      "docs/getting-started.md",
+      "docs/limitations.md",
+      "docs/portfolio.md"
+    ],
+    "exact_configured_secret_values_checked": 7,
+    "token_and_private_key_patterns_checked": 4,
+    "matching_files": [],
+    "limitation": "Only generated closeout configuration values and listed token/key patterns; not an exhaustive detector."
+  },
+  "passed": true,
+  "initial_check": {
+    "artifact": "reports/closeout/audit-first.json",
+    "exit_code": 1,
+    "reason": "The audit linked its own output before creating it; all other checks passed. The final check verifies that now-created evidence target."
+  },
+  "git_diff_check_exit_code": 0,
+  "publication_integration": {
+    "initial_push": "Rejected because origin/main advanced; no remote files overwritten.",
+    "preserved_remote_revision": "d917a8d2b2c0b1bca91c56273268b599e0ce8f74",
+    "method": "Rebase unpublished closeout commit onto origin/main; no force push."
+  }
+}

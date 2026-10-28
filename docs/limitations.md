@@ -24,7 +24,7 @@ Login/registration/refresh throttles use Django's per-process local-memory cache
 - Logical recovery verifies private trusted-project public-schema backups into new isolated databases. Password hashes/source rows remain sensitive in backups. Cluster roles/passwords, JWT signing keys, encryption/offsite retention, PostgreSQL internals/statistics and exact concurrent sequence equality are outside the backup equality claim. Older captured schemas remain older until deliberately migrated; no RPO/RTO/PITR/failover guarantee follows.
 - Automated tests and independent review exercise important paths/schedules, not every possible failure. Mermaid source is provided for GitHub rendering; a rendered-diagram screenshot/export was not verified in this delivery.
 
-## Prioritized follow-up work
+## Optional future work outside the completed scope
 
 1. Add deployment-specific supervision, retained log monitoring/alerts and recovery drills around the optional periodic worker. Its JSON backlog observations are not health certification; stopped/failed workers and persistent corrupt oldest rows need operator intervention. Queue fairness, quarantine and production scheduling guarantees are not implemented.
 2. Design payment/refund and seller-fulfillment integrations with explicit provider/event contracts; keep imported source facts immutable.
@@ -32,4 +32,4 @@ Login/registration/refresh throttles use Django's per-process local-memory cache
 4. Add deployment configuration, TLS, shared throttling, observability, encrypted/offsite backup policy, PITR and key rotation for a real hosting target. The implemented isolated logical recovery drill does not define production recovery objectives.
 5. Extend source modeling to reviews/geolocation only after new key/cardinality/privacy validation; add multiple snapshots only with explicit cross-snapshot integrity rules.
 
-These are future changes, not implied completed functionality. Data use remains subject to [source attribution and CC BY-NC-SA 4.0](../THIRD_PARTY_DATA.md); the project makes no employment, partnership, endorsement or internal-access claim.
+These are optional future changes, not acceptance blockers or implied completed functionality. Data use remains subject to [source attribution and CC BY-NC-SA 4.0](../THIRD_PARTY_DATA.md); the project makes no employment, partnership, endorsement or internal-access claim.

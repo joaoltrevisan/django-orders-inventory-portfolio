@@ -1,0 +1,9 @@
+# Independent closeout review
+
+The final reviewer independently inspected the existing implementation and retained evidence in read-only mode. The review covered the original six-stage scope, Olist adaptation, database relationships, historical/simulated boundaries, source import, transactions/permissions/locks, controlled concurrency, SQL correctness and optimization evidence, CI and recovery. It did not rerun the full suite or mutate databases.
+
+No mandatory implementation blocker or additional feature requirement was found. The reviewer independently confirmed retained evidence of **221 PostgreSQL tests**, **75 role checks**, **38 OpenAPI paths**, **28 tables / 22 migrations**, and the current SQL file hash. Recalculating the 21 measured plans yielded medians **5.356 / 0.080 / 5.135 ms**, with 30 plans including warm-ups. These remain the dated experiment's results.
+
+Two documentation corrections were requested and implemented: the test guide's link labeled current pointed to API 1.1.0 rather than API 1.4.0, and its claim that all 28 controlled operational scenarios observed blocking failed to distinguish three SKIP LOCKED schedules. The guide now identifies **25 observed lock waits and three verified SKIP LOCKED schedules**. The README was consolidated around the current delivery instead of a sequence of older counts.
+
+The final documentation/evidence diff was separately reviewed and approved, including all 50 curl transport/status results, six successful setup steps and the exact baseline CI revision. At that checkpoint the reviewer required only materializing the planned static audit output and checking the final documentation commit's CI before handoff. No further implementation was requested. Production limitations are explicitly optional work beyond the accepted implementation scope. [Delivery and evidence](delivery.md) record the actual final checks and user technical-review checkpoint.

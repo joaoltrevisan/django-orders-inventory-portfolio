@@ -32,7 +32,7 @@ The measured delivered-order page changed from a parallel order-table scan/sort 
 4. Follow [historical analysis setup](getting-started.md#path-b-historical-import-sql-and-index-analysis), inspect the import report and execute the [SQL portfolio](stage-05/sql-portfolio.md).
 5. Inspect the raw before/after/control plans and cache/storage trade-offs, then discuss what further workload evidence would justify an index migration.
 
-Final execution results and the initially failed/corrected curl example are retained in [Stage 6 verification](stage-06/verification.md). Source anomalies are disclosed rather than repaired to produce cleaner metrics. No fabricated performance measurements or unexecuted tests are presented as evidence.
+The [delivery closeout](delivery.md) records the completed scope, current 221-test evidence and final 50-request HTTP workflow. Earlier execution results, including the initially failed/corrected curl example, remain in the dated [Stage 6 verification](stage-06/verification.md). Source anomalies are disclosed rather than repaired to produce cleaner metrics. No fabricated performance measurements or unexecuted tests are presented as evidence.
 
 [Recovery evidence](recovery/verification.md) separately demonstrates actual isolated restoration of operational data and the full historical snapshot, retaining each captured migration version rather than treating an old backup as an automatic application upgrade.
 
@@ -40,4 +40,4 @@ Final execution results and the initially failed/corrected curl example are reta
 
 This independently developed service uses Olist's publicly released anonymized dataset for historical analysis. It does not imply employment, a commissioned contract, partnership, endorsement or internal-system access. Technical source identity, version ambiguity, attribution and **CC BY-NC-SA 4.0** requirements are in [THIRD_PARTY_DATA.md](../THIRD_PARTY_DATA.md).
 
-Authentication, current prices/offers, inventory, new payments and operational fulfillment are explicitly simulated and separate from historical facts. The service is locally reproducible, not publicly deployed or production-certified. Optional keyed creation retries are implemented with transaction serialization and preserved snapshots. Production supervision/alerts, real integrations and deployment hardening remain prioritized [future improvements](limitations.md).
+Authentication, current prices/offers, inventory, new payments and operational fulfillment are explicitly simulated and separate from historical facts. The service is locally reproducible, not publicly deployed or production-certified. Optional keyed creation retries are implemented with transaction serialization and preserved snapshots. Production supervision/alerts, real integrations and deployment hardening remain optional [future improvements](limitations.md).
